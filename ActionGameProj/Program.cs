@@ -90,6 +90,7 @@ namespace ActionGameProj
 
 			DXButton[] buttonsForEditMode1 = new DXButton[14];
 			int octave = 4;
+			//hogehoge
 
 			string[] pitches = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
