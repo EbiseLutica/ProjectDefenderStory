@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSheetSoundEditor", "ActionGameProj\MusicSheetSoundEditor.csproj", "{0B778EB9-36F3-40A3-97ED-468308700D33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSheetSEEditor", "MusicSheetSEEditor\MusicSheetSEEditor.csproj", "{E22F5729-056A-44D3-AA4F-1DFEB334AB46}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0B778EB9-36F3-40A3-97ED-468308700D33}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E22F5729-056A-44D3-AA4F-1DFEB334AB46}.Release|Win32.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
