@@ -17,5 +17,38 @@ namespace MusicSheetSEEditor
 			InitializeComponent();
 			comboBox1.SelectedIndex = 0;
 		}
+
+		int hztemp = 440;
+
+
+
+		private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void textBox1_Leave(object sender, EventArgs e)
+		{
+			if (int.TryParse(textBox1.Text, out ))
+		}
+
+
+
 	}
+
+	public struct SoundData
+	{
+		public int A;
+		public int D;
+		public byte S;
+		public int R;
+
+		public int waveidx;
+		public int freq;
+		public int startidx;
+		public int length;
+		public bool enabled;
+		public int pan;
+	}
+
 }

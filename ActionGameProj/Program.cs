@@ -52,13 +52,9 @@ namespace ActionGameProj
 		{
 			//波形編集モード: 1マスは 10*15
 
-			AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler((send, e) =>
-			{
-
-			});
 
 			DX.SetGraphMode(320, 256, 32);
-			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
+			
 			DX.ChangeWindowMode(1);
 			DX.SetWaitVSyncFlag(0);
 			DX.SetFontSize(14);
@@ -73,7 +69,7 @@ namespace ActionGameProj
 			}
 			int f = 0;
 			int fps = 1;
-
+			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 			//int nextFps = 60;
 			int bsec = DateTime.Now.Second;
 			int bmsec = DateTime.Now.Millisecond;
@@ -90,8 +86,8 @@ namespace ActionGameProj
 
 			DXButton[] buttonsForEditMode1 = new DXButton[14];
 			int octave = 4;
-		
-
+			
+			
 			string[] pitches = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 			Envelope myenv = new Envelope(0, 0, 255, 0);
@@ -421,14 +417,7 @@ namespace ActionGameProj
 			return (flag ? 1 : -1);
 		}
 
-		static void midi_Received(object sender, Avenue.DataEventArgs<NextMidi.DataElement.MidiEvent> e)
-		{
-			foreach (byte data in e.Value.ToNativeEvent())
-			{
-				Console.Write(data.ToString("X2") + " ");
-			}
-			Console.Write("\r\n");
-		}
+
 
 		
 
