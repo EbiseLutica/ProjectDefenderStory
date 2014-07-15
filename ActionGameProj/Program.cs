@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DxLibDLL;
 using System.Drawing;
+using System.Windows.Forms;
 
 using NextMidi;
 using NextMidi.MidiPort;
@@ -12,6 +13,7 @@ using NextMidi.MidiPort.Input;
 
 namespace ActionGameProj
 {
+	
 	class Program
 	{
 
@@ -47,7 +49,7 @@ namespace ActionGameProj
 												 };
 
 
-
+		[STAThread]
 		static void Main(string[] args)
 		{
 			//波形編集モード: 1マスは 10*15
@@ -128,7 +130,7 @@ namespace ActionGameProj
 			buttonsForEditMode1[12] = new DXButton(new Rectangle(230, 98, 20, 96), "A#", Color.Black, Color.White);
 			buttonsForEditMode1[13] = new DXButton(new Rectangle(250, 98, 20, 128), "B", Color.White, Color.Black);
 
-			DXButton[] buttonsForEditMode2 = new DXButton[8];
+			DXButton[] buttonsForEditMode2 = new DXButton[10];
 
 			buttonsForEditMode2[0] = new DXButton(new Rectangle(24, 16, 32, 32), "A↑", Color.Black, Color.White);
 			buttonsForEditMode2[1] = new DXButton(new Rectangle(64, 16, 32, 32), "D↑", Color.Black, Color.White);
@@ -139,6 +141,9 @@ namespace ActionGameProj
 			buttonsForEditMode2[5] = new DXButton(new Rectangle(64, 208, 32, 32), "D↓", Color.Black, Color.White);
 			buttonsForEditMode2[6] = new DXButton(new Rectangle(104, 208, 32, 32), "S↓", Color.Black, Color.White);
 			buttonsForEditMode2[7] = new DXButton(new Rectangle(144, 208, 32, 32), "R↓", Color.Black, Color.White);
+
+			buttonsForEditMode2[8] = new DXButton(new Rectangle(190, 162, 48, 32), "Save", Color.Black, Color.White);
+			buttonsForEditMode2[9] = new DXButton(new Rectangle(190, 208, 48, 32), "Load", Color.Black, Color.White);
 
 			buttonsForEditMode2[0].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
 			{
@@ -190,6 +195,32 @@ namespace ActionGameProj
 					myenv.ReleaseTime = 0;
 			});
 
+			buttonsForEditMode2[8].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			{
+				SaveFileDialog sfd = new SaveFileDialog();
+				sfd.Filter = "Music Sheet サウンドファイル (*.mssf)|*.mssf|すべてのファイル (*.*)|*.*";
+				if (sfd.ShowDialog() == DialogResult.Cancel)
+					return;
+				SaveFileVer1(sfd.FileName, wave, myenv.AttackTime, myenv.DecayTime, myenv.SustainLevel, myenv.ReleaseTime, pan);
+
+
+			});
+
+			buttonsForEditMode2[9].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			{
+				OpenFileDialog ofd = new OpenFileDialog();
+				ofd.Filter = "Music Sheet サウンドファイル (*.mssf)|*.mssf|すべてのファイル (*.*)|*.*";
+				if (ofd.ShowDialog() == DialogResult.Cancel)
+					return;
+				int a,d,r;
+				byte s;
+				LoadFileVer1(ofd.FileName, out wave, out a, out d, out s, out r, out pan);
+				myenv.AttackTime = a;
+				myenv.DecayTime = d;
+				myenv.SustainLevel = s;
+				myenv.ReleaseTime = r;
+
+			});
 
 			Action<int, DXButton> down = new Action<int, DXButton>((mbtn, dbt) =>
 			{
@@ -373,6 +404,7 @@ namespace ActionGameProj
 		}
 
 
+
 		public static int SetNoise(int hz, bool isShortFreq, ref int sheed, int length)
 		{
 			int output = 0;
@@ -423,7 +455,6 @@ namespace ActionGameProj
 
 		static int SetWave(short[] wave, int hz)
 		{
-			int sheed = 0x8000;
 			int length = 0;
 			for (int i = 0; i < 44100; i++)
 				if (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI >= 360)
@@ -449,6 +480,101 @@ namespace ActionGameProj
 			return retval;
 
 
+		}
+
+		public static void LoadFileDynamic(string path, out short[] wave, out int a, out int d, out byte s, out int r, out int pan)
+		{
+			System.IO.BinaryReader br = null;
+			try
+			{
+				br = new System.IO.BinaryReader(new System.IO.FileStream(path, System.IO.FileMode.Open));
+			}
+			catch (System.IO.FileNotFoundException)
+			{
+				throw new Exception("ERR:0004");
+			}
+			char[] head = br.ReadChars(8);
+			if (head != new[] { 'M', 'S', 'S', 'F', '_', 'V', 'E', 'R' })
+			{
+				throw new Exception("ERR:0002");
+			}
+			int ver = 0;
+			try
+			{
+				ver = int.Parse(new string(br.ReadChars(3)));
+			}
+			catch (Exception)
+			{
+				throw new Exception("ERR:0002");
+			}
+			switch (ver)
+			{
+				case 1:
+					LoadFileVer1(path, out wave, out a, out d, out s, out r, out pan);
+					break;
+				default:
+					throw new Exception("ERR:0005");
+
+			}
+		}
+
+		public static void SaveFileVer1(string path, short[] wave, Int32 a, Int32 d, byte s, Int32 r, Int32 pan)
+		{
+			System.IO.BinaryWriter bw = null;
+			try
+			{
+				bw = new System.IO.BinaryWriter(new System.IO.FileStream(path, System.IO.FileMode.Create));
+			}
+			catch (UnauthorizedAccessException)
+			{
+				throw new Exception("ERR:0003");
+			}
+			bw.Write(new[] { 'M', 'S', 'S', 'F', '_', 'V', 'E', 'R', '0', '0', '1' }, 0, 11);	//ヘッダー
+			foreach (short wav in wave)
+				bw.Write(wav);							//波形データ
+			bw.Write(a);								//アタックタイム
+			bw.Write(d);								//ディケイタイム
+			bw.Write(s);								//サスティンレベル
+			bw.Write(r);								//リリースタイム
+			bw.Write(pan);								//パンポット
+			
+			bw.Close();									//ストリームを閉じる
+		}
+
+		public static void LoadFileVer1(string path, out short[] wave, out int a, out int d, out byte s, out int r, out int pan)
+		{
+			wave = new short[32];
+			System.IO.BinaryReader br = null;
+			try
+			{
+				br = new System.IO.BinaryReader(new System.IO.FileStream(path, System.IO.FileMode.Open));
+			}
+			catch (System.IO.FileNotFoundException)
+			{
+				throw new Exception("ERR:0004");
+			}
+			char[] head = br.ReadChars(11);
+			if (new string(head) != "MSSF_VER001")
+			{
+				if (new string(head).Substring(0, 8) == "MSSF_VER")
+				{
+					throw new Exception("ERR:0001");	//指定した Music Sheet Sound File のバージョンが異なる。
+				}
+				else
+				{
+					throw new Exception("ERR:0002");	//そのファイルは Music Sheet Sound File ではない。
+				}
+			}
+			for (int i = 0; i < 32; i++)
+				wave[i] = br.ReadInt16();
+
+			a = br.ReadInt32();
+			d = br.ReadInt32();
+			s = br.ReadByte();
+			r = br.ReadInt32();
+
+			pan = br.ReadInt32();
+			br.Close();
 		}
 
 		public static int GetFreq(string pitch, int oct)
