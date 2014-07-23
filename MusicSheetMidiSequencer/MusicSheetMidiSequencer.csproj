@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{983C7C11-A561-48F8-A2F3-3F2B21CA6B97}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MusicSheetMidiSequencer</RootNamespace>
     <AssemblyName>MusicSheetMidiSequencer</AssemblyName>
@@ -31,12 +31,34 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="avenue.core">
+      <HintPath>C:\Users\Citringo\Desktop\Package\avenue.core.dll</HintPath>
+    </Reference>
+    <Reference Include="avenue.filing">
+      <HintPath>C:\Users\Citringo\Desktop\Package\avenue.filing.dll</HintPath>
+    </Reference>
     <Reference Include="DxLibDotNet">
       <HintPath>..\..\..\..\..\Desktop\DxLibDotNet\DxLibDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="Midi">
+      <HintPath>C:\Users\Citringo\Desktop\midi-dot-net_1.1.0\Midi.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.data">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.data.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.dataelement">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.dataelement.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.filing.midi">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.filing.midi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,11 +67,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Insts\3.mssf" />
+    <None Include="Insts\2.mssf" />
+    <None Include="Insts\1.mssf" />
+    <None Include="Insts\0.mssf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DxLib.dll">
@@ -58,12 +90,21 @@
     <Content Include="DxLib_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="池袋.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionGameProj\MusicSheetSoundEditor.csproj">
       <Project>{0b778eb9-36f3-40a3-97ed-468308700d33}</Project>
       <Name>MusicSheetSoundEditor</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

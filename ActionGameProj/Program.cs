@@ -11,10 +11,10 @@ using NextMidi;
 using NextMidi.MidiPort;
 using NextMidi.MidiPort.Input;
 
-namespace ActionGameProj
+namespace MusicSheetSoundEditor
 {
 	
-	class Program
+	public class Program
 	{
 
 		public static short[] WAV_SQUARE = {
