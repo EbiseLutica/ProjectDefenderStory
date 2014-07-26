@@ -28,38 +28,37 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-			this.label1 = new System.Windows.Forms.Label();
+			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
-			// label1
+			// textBox1
 			// 
-			this.label1.AllowDrop = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Font = new System.Drawing.Font("ＭＳ ゴシック", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.label1.Location = new System.Drawing.Point(0, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(349, 261);
-			this.label1.TabIndex = 0;
-			this.label1.Text = resources.GetString("label1.Text");
-			this.label1.DragDrop += new System.Windows.Forms.DragEventHandler(this.label1_DragDrop);
-			this.label1.DragEnter += new System.Windows.Forms.DragEventHandler(this.label1_DragEnter);
+			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBox1.Location = new System.Drawing.Point(0, 0);
+			this.textBox1.Multiline = true;
+			this.textBox1.Name = "textBox1";
+			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBox1.Size = new System.Drawing.Size(349, 261);
+			this.textBox1.TabIndex = 0;
 			// 
 			// MainWindow
 			// 
-			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(349, 261);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.textBox1);
 			this.Name = "MainWindow";
 			this.Text = "MainWindow";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.Label label1;
+		public System.Windows.Forms.TextBox textBox1;
+
+
+
 	}
 }

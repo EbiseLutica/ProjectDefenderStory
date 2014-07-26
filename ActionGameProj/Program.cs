@@ -228,7 +228,7 @@ namespace MusicSheetSoundEditor
 				if (nowTone != null && nowTone.Playing)
 					nowTone.Abort();
 				nowTone = new Tone(dbt.Text, octave, wave, myenv, 255, pan);
-				nowTone.StartPlay();
+				nowTone.StartPlay(-1,-1);
 			});
 
 			Action<int, DXButton> up = new Action<int, DXButton>((mbtn, dbt) =>
@@ -388,7 +388,7 @@ namespace MusicSheetSoundEditor
 						i += DateTime.Now.Millisecond - bmsec - 1;
 					while (DateTime.Now.Millisecond - bmsec == 0) { }
 					if (nowTone != null && nowTone.Playing)
-						nowTone.PlayLoop();
+						nowTone.PlayLoop(-1);
 
 					bmsec = DateTime.Now.Millisecond;
 					if (DX.WaitTimer(1) == -1)
@@ -494,7 +494,7 @@ namespace MusicSheetSoundEditor
 				throw new Exception("ERR:0004");
 			}
 			char[] head = br.ReadChars(8);
-			if (head != new[] { 'M', 'S', 'S', 'F', '_', 'V', 'E', 'R' })
+			if (new string(head) != "MSSF_VER")
 			{
 				throw new Exception("ERR:0002");
 			}
@@ -507,6 +507,7 @@ namespace MusicSheetSoundEditor
 			{
 				throw new Exception("ERR:0002");
 			}
+			br.Close();
 			switch (ver)
 			{
 				case 1:
@@ -795,8 +796,11 @@ namespace MusicSheetSoundEditor
 
 		public int Handle { get; set; }
 
-		public int bmilisec = 0;
+		public int Velocity { get; set; }
 
+		public int bmilisec = 0;
+		public int startedMidiTick = 0;
+		public int nowMidiTick = 0;
 		public int releasedVolume = 0;
 
 		public Tone(string pitch, int octave, short[] wave, Envelope env, int vol, int pan)
@@ -815,9 +819,32 @@ namespace MusicSheetSoundEditor
 			Volume = vol;
 
 			Playing = false;
+			Velocity = 100;
 		}
-		
-		public void StartPlay()
+
+		public Tone(string pitch, int octave, short[] wave, Envelope env, int vol, int pan, int vel)
+		{
+			if (DX.DxLib_IsInit() == 0)
+			{
+				throw new Exception("DXLib が初期化されていません。");
+			}
+			Pitch = pitch;
+			Octave = octave;
+			Wave = wave;
+
+			Handle = SetWave(wave, Freq = GetFreq(pitch, octave), pan);
+			Envelope = env;
+
+			Volume = vol;
+
+			Velocity = vel;
+
+			Playing = false;
+		}
+
+		public int gate;
+
+		public void StartPlay(int miditick, int gate)
 		{
 			outVolume = Volume;
 			Playing = true;
@@ -826,12 +853,14 @@ namespace MusicSheetSoundEditor
 			this.envflag = EnvelopeFlag.Attack;
 			tick = 0;
 			bmilisec = DX.GetNowCount();
-			Console.WriteLine("[DEBUG]音源再生開始");
+			startedMidiTick = miditick;
+			this.gate = gate;
+			//Console.WriteLine("[DEBUG]音源再生開始");
 		}
 		
 
 
-		public void PlayLoop()
+		public void PlayLoop(int miditick)
 		{
 			if (!this.Playing)
 				return;
@@ -876,6 +905,9 @@ namespace MusicSheetSoundEditor
 			{
 
 			}
+			nowMidiTick = miditick;
+			if (nowMidiTick - startedMidiTick > gate && gate != -1)
+				this.Stop();
 			tick++;
 
 			bmilisec = DX.GetNowCount();
@@ -914,7 +946,7 @@ namespace MusicSheetSoundEditor
 			for (int i = 0; i < 44100; i++)
 				if (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI >= 360)
 				{
-					Console.Write(Math.PI * 2 / 44100 * i * hz * 180 / Math.PI);
+					//Console.Write(Math.PI * 2 / 44100 * i * hz * 180 / Math.PI);
 					length = i;
 					break;
 				}
@@ -953,7 +985,7 @@ namespace MusicSheetSoundEditor
 		}
 
 		
-
+		/*
 		public static int GetFreq(string pitch, int oct)
 		{
 			int freq;
@@ -1035,8 +1067,21 @@ namespace MusicSheetSoundEditor
 				}
 			return freq / 100;
 		}
+		*/
 
-		
+		public static int GetFreq(string pitch, int oct)
+		{
+			int hoge = oct * 12 + pitchnames.IndexOf(pitch) + 12;
+			int hage = GetFreq(hoge);
+			return hage;
+		}
+
+		public static List<string> pitchnames = new[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }.ToList();
+
+		public static int GetFreq(int noteno)
+		{
+			return (int)(440 * Math.Pow(2, (noteno - 69) / 12.0));
+		}
 
 		
 	

@@ -47,14 +47,50 @@
     <Reference Include="Midi">
       <HintPath>C:\Users\Citringo\Desktop\midi-dot-net_1.1.0\Midi.dll</HintPath>
     </Reference>
+    <Reference Include="MIDIClock.CSharp">
+      <HintPath>C:\Users\Citringo\Desktop\MIDIClockLib0.9_cs0.1\Release\MIDIClock.CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="nextmidi.data">
       <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.data.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.dataelement">
       <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.dataelement.dll</HintPath>
     </Reference>
+    <Reference Include="nextmidi.dataelement.status, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.dataelement.status.dll</HintPath>
+    </Reference>
     <Reference Include="nextmidi.filing.midi">
       <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.filing.midi.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.filing.midi.chunk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.filing.midi.chunk.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.filing.midi.midifile, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.filing.midi.midifile.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.bridge">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.midiport.bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.core">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.midiport.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.input">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.midiport.input.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.input.core">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.midiport.input.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.output">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.midiport.output.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.output.core">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.midiport.output.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.time">
+      <HintPath>C:\Users\Citringo\Desktop\Package\nextmidi.time.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -78,10 +114,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Insts\3.mssf" />
-    <None Include="Insts\2.mssf" />
-    <None Include="Insts\1.mssf" />
-    <None Include="Insts\0.mssf" />
+    <None Include="Insts\12.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\3.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\2.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\1.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\0.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\38.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\54.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\74.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\75.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\80.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Insts\81.mssf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="DxLib.dll">
@@ -90,7 +155,25 @@
     <Content Include="DxLib_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="池袋.mid">
+    <Content Include="MIDIClock.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MIDIClock_cs.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="noname.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="piano2.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="portatest.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tpmidi01_1.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="おもちゃエレクトロニクス.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

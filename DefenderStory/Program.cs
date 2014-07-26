@@ -572,6 +572,7 @@ namespace DefenderStory
 		public bool jumping = false;
 		public bool jumped = false;
 		public int jumpcnt = 0;
+		public double[] Sin = null;
 		ObjectHitFlag bohf1 = ObjectHitFlag.NotHit, bohf2 = ObjectHitFlag.NotHit;
 		//bool isRight = false;
 		//bool killed = false;
@@ -589,6 +590,9 @@ namespace DefenderStory
 			bjumpright = jr;
 			bdead = d;
 			this.KilledImageHandle = bdead;
+			Sin = new double[360];
+			for (int i = 0; i < 360; i++)
+				Sin[i] = Math.Sin(i / 180.0 * Math.PI)*128;
 		}
 
 		public override int killedMaxTick
@@ -607,7 +611,7 @@ namespace DefenderStory
 			if (killedy == -16)
 				killedy = Point.Y;
 			if (tick < 180)
-				this.Point = new Point(Point.X, (int)(killedy - Math.Sin(tick / 180.0 * Math.PI) * 128));
+				this.Point = new Point(Point.X, (int)(killedy - Sin[tick % 360]));
 			else
 				this.Point = new Point(Point.X, Point.Y + 1);
 		}
