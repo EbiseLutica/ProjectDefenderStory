@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("DefenderStory")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Defenders Story")]
+[assembly: AssemblyDescription("古典的で 2D な、横スクロールのジャンプアクションゲーム")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DefenderStory")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("Defenders Story")]
+[assembly: AssemblyCopyright("(C)2014 Citringo Soft.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

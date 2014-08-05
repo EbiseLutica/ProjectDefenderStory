@@ -908,7 +908,7 @@ namespace MusicSheetSoundEditor
 			nowMidiTick = miditick;
 			if (nowMidiTick - startedMidiTick > gate && gate != -1)
 				this.Stop();
-			tick++;
+			tick += DX.GetNowCount() - bmilisec;
 
 			bmilisec = DX.GetNowCount();
 			//Console.WriteLine("[DEBUG]音源ループ: {0}, {1}, {2}", outVolume, tick, envflag);
@@ -956,14 +956,35 @@ namespace MusicSheetSoundEditor
 			float tR = 0;
 			float t = 0;
 			int hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
+			ushort[] y = new ushort[length];
+			for (int i = 0; i < length; i++)
+			{
+				t = wave[(int)((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360 / (360 / 32.0))]+32768; // divided by 10 means volume control
+				t /= 2;
+				
+				/*if (i > 0)
+				y[i] = (ushort)(0.9f * (ushort)y[i - 1] + 0.1f*t);
+				else*/
+					y[i] = (ushort)t;
+				
+				/*
+				if (i > 1)
+					y[i] = (ushort)((y[i - 2] + y[i - 1] + t) / 3);
+				if (i > 0)
+					y[i] = (ushort)((y[i - 1] + t) / 3);
+				else
+					y[i] = (ushort)t;
+				*/
+			}
+
+
+
+			y[0] = (ushort)(0.9f * (ushort)y[length - 1] + 0.1f * y[0]);
 
 			for (int i = 0; i < length; i++)
 			{
-				t = wave[(int)((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360 / (360 / 32.0))]; // divided by 10 means volume control
-				t /= 2;
-				//data[i] = (short)t;
-				tL = t - pan * 327.67f;
-				tR = t + pan * 327.67f;
+				tL = y[i] - pan * 327.67f;
+				tR = y[i] + pan * 327.67f;
 				if (tL < 0)
 					tL = 0;
 				if (tL > 32767)
@@ -975,8 +996,9 @@ namespace MusicSheetSoundEditor
 					tR = 32767;
 
 
-				DX.WriteSoftSoundData(hSSnd, i, (short)tL, (short)tR);
+				DX.WriteSoftSoundData(hSSnd, i, (ushort)tL, (ushort)tR);
 			}
+
 
 			int retval = DX.LoadSoundMemFromSoftSound(hSSnd);
 			DX.DeleteSoftSound(hSSnd);
@@ -1108,6 +1130,8 @@ namespace MusicSheetSoundEditor
 			SustainLevel = s;
 			ReleaseTime = r;
 		}
+
+		
 
 	}
 

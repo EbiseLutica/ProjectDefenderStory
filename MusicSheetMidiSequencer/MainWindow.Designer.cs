@@ -33,6 +33,7 @@
 			// 
 			// textBox1
 			// 
+			this.textBox1.AllowDrop = true;
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBox1.Location = new System.Drawing.Point(0, 0);
 			this.textBox1.Multiline = true;
@@ -40,15 +41,19 @@
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox1.Size = new System.Drawing.Size(349, 261);
 			this.textBox1.TabIndex = 0;
+			this.textBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox1_DragDrop);
+			this.textBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBox1_DragEnter);
 			// 
 			// MainWindow
 			// 
+			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(349, 261);
 			this.Controls.Add(this.textBox1);
 			this.Name = "MainWindow";
 			this.Text = "MainWindow";
+			this.TopMost = true;
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

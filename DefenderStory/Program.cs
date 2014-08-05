@@ -63,41 +63,21 @@ namespace DefenderStory
 
 			//int hndl_bigplayer_walkleft = DX.CreateGraphFromRectSoftImage(hndl_playerchip, 0, 0, 16, 32);
 
-			int[] hndl_bigplayer_datas = new int[11];
+			int[] hndl_bigplayer_datas = new int[72];
 
-			if (DX.LoadDivGraph("Resources\\Graphics\\player_chip.png", 11, 11, 1, 16, 32, out hndl_bigplayer_datas[0]) == -1)
+			if (DX.LoadDivGraph("Resources\\Graphics\\player_chip.png", 72, 18, 4, 16, 32, out hndl_bigplayer_datas[0]) == -1)
 			{
 				throw new Exception("プレイヤーキャラの読み込みに失敗しました。");
 			}
 
-
-			int[] hndl_bigplayer_walkleft = {
-												hndl_bigplayer_datas[0],
-												hndl_bigplayer_datas[1],
-												hndl_bigplayer_datas[2],
-												hndl_bigplayer_datas[3]
-											};
-
-			int[] hndl_bigplayer_jumpleft = {
-												hndl_bigplayer_datas[4]
-											};
-
-			int[] hndl_bigplayer_dead = {
-											hndl_bigplayer_datas[5]
-										};
-
-			int[] hndl_bigplayer_walkright = {
-												hndl_bigplayer_datas[6],
-												hndl_bigplayer_datas[7],
-												hndl_bigplayer_datas[8],
-												hndl_bigplayer_datas[9]
-											 };
-
-			int[] hndl_bigplayer_jumpright = {
-												 hndl_bigplayer_datas[10]
-											 };
-
+			int[] hndl_commonMob_datas = new int[144];
 			
+			if (DX.LoadDivGraph("Resources\\Graphics\\commonMob.png", 144, 16, 4, 16, 16, out hndl_commonMob_datas[0]) == -1)
+			{
+				throw new Exception("プレイヤーキャラの読み込みに失敗しました。");
+			}
+			
+
 
 
 			int[] hndl_mpt = new int[64];
@@ -156,20 +136,23 @@ namespace DefenderStory
 			SpriteCollection spcolle = new SpriteCollection();
 
 			
-			Player me = new Player(new Point(32, 32), new Size(16, 32), hndl_bigplayer_walkright, true, 8, 0, mptobjects, hndl_bigplayer_walkleft, hndl_bigplayer_walkright, hndl_bigplayer_jumpleft, hndl_bigplayer_jumpright, hndl_bigplayer_dead, spcolle);
+			Player me = new Player(new Point(32, 32), new Size(16, 32), true, 8, 0, mptobjects, spcolle, hndl_bigplayer_datas);
+
+			Player me2 = new Player(new Point(64, 32), new Size(16, 32), true, 8, 0, mptobjects, spcolle, hndl_bigplayer_datas);
+
+			Player me3 = new Player(new Point(96, 32), new Size(16, 32), true, 8, 0, mptobjects, spcolle, hndl_bigplayer_datas);
+
+			Player me4 = new Player(new Point(128, 32), new Size(16, 32), true, 8, 0, mptobjects, spcolle, hndl_bigplayer_datas);
+
+			Bunyo hoge = new Bunyo(new Point(256,2), new Size(16,16), true, 8, 0, mptobjects, spcolle, hndl_commonMob_datas);
 			
-			Player me2 = new Player(new Point(64, 32), new Size(16, 32), hndl_bigplayer_walkright, true, 8, 0, mptobjects, hndl_bigplayer_walkleft, hndl_bigplayer_walkright, hndl_bigplayer_jumpleft, hndl_bigplayer_jumpright, hndl_bigplayer_dead, spcolle);
 
-			Player me3 = new Player(new Point(96, 32), new Size(16, 32), hndl_bigplayer_walkright, true, 8, 0, mptobjects, hndl_bigplayer_walkleft, hndl_bigplayer_walkright, hndl_bigplayer_jumpleft, hndl_bigplayer_jumpright, hndl_bigplayer_dead, spcolle);
-
-			Player me4 = new Player(new Point(128, 32), new Size(16, 32), hndl_bigplayer_walkright, true, 8, 0, mptobjects, hndl_bigplayer_walkleft, hndl_bigplayer_walkright, hndl_bigplayer_jumpleft, hndl_bigplayer_jumpright, hndl_bigplayer_dead, spcolle);
-
-			
-
-			spcolle.Add(me,true);
+			spcolle.Add(me);
 			spcolle.Add(me2);
 			spcolle.Add(me3);
 			spcolle.Add(me4);
+
+			spcolle.Add(hoge, true);
 
 			for (int i = 0; i < 240; i++)
 			{
@@ -300,9 +283,13 @@ namespace DefenderStory
 					bsec = DateTime.Now.Second;
 				}
 
-				
 
-				DX.DrawString(0, 0, string.Format("camX:{0}/{1} camY:{2}/{3} fps: {4}", camera.X/16, map.Width, camera.Y/16, map.Height, fps), DX.GetColor(255, 255, 255));
+				string aho = "";
+				foreach (Sprite sp in spcolle)
+				{
+					aho += (sp.killed ? "死" : "生");
+				}
+				DX.DrawString(0, 0, string.Format(aho, camera.X/16, map.Width, camera.Y/16, map.Height, fps), DX.GetColor(255, 255, 255));
 
 				if (DX.ScreenFlip() == -1)
 				{
@@ -563,10 +550,16 @@ namespace DefenderStory
 			Draw(0, 0, ref ks, chips);
 		}
 
-
+		public static bool CheckHitJudge(Rectangle rect1, Rectangle rect2)
+		{
+			return (rect1.X < rect2.X + rect2.Width) && (rect2.X < rect1.X + rect1.Width) &&
+				   (rect1.Y < rect2.Y + rect2.Height) && (rect2.Y < rect1.Y + rect1.Height);
+		}
+		
 
 	}
 
+	
 	public class Player : Sprite
 	{
 		public bool jumping = false;
@@ -579,20 +572,53 @@ namespace DefenderStory
 		int killedtick = 0;
 		int bubbleNumber = 16;
 
-		int[] bwalkleft = null, bwalkright = null, bjumpleft = null, bjumpright = null, bdead = null;
+		static int[] biglwalk = { 0, 1, 2, 3 };
+		static int[] bigljump = { 4 };
+		static int[] bigrwalk = { 6, 7, 8, 9 };
+		static int[] bigrjump = { 10 };
+		static int[] bigdead = { 5 };
+		static int[] biglcrch = { 11 };
+		static int[] bigrcrch = { 12 };
+		static int[] biglprat = { 13 };
+		static int[] bigrprat = { 14 };
+		static int[] biglpratw = { 15 };
+		static int[] bigrpratw = { 16 };
+		static int[] biglswimw = { 18, 19, 20, 21 };
+		static int[] bigrswimw = { 22, 23, 24, 25 };
+		static int[] biglwalkw = { 26, 27, 28, 29 };
+		static int[] bigrwalkw = { 30, 31, 32, 33 };
+		static int[] biglcrchw = { 34 };
+		static int[] bigrcrchw = { 35 };
 
-		public Player(Point p, Size s, int[] handle, bool useanime, int speed, int loop, Object[] objs, int[] wl, int[] wr, int[] jl, int[] jr, int[] d, SpriteCollection par)
-			: base(p, s, handle, useanime, speed, loop, objs, par)
+		static int[] biglwalkt = { 36, 37, 38, 39 };
+		static int[] bigljumpt = { 40 };
+		static int[] bigrwalkt = { 41, 42, 43, 44 };
+		static int[] bigrjumpt = { 45 };
+		static int[] bigldeadt = { 46 };
+		static int[] biglcrcht = { 47 };
+		static int[] bigrcrcht = { 48 };
+		static int[] biglpratt = { 49 };
+		static int[] bigrpratt = { 50 };
+		static int[] biglpratwt = { 51 };
+		static int[] bigrpratwt = { 52 };
+		static int[] biglswimwt = { 54, 55, 56, 57 };
+		static int[] bigrswimwt = { 58, 59, 60, 61 };
+		static int[] biglwalkwt = { 62, 63, 64, 65 };
+		static int[] bigrwalkwt = { 66, 67, 68, 69 };
+		static int[] biglcrchwt = { 70 };
+		static int[] bigrcrchwt = { 71 };
+
+		int[] datas;
+
+		public Player(Point p, Size s, bool useanime, int speed, int loop, Object[] objs, SpriteCollection par, int[] datas)
+			: base(p, s, new[]{0}, useanime, speed, loop, objs, par)
 		{
-			bwalkleft = wl;
-			bwalkright = wr;
-			bjumpleft = jl;
-			bjumpright = jr;
-			bdead = d;
-			this.KilledImageHandle = bdead;
+
+			this.datas = datas;
+			this.KilledImageHandle = GetImage(bigdead);
 			Sin = new double[360];
 			for (int i = 0; i < 360; i++)
-				Sin[i] = Math.Sin(i / 180.0 * Math.PI)*128;
+				Sin[i] = Math.Sin(i / 180.0 * Math.PI) * 64;
 		}
 
 		public override int killedMaxTick
@@ -657,10 +683,10 @@ namespace DefenderStory
 				if (spdx < 0.4f && spdx > -0.4f)
 					spdx = 0;
 			}
-			
+
 			nowX += spdx; nowY += spdy;
 
-			
+
 
 
 
@@ -686,6 +712,7 @@ namespace DefenderStory
 				killed = true;
 				isFall = true;
 			}
+
 
 
 			if (!killed)
@@ -731,138 +758,277 @@ namespace DefenderStory
 					spdlimit = 2;
 				}
 
-				if (spdx != 0 && !isRight)
+				spdx = (float)Math.Round(spdx, 3);
+				//nowX = (int)nowX;
+
+				Point judge1 = new Point((int)nowX + 2, (int)nowY + 32);	//足判定1	
+
+				Point judge2 = new Point((int)nowX + 12, (int)nowY + 32);	//足判定2
+
+				Point judge3 = new Point((int)nowX + 1, (int)nowY + 24);	//左障害物判定
+
+				Point judge4 = new Point((int)nowX + 13, (int)nowY + 24);	//右障害物判定
+
+				Point judge5 = new Point((int)nowX + 1, (int)nowY + 12);	//左障害物判定2
+
+				Point judge6 = new Point((int)nowX + 13, (int)nowY + 12);	//右障害物判定2
+
+				Point judge7 = new Point((int)nowX + 2, (int)nowY - 1);		//頭判定1
+
+				Point judge8 = new Point((int)nowX + 12, (int)nowY - 1);	//頭判定2
+
+
+
+				ObjectHitFlag ohf1 = ObjectHitFlag.NotHit,
+							  ohf2 = ObjectHitFlag.NotHit,
+							  ohf3 = ObjectHitFlag.NotHit,
+							  ohf4 = ObjectHitFlag.NotHit,
+							  ohf5 = ObjectHitFlag.NotHit,
+							  ohf6 = ObjectHitFlag.NotHit,
+							  ohf7 = ObjectHitFlag.NotHit,
+							  ohf8 = ObjectHitFlag.NotHit;
+
+				//もし判定点が床部分なら、上を目指す。
+				try
 				{
-					if (jumping)
+					ohf1 = mptobjects[chips[judge1.X / 16, judge1.Y / 16]].CheckHit(judge1.X % 16, judge1.Y % 16);
+
+					ohf2 = mptobjects[chips[judge2.X / 16, judge2.Y / 16]].CheckHit(judge2.X % 16, judge2.Y % 16);
+
+					ohf3 = mptobjects[chips[judge3.X / 16, judge3.Y / 16]].CheckHit(judge3.X % 16, judge3.Y % 16);
+
+					ohf4 = mptobjects[chips[judge4.X / 16, judge4.Y / 16]].CheckHit(judge4.X % 16, judge4.Y % 16);
+
+					ohf5 = mptobjects[chips[judge5.X / 16, judge5.Y / 16]].CheckHit(judge5.X % 16, judge5.Y % 16);
+
+					ohf6 = mptobjects[chips[judge6.X / 16, judge6.Y / 16]].CheckHit(judge6.X % 16, judge6.Y % 16);
+
+					ohf7 = mptobjects[chips[judge7.X / 16, judge7.Y / 16]].CheckHit(judge7.X % 16, judge7.Y % 16);
+
+					ohf8 = mptobjects[chips[judge8.X / 16, judge8.Y / 16]].CheckHit(judge8.X % 16, judge8.Y % 16);
+
+
+				}
+				catch (Exception)
+				{
+				}
+
+				if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+				{
+					for (int bi = 0; bi < bubbleNumber / 2; bi++)
+						DX.DrawCircle(this.Point.X + DX.GetRand(this.Size.Width), this.Point.Y + this.Size.Height - DX.GetRand(4), DX.GetRand(3), DX.GetColor(255, 255, 255), 0);
+					if (bubbleNumber > -1 && DX.GetNowCount() % 2 == 0)
+						bubbleNumber--;
+					jumping = false;
+					jumped = false;
+				}
+				else
+				{
+					if (bohf1 != ObjectHitFlag.InWater && bohf2 != ObjectHitFlag.InWater)
+						bubbleNumber = 16;
+
+				}
+
+
+
+
+				if (!killed)
+				{
+					if ((ohf1 == ObjectHitFlag.NotHit || ohf1 == ObjectHitFlag.InWater) && (ohf2 == ObjectHitFlag.NotHit || ohf2 == ObjectHitFlag.InWater))
+						spdy += 0.1f;
+
+
+
+					if (ohf1 == ObjectHitFlag.Hit || ohf2 == ObjectHitFlag.Hit)
 					{
-						this.ImageHandle = bjumpleft;
-						this.nowImageNumber = 0;
-						this.UseAnime = false;
+						nowY = nowY - 1;
+						spdy = 0;
+						jumped = false;
+						jumping = false;
 					}
-					else
+
+
+
+
+
+					if (ohf3 == ObjectHitFlag.Hit || ohf5 == ObjectHitFlag.Hit)
 					{
-						this.ImageHandle = bwalkleft;
-						this.UseAnime = true;
+						nowX = (int)(nowX + 1);
+						spdx = 0;
+						this.nowImageNumber = 0;
+					}
+
+					if (ohf4 == ObjectHitFlag.Hit || ohf6 == ObjectHitFlag.Hit)
+					{
+						nowX = (int)(nowX - 1);
+						spdx = 0;
+						this.nowImageNumber = 0;
+					}
+
+					if (ohf7 == ObjectHitFlag.Hit || ohf8 == ObjectHitFlag.Hit)
+					{
+						nowY = nowY + 1;
+						spdy = 0;
+					}
+
+					Rectangle jibun = new Rectangle(this.Point, this.Size);
+
+					if (ks.inz == 0 && jumping && jumpcnt < 90)
+					{
+						spdy += 0.1f;
+					}
+
+					if (spdx != 0 && !isRight)
+					{
+						if (jumping)
+						{
+
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(biglswimw);
+								this.UseAnime = true;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(bigljump);
+
+								this.nowImageNumber = 0;
+								this.UseAnime = true;
+							}
+						}
+						else
+						{
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(biglwalkw);
+								this.UseAnime = true;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(biglwalk);
+								this.UseAnime = true;
+							}
+						}
+					}
+
+					if (spdx != 0 && isRight)
+					{
+						if (jumping)
+						{
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(bigrswimw);
+								this.UseAnime = true;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(bigrjump);
+
+								this.nowImageNumber = 0;
+								this.UseAnime = false;
+							}
+						}
+						else
+						{
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(bigrwalkw);
+								this.UseAnime = true;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(bigrwalk);
+
+
+								this.UseAnime = true;
+							}
+						}
+					}
+
+					if (spdx == 0 && !isRight)
+					{
+						if (jumping)
+						{
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(biglswimw);
+								this.UseAnime = true;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(bigljump);
+
+								this.nowImageNumber = 0;
+								this.UseAnime = false;
+							}
+						}
+						else
+						{
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(biglwalkw);
+								this.UseAnime = false;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(biglwalk);
+
+								this.nowImageNumber = 0;
+								this.UseAnime = false;
+							}
+						}
+					}
+					else if (spdx == 0 && isRight)
+					{
+						if (jumping)
+						{
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(bigrswimw);
+								this.UseAnime = true;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(bigrjump);
+
+								this.nowImageNumber = 0;
+								this.UseAnime = false;
+							}
+						}
+						else
+						{
+							if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+							{
+								this.ImageHandle = GetImage(bigrwalkw);
+								this.UseAnime = false;
+							}
+							else
+							{
+								this.ImageHandle = GetImage(bigrwalk);
+
+								this.nowImageNumber = 0;
+								this.UseAnime = false;
+							}
+						}
 					}
 				}
 
-				if (spdx != 0 && isRight)
+				bohf1 = ohf1;
+				bohf2 = ohf2;
+
+
+
+
+				/*
+				if (nowY + me.Size.Height > jimeny)
 				{
-					if (jumping)
-					{
-						this.ImageHandle = bjumpright;
-						this.nowImageNumber = 0;
-						this.UseAnime = false;
-					}
-					else
-					{
-						this.ImageHandle = bwalkright;
-						this.UseAnime = true;
-					}
+					nowY = jimeny - me.Size.Height;
+					spdy = 0;
+					jumped = false;
+					jumping = false;
 				}
-
-				if (spdx == 0 && !isRight)
-				{
-					if (jumping)
-					{
-						this.ImageHandle = bjumpleft;
-						this.nowImageNumber = 0;
-						this.UseAnime = false;
-					}
-					else
-					{
-						this.nowImageNumber = 0;
-						this.ImageHandle = bwalkleft;
-						this.UseAnime = false;
-					}
-				}
-				else if (spdx == 0 && isRight)
-				{
-					if (jumping)
-					{
-						this.ImageHandle = bjumpright;
-						this.nowImageNumber = 0;
-						this.UseAnime = false;
-					}
-					else
-					{
-						this.nowImageNumber = 0;
-						this.ImageHandle = bwalkright;
-						this.UseAnime = false;
-					}
-				}
-			}
-
-
-			spdx = (float)Math.Round(spdx, 3);
-			//nowX = (int)nowX;
-
-			Point judge1 = new Point((int)nowX + 2, (int)nowY + 32);	//足判定1	
-
-			Point judge2 = new Point((int)nowX + 12, (int)nowY + 32);	//足判定2
-
-			Point judge3 = new Point((int)nowX + 1, (int)nowY + 24);	//左障害物判定
-
-			Point judge4 = new Point((int)nowX + 13, (int)nowY + 24);	//右障害物判定
-
-			Point judge5 = new Point((int)nowX + 1, (int)nowY + 12);	//左障害物判定2
-
-			Point judge6 = new Point((int)nowX + 13, (int)nowY + 12);	//右障害物判定2
-
-			Point judge7 = new Point((int)nowX + 2, (int)nowY - 1);		//頭判定1
-
-			Point judge8 = new Point((int)nowX + 12, (int)nowY - 1);	//頭判定2
-
-
-
-			ObjectHitFlag ohf1 = ObjectHitFlag.NotHit,
-						  ohf2 = ObjectHitFlag.NotHit,
-						  ohf3 = ObjectHitFlag.NotHit,
-						  ohf4 = ObjectHitFlag.NotHit,
-						  ohf5 = ObjectHitFlag.NotHit,
-						  ohf6 = ObjectHitFlag.NotHit,
-						  ohf7 = ObjectHitFlag.NotHit,
-						  ohf8 = ObjectHitFlag.NotHit;
-
-			//もし判定点が床部分なら、上を目指す。
-			try
-			{
-				ohf1 = mptobjects[chips[judge1.X / 16, judge1.Y / 16]].CheckHit(judge1.X % 16, judge1.Y % 16);
-
-				ohf2 = mptobjects[chips[judge2.X / 16, judge2.Y / 16]].CheckHit(judge2.X % 16, judge2.Y % 16);
-
-				ohf3 = mptobjects[chips[judge3.X / 16, judge3.Y / 16]].CheckHit(judge3.X % 16, judge3.Y % 16);
-
-				ohf4 = mptobjects[chips[judge4.X / 16, judge4.Y / 16]].CheckHit(judge4.X % 16, judge4.Y % 16);
-
-				ohf5 = mptobjects[chips[judge5.X / 16, judge5.Y / 16]].CheckHit(judge5.X % 16, judge5.Y % 16);
-
-				ohf6 = mptobjects[chips[judge6.X / 16, judge6.Y / 16]].CheckHit(judge6.X % 16, judge6.Y % 16);
-
-				ohf7 = mptobjects[chips[judge7.X / 16, judge7.Y / 16]].CheckHit(judge7.X % 16, judge7.Y % 16);
-
-				ohf8 = mptobjects[chips[judge8.X / 16, judge8.Y / 16]].CheckHit(judge8.X % 16, judge8.Y % 16);
-
-
-			}
-			catch (Exception)
-			{
-			}
-
-			if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
-			{
-				for (int bi = 0; bi < bubbleNumber / 2; bi++)
-					DX.DrawCircle(this.Point.X + DX.GetRand(this.Size.Width), this.Point.Y + this.Size.Height - DX.GetRand(4), DX.GetRand(3), DX.GetColor(255, 255, 255), 0);
-				if (bubbleNumber > -1 && DX.GetNowCount() % 2 == 0)
-					bubbleNumber--;
-				jumping = false;
-				jumped = false;
-			}
-			else
-			{
-				if (bohf1 != ObjectHitFlag.InWater && bohf2 != ObjectHitFlag.InWater)
-					bubbleNumber = 16;
-
+				
+				*/
 			}
 
 			if (killed)
@@ -875,73 +1041,297 @@ namespace DefenderStory
 				killedtick++;
 			}
 
-			if (!killed)
-			{
-				if ((ohf1 == ObjectHitFlag.NotHit || ohf1 == ObjectHitFlag.InWater) && (ohf2 == ObjectHitFlag.NotHit || ohf2 == ObjectHitFlag.InWater))
-					spdy += 0.1f;
-
-
-
-				if (ohf1 == ObjectHitFlag.Hit || ohf2 == ObjectHitFlag.Hit)
-				{
-					nowY = nowY - 1;
-					spdy = 0;
-					jumped = false;
-					jumping = false;
-				}
-
-
-
-
-
-				if (ohf3 == ObjectHitFlag.Hit || ohf5 == ObjectHitFlag.Hit)
-				{
-					nowX = (int)(nowX + 1);
-					spdx = 0;
-					this.nowImageNumber = 0;
-				}
-
-				if (ohf4 == ObjectHitFlag.Hit || ohf6 == ObjectHitFlag.Hit)
-				{
-					nowX = (int)(nowX - 1);
-					spdx = 0;
-					this.nowImageNumber = 0;
-				}
-
-				if (ohf7 == ObjectHitFlag.Hit || ohf8 == ObjectHitFlag.Hit)
-				{
-					nowY = nowY + 1;
-					spdy = 0;
-				}
-				if (ks.inz == 0 && jumping && jumpcnt < 90)
-				{
-					spdy += 0.1f;
-				}
-
-				bohf1 = ohf1;
-				bohf2 = ohf2;
-
-			}
-
-
-			/*
-			if (nowY + me.Size.Height > jimeny)
-			{
-				nowY = jimeny - me.Size.Height;
-				spdy = 0;
-				jumped = false;
-				jumping = false;
-			}
-				
-			*/
-
-
 
 			if (!killed)
 				this.Point = new Point((int)nowX, (int)nowY);
 
 			base.Draw(x, y, ref ks, chips);
+
 		}
+
+		int[] GetImage(int[] datas)
+		{
+			int[] lastdata = new int[datas.Length];
+			int i = 0;
+			foreach (int data in datas)
+			{
+				lastdata[i] = this.datas[data];
+				i++;
+			}
+			return lastdata;
+		
+}
+}
+
+	public class Bunyo : Sprite
+	{
+		public bool jumping = false;
+		public bool jumped = false;
+		public int jumpcnt = 0;
+		public double[] Sin = null;
+		ObjectHitFlag bohf1 = ObjectHitFlag.NotHit, bohf2 = ObjectHitFlag.NotHit;
+		//bool isRight = false;
+		//bool killed = false;
+		int killedtick = 0;
+		int bubbleNumber = 16;
+
+		static int[] walkleft = {0, 1};
+		static int[] walkright = { 4, 5 };
+		static int[] dead = { 2 };
+		static int[] stepped = { 3 };
+
+		int[] datas;
+
+		public Bunyo(Point p, Size s, bool useanime, int speed, int loop, Object[] objs, SpriteCollection par, int[] datas)
+			: base(p, s, new[]{0}, useanime, speed, loop, objs, par)
+		{
+
+			this.datas = datas;
+			this.KilledImageHandle = GetImage(dead);
+			Sin = new double[360];
+			for (int i = 0; i < 360; i++)
+				Sin[i] = Math.Sin(i / 180.0 * Math.PI) * 128;
+			spdx = -1;
+		}
+
+		public override int killedMaxTick
+		{
+			get { return 240; }
+		}
+
+		int killedy = -16;
+
+		public override void Killing(int tick)
+		{
+			if (this.ImageHandle != this.KilledImageHandle)
+				this.ImageHandle = this.KilledImageHandle;
+			this.nowImageNumber = 0;
+			this.UseAnime = false;
+			if (killedy == -16)
+				killedy = Point.Y;
+			if (tick < 180)
+				this.Point = new Point(Point.X, (int)(killedy - Sin[tick % 360]));
+			else
+				this.Point = new Point(Point.X, Point.Y + 1);
+		}
+
+		public override void Draw(int x, int y, ref States ks, byte[,] chips)
+		{
+
+			if (nowX < 0)
+			{
+				spdx = 1;
+			}
+
+			if (nowX > ks.map.Width * 16 - 16)
+			{
+				spdx = -1;
+				nowX = ks.map.Width * 16 - 16;
+			}
+
+			if (nowY < 0)
+			{
+				spdy = 0;
+				nowY = 0;
+			}
+			if (nowY > ks.map.Height * 16)
+			{
+				killed = true;
+				isFall = true;
+			}
+
+
+			if (!killed)
+			{
+
+
+				Point judge1 = new Point((int)nowX + 2, (int)nowY + 16);	//足判定1	
+
+				Point judge2 = new Point((int)nowX + 12, (int)nowY + 16);	//足判定2
+
+				Point judge3 = new Point((int)nowX + 1, (int)nowY + 12);	//左障害物判定
+
+				Point judge4 = new Point((int)nowX + 13, (int)nowY + 12);	//右障害物判定
+				
+				Point judge5 = new Point((int)nowX + 1, (int)nowY + 6);		//左障害物判定2
+
+				Point judge6 = new Point((int)nowX + 13, (int)nowY + 6);	//右障害物判定2
+
+				Point judge7 = new Point((int)nowX + 2, (int)nowY - 1);		//頭判定1
+
+				Point judge8 = new Point((int)nowX + 12, (int)nowY - 1);	//頭判定2
+
+
+
+				ObjectHitFlag ohf1 = ObjectHitFlag.NotHit,
+							  ohf2 = ObjectHitFlag.NotHit,
+							  ohf3 = ObjectHitFlag.NotHit,
+							  ohf4 = ObjectHitFlag.NotHit,
+							  ohf5 = ObjectHitFlag.NotHit,
+							  ohf6 = ObjectHitFlag.NotHit,
+							  ohf7 = ObjectHitFlag.NotHit,
+							  ohf8 = ObjectHitFlag.NotHit;
+
+				//もし判定点が床部分なら、上を目指す。
+				try
+				{
+					ohf1 = mptobjects[chips[judge1.X / 16, judge1.Y / 16]].CheckHit(judge1.X % 16, judge1.Y % 16);
+
+					ohf2 = mptobjects[chips[judge2.X / 16, judge2.Y / 16]].CheckHit(judge2.X % 16, judge2.Y % 16);
+
+					ohf3 = mptobjects[chips[judge3.X / 16, judge3.Y / 16]].CheckHit(judge3.X % 16, judge3.Y % 16);
+
+					ohf4 = mptobjects[chips[judge4.X / 16, judge4.Y / 16]].CheckHit(judge4.X % 16, judge4.Y % 16);
+
+					ohf5 = mptobjects[chips[judge5.X / 16, judge5.Y / 16]].CheckHit(judge5.X % 16, judge5.Y % 16);
+
+					ohf6 = mptobjects[chips[judge6.X / 16, judge6.Y / 16]].CheckHit(judge6.X % 16, judge6.Y % 16);
+
+					ohf7 = mptobjects[chips[judge7.X / 16, judge7.Y / 16]].CheckHit(judge7.X % 16, judge7.Y % 16);
+
+					ohf8 = mptobjects[chips[judge8.X / 16, judge8.Y / 16]].CheckHit(judge8.X % 16, judge8.Y % 16);
+
+
+				}
+				catch (Exception)
+				{
+				}
+
+				if (ohf1 == ObjectHitFlag.InWater && ohf2 == ObjectHitFlag.InWater)
+				{
+					for (int bi = 0; bi < bubbleNumber / 2; bi++)
+						DX.DrawCircle(this.Point.X + DX.GetRand(this.Size.Width), this.Point.Y + this.Size.Height - DX.GetRand(4), DX.GetRand(3), DX.GetColor(255, 255, 255), 0);
+					if (bubbleNumber > -1 && DX.GetNowCount() % 2 == 0)
+						bubbleNumber--;
+					jumping = false;
+					jumped = false;
+				}
+				else
+				{
+					if (bohf1 != ObjectHitFlag.InWater && bohf2 != ObjectHitFlag.InWater)
+						bubbleNumber = 16;
+
+				}
+
+				if (killed)
+				{
+					Killing(killedtick);
+					if (killedMaxTick < killedtick)
+					{
+						isDead = true;
+					}
+					killedtick++;
+				}
+
+				if (!killed)
+				{
+					if ((ohf1 == ObjectHitFlag.NotHit || ohf1 == ObjectHitFlag.InWater) && (ohf2 == ObjectHitFlag.NotHit || ohf2 == ObjectHitFlag.InWater))
+						spdy += 0.1f;
+
+
+
+					if (ohf1 == ObjectHitFlag.Hit || ohf2 == ObjectHitFlag.Hit)
+					{
+						nowY = nowY - 1;
+						spdy = 0;
+						jumped = false;
+						jumping = false;
+					}
+
+
+
+
+
+					if (ohf3 == ObjectHitFlag.Hit || ohf5 == ObjectHitFlag.Hit)
+					{
+						nowX = (int)(nowX + 1);
+						spdx = 0;
+						this.nowImageNumber = 0;
+						spdx = 1;
+					}
+
+					if (ohf4 == ObjectHitFlag.Hit || ohf6 == ObjectHitFlag.Hit)
+					{
+						nowX = (int)(nowX - 1);
+						spdx = 0;
+						this.nowImageNumber = 0;
+						spdx = -1;
+					}
+
+					if (ohf7 == ObjectHitFlag.Hit || ohf8 == ObjectHitFlag.Hit)
+					{
+						nowY = nowY + 1;
+						spdy = 0;
+					}
+
+					Rectangle jibun = new Rectangle(this.Point, this.Size);
+
+					//当たり判定✦ﾇｰﾙﾇｰﾙ
+					foreach (Sprite sp in Parent)
+					{
+						if (!(sp is Player))
+							continue;
+						if (CheckHitJudge(new Rectangle(sp.Point.X, sp.Point.Y + 16, sp.Size.Width, sp.Size.Height / 2), new Rectangle(this.Point.X, this.Point.Y + 8, this.Size.Width, this.Size.Height / 2)))
+						{
+							sp.killed = true;
+						}
+					}
+					
+					if (spdx < 0)		//ひだり
+					{
+						ImageHandle = GetImage(walkleft);
+						UseAnime = true;
+					}
+					else if (spdx > 0)	//みぎ
+					{
+						ImageHandle = GetImage(walkright);
+						UseAnime = true;
+					}
+
+					nowX += spdx;
+					nowY += spdy;
+
+					bohf1 = ohf1;
+					bohf2 = ohf2;
+
+				}
+
+
+				/*
+				if (nowY + me.Size.Height > jimeny)
+				{
+					nowY = jimeny - me.Size.Height;
+					spdy = 0;
+					jumped = false;
+					jumping = false;
+				}
+				
+				*/
+
+
+
+				if (!killed)
+					this.Point = new Point((int)nowX, (int)nowY);
+
+				base.Draw(x, y, ref ks, chips);
+			}
+
+
+
+		}
+
+		int[] GetImage(int[] datas)
+		{
+			int[] lastdata = new int[datas.Length];
+			int i = 0;
+			foreach (int data in datas)
+			{
+				lastdata[i] = this.datas[data];
+				i++;
+			}
+			return lastdata;
+		}
+
 
 	}
 
