@@ -36,19 +36,48 @@ namespace MusicSheetSEEditor
 				return;
 			}
 			DX.SetGraphMode(480, 360, 32,60);
+			int wavegraph = 0;
 			Form1 f1 = new Form1();
 			f1.Show();
 			DX.SetUserChildWindow(f1.Handle);
+			int hnowmem = 0;
 			while (true)
 			{
 				DX.ProcessMessage();						//しないと固まる
 				DX.ClearDrawScreen();						//クリアしておかないとScreenFlipでどうなるかわからない
-				if (DX.ScreenFlip() == -1)					//ウィンドウを消すとtrueになるようなので終了処理をする
+				if (f1.wavesetrequest)
 				{
-					DX.DxLib_End();							
-					//ShowError("描画更新に失敗しました。");
-					return;
+					if (wavegraph != 0)
+						DX.DeleteGraph(wavegraph);
+					if (hnowmem != 0)
+						DX.DeleteSoundMem(hnowmem);
+					int hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(f1.wavedata.Length);
+					int hGraph = DX.MakeSoftImage(480, 360);
+
+					for (int i = 0; i < f1.wavedata.Length; i++)
+					{
+						DX.WriteSoftSoundData(hSSnd, i, f1.wavedata[i], f1.wavedata[i]);
+						DX.DrawLineSoftImage(hGraph, i/2, 180, i/2, (int)(f1.wavedata[i] / (65535 / 180.0) + 90), 255, 255, 255, 255);
+					}
+					wavegraph = DX.CreateGraphFromSoftImage(hGraph);
+					hnowmem = DX.LoadSoundMemFromSoftSound(hSSnd);
+					DX.DeleteSoftSound(hSSnd);
+					DX.DeleteSoftImage(hGraph);
+					f1.wavesetrequest = false;
+					DX.PlaySoundMem(hnowmem, DX.DX_PLAYTYPE_NORMAL);
 				}
+
+				//波形描画
+
+				if (wavegraph != 0)
+					DX.DrawGraph(0, 0, wavegraph, 0);
+
+					if (DX.ScreenFlip() == -1)					//ウィンドウを消すとtrueになるようなので終了処理をする
+					{
+						DX.DxLib_End();
+						//ShowError("描画更新に失敗しました。");
+						return;
+					}
 			}
 
 		}
@@ -62,5 +91,12 @@ namespace MusicSheetSEEditor
 			MessageBox.Show(string.Format(@"実行中にエラーが発生しました。
 エラー内容: {0}", text), "エラー", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 		}
+
+		
+
+	}
+	public enum EnvelopeFlag
+	{
+		None, Attack, Decay, Sustain, Release
 	}
 }

@@ -15,24 +15,83 @@ namespace MusicSheetSEEditor
 		public Form1()
 		{
 			InitializeComponent();
-			comboBox1.SelectedIndex = 0;
+			
 		}
 
 		int hztemp = 440;
 
+		SoundData[] sound = new SoundData[4];
 
+		
 
-		private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+		public bool wavesetrequest = false;
+
+		public ushort[] wavedata = new ushort[1];
+
+		
+
+		/// <summary>
+		/// 一周期分の波形データ、周波数、パンポットを指定して、波形データを作成します。
+		/// </summary>
+		/// <param name="wave">32個の波形データ。</param>
+		/// <param name="hz">周波数。</param>
+		/// <param name="pan">-100 ～ +100 の範囲で、パンポット。</param>
+		/// <returns>生成されたサウンドバッファーのハンドル。</returns>
+		public static ushort[] CreateSquare(int hz, int vol)
 		{
+			int length = 0;
+			for (int i = 0; i < 44100; i++)
+				if (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI >= 360)
+				{
+					length = i;
+					break;
+				}
+			float tL = 0;
+			float tR = 0;
+			float t = 0;
+			ushort[] y = new ushort[length];
+			for (int i = 0; i < length; i++)
+			{
+				t = (int)((int)((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360 / 180) * 65535) * (vol / 100.0f);
+				y[i] = (ushort)t;
+			}
 
+
+			return y;
 		}
 
-		private void textBox1_Leave(object sender, EventArgs e)
+		public static ushort[] CreateSaw(int hz, int vol)
 		{
-			if (int.TryParse(textBox1.Text, out ))
+			int length = 0;
+			for (int i = 0; i < 44100; i++)
+				if (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI >= 360)
+				{
+					length = i;
+					break;
+				}
+			float tL = 0;
+			float tR = 0;
+			float t = 0;
+			ushort[] y = new ushort[length];
+			for (int i = 0; i < length; i++)
+			{
+				t = (int)(((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360) * (65535 / 360)) * (vol / 100.0f);
+				y[i] = (ushort)t;
+			}
+
+
+			return y;
 		}
 
+		public static float CreateSquarePiece(int hz, int i, int vol)
+		{
+			return (int)((int)((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360 / 180) * 65535) * (vol / 100.0f);
+		}
 
+		public static float CreateSawPiece(int hz, int i, int vol)
+		{
+			return (int)(((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360) * (65535 / 360) ) * (vol / 100.0f);
+		}
 
 	}
 

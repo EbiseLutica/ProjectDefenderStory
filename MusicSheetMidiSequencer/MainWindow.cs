@@ -41,7 +41,7 @@ namespace MusicSheetMidiSequencer
 				MessageBox.Show("複数のファイルがドロップされました。\r\n先頭のファイルのみ再生を開始します");
 			file = fileName[0];
 			playRequest = true;
-			}
+		}
 
 		/// <summary>
 		/// 再生リクエストが送られたかどうかを判定し、ある場合は指定した文字列変数にファイル名を代入します。

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSheetSoundEditor", "ActionGameProj\MusicSheetSoundEditor.csproj", "{0B778EB9-36F3-40A3-97ED-468308700D33}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefenderStory", "DefenderStory\DefenderStory.csproj", "{41F08C51-7455-4179-B2D9-E4864FA478F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSheetMidiSequencer", "MusicSheetMidiSequencer\MusicSheetMidiSequencer.csproj", "{983C7C11-A561-48F8-A2F3-3F2B21CA6B97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor.csproj", "{847CA38F-6579-49FF-8ABF-7B6660BA02CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,16 @@ Global
 		{983C7C11-A561-48F8-A2F3-3F2B21CA6B97}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{983C7C11-A561-48F8-A2F3-3F2B21CA6B97}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{983C7C11-A561-48F8-A2F3-3F2B21CA6B97}.Release|Win32.ActiveCfg = Release|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{847CA38F-6579-49FF-8ABF-7B6660BA02CE}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
