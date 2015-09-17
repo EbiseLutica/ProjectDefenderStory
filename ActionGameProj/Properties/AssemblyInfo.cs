@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("横スクロール2Dアクションゲーム(仮題)")]
-[assembly: AssemblyDescription("古典的な横スクロールジャンプアクションのゲーム")]
+[assembly: AssemblyTitle("Music Sheet Sound Editor")]
+[assembly: AssemblyDescription("Music Sheetの波形データを作成できます。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Citringo Project")]
-[assembly: AssemblyProduct("横スクロール2Dアクションゲーム(仮題)")]
-[assembly: AssemblyCopyright("(C)2014 Citringo Project")]
+[assembly: AssemblyCompany("Citringo")]
+[assembly: AssemblyProduct("Music Sheet Sound Editor")]
+[assembly: AssemblyCopyright("(C)2014-2015 Citringo")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

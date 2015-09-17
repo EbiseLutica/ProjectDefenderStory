@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("Music Sheet Midi シーケンサー")]
+[assembly: AssemblyTitle("Music Sheet Midi Sequencer")]
 [assembly: AssemblyDescription("Music Sheet 音源を使って Midi シーケンスを演奏するソフトウェア。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Citringo")]
 [assembly: AssemblyProduct("Music Sheet Midi シーケンサー")]
-[assembly: AssemblyCopyright("(C)2014 Citringo Soft.")]
+[assembly: AssemblyCopyright("(C)2014-2015 Citringo")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

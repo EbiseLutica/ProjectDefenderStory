@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MusicSheetSoundEditor</RootNamespace>
-    <AssemblyName>ActionGameProj</AssemblyName>
+    <AssemblyName>MusicSheetSoundEditor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
@@ -50,42 +50,13 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>mssfedit.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="avenue.core">
-      <HintPath>..\..\..\..\..\Desktop\Package\avenue.core.dll</HintPath>
-    </Reference>
-    <Reference Include="avenue.filing">
-      <HintPath>..\..\..\..\..\Desktop\Package\avenue.filing.dll</HintPath>
-    </Reference>
-    <Reference Include="DxLibDotNet">
-      <HintPath>..\..\..\..\..\Desktop\DxLibDotNet\DxLibDotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.data">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.data.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.dataelement">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.dataelement.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.dataelement.status">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.dataelement.status.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.filing.midi">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.filing.midi.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.midiport.core">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.midiport.core.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.midiport.input">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.midiport.input.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.midiport.input.core">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.midiport.input.core.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.midiport.output">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.midiport.output.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.midiport.output.core">
-      <HintPath>..\..\..\..\..\Desktop\Package\nextmidi.midiport.output.core.dll</HintPath>
+    <Reference Include="DxLibDotNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\DxLibDotNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,7 +64,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -120,6 +90,9 @@
     <Content Include="DxLib_x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="mssfedit.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -137,6 +110,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibGUI\LibGUI.csproj">
+      <Project>{19dbf218-86de-45bf-acfb-2847e287a996}</Project>
+      <Name>LibGUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibMssf\LibMssf.csproj">
+      <Project>{12bd58f2-c658-4eca-a0ce-447a7d1af011}</Project>
+      <Name>LibMssf</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
