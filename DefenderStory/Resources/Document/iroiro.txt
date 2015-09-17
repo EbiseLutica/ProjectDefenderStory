@@ -1,0 +1,39 @@
+┌[Level]
+├┬[Area]
+│├─(blockdata.citmap)
+│├─(spdata.json)
+│└─(area.json)
+└─(lvldat.json)
+
+Level ディレクトリは、レベル番号のみ書く。
+Area ディレクトリも、Area 番号のみ書く。
+
+・citchip仕様
+マップチップの情報だけなのでそんなに難しくない
+
+["CITCHIP"][width][height][chipdata]*(width*height)
+
+・spdata 記法
+{
+	"spdata":
+	[
+		ここにエンティティのメタデータ
+	]
+}
+
+・area 記法
+一応まだ仮
+仕様が変わるかも
+
+{
+	"Mpt" : "0",
+	"Music" : "散歩.mid",
+	"BG" : "overground.png",
+	"ScrollSpeed": 10
+}
+
+・lvldat 記法
+
+{
+	"FirstArea" : 0
+}

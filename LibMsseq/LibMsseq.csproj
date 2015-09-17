@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2EB97F64-104E-449A-B04B-F913EFA3D84B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LibMsseq</RootNamespace>
+    <AssemblyName>LibMsseq</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="avenue.core">
+      <HintPath>..\..\..\..\Lib\avenue.core.dll</HintPath>
+    </Reference>
+    <Reference Include="avenue.filing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\avenue.filing.dll</HintPath>
+    </Reference>
+    <Reference Include="DxLibDotNet">
+      <HintPath>..\..\..\..\Lib\DxLibDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="MIDIClock.CSharp">
+      <HintPath>..\MusicSheetMidiSequencer\bin\Debug\MIDIClock.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.data">
+      <HintPath>..\..\..\..\Lib\nextmidi.data.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.dataelement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\nextmidi.dataelement.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.dataelement.status, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\nextmidi.dataelement.status.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.filing.midi">
+      <HintPath>..\..\..\..\Lib\nextmidi.filing.midi.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.bridge">
+      <HintPath>..\..\..\..\Lib\nextmidi.midiport.bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.core">
+      <HintPath>..\..\..\..\Lib\nextmidi.midiport.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.input">
+      <HintPath>..\..\..\..\Lib\nextmidi.midiport.input.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.midiport.input.core">
+      <HintPath>..\..\..\..\Lib\nextmidi.midiport.input.core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MIDIClock.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MIDIClock_cs.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibMssf\LibMssf.csproj">
+      <Project>{12bd58f2-c658-4eca-a0ce-447a7d1af011}</Project>
+      <Name>LibMssf</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
