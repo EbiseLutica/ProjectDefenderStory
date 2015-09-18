@@ -270,6 +270,8 @@ namespace DefenderStory.AI
 			{
 				if (ep == HostEntity ||  ep.IsDying || (ep.MyGroup != EntityGroup.Defender && ep.MyGroup != EntityGroup.Monster))
 					continue;
+				if (HostEntity is EntityTurcosShell && ((EntityTurcosShell)HostEntity).mutekitime > 0 && ep.MyGroup == EntityGroup.Defender)
+					continue;
 				if (new Rectangle((int)ep.Location.X, (int)(ep.Location.Y), (int)ep.Size.Width, (int)ep.Size.Height)
 					.CheckCollision(new Rectangle((int)this.HostEntity.Location.X, (int)this.HostEntity.Location.Y + 8, (int)this.HostEntity.Size.Width, (int)this.HostEntity.Size.Height - 8)))
 					ep.Kill();

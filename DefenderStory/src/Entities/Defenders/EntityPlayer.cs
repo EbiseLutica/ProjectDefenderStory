@@ -83,10 +83,7 @@ namespace DefenderStory.Entities
 		}
 		
 
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override RectangleF Collision
 		{

@@ -14,20 +14,17 @@ namespace DefenderStory.Entities
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return null;
 			}
 		}
 
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override EntityGroup MyGroup
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return EntityGroup.Other;
 			}
 		}
 
@@ -37,16 +34,30 @@ namespace DefenderStory.Entities
 			Mpts = obj;
 			Map = chips;
 			Parent = par;
+			Size = new Size(16, 16);
 		}
 
 		public override void SetKilledAnime()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public override void SetCrushedAnime()
 		{
-			throw new NotImplementedException();
+			
 		}
+
+		public override void onUpdate(Status ks)
+		{
+			//TODO: ここにこの Entity が行う処理を記述してください。
+			base.onUpdate(ks);
+		}
+
+		public override Entity SetEntityData(dynamic jsonobj)
+		{
+			base.SetEntityData((object)jsonobj);
+			return this;
+		}
+
 	}
 }

@@ -86,11 +86,8 @@ namespace DefenderStory.Entities
 		/// <summary>
 		/// 自分の大きさ。
 		/// </summary>
-		public abstract Size Size
-		{
-			get;
-			protected set;
-		}
+		public Size Size
+		{ get; protected set; }
 
 		/// <summary>
 		/// 前フレームでの場所。

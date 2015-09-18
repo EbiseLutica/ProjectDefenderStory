@@ -18,10 +18,7 @@ namespace DefenderStory.Entities
 			}
 		}
 
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override EntityGroup MyGroup
 		{
@@ -73,10 +70,7 @@ namespace DefenderStory.Entities
 			}
 		}
 
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public EntityArrow(PointF pnt, Data.Object[] obj, byte[,,] chps, EntityList par)
 		{

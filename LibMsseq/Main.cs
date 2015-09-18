@@ -42,7 +42,7 @@ namespace MusicSheet.Sequence
 		public float tick;
 		public int milisec;
 		public int fps { get; set; }
-		int oldtick, deltatick, tickmod;
+		int deltatick, tickmod;
 		int bmili = DX.GetNowCount();
 
 		public int Tick
@@ -96,7 +96,7 @@ namespace MusicSheet.Sequence
 
 
 
-	public class Sequencer
+	public class Sequencer : IDisposable
 	{
 		public SoundModule sm;
 		public MidiData mfd;
@@ -385,7 +385,44 @@ namespace MusicSheet.Sequence
 			btick = nTickCount;
 		}
 
-		
+		#region IDisposable Support
+		private bool disposedValue = false; // 重複する呼び出しを検出するには
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposedValue)
+			{
+				if (disposing)
+				{
+					// TODO: マネージ状態を破棄します (マネージ オブジェクト)。
+					
+				}
+				mc.Dispose();
+				// TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
+				// TODO: 大きなフィールドを null に設定します。
+				sm = null;
+
+				disposedValue = true;
+			}
+		}
+
+		// TODO: 上の Dispose(bool disposing) にアンマネージ リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします。
+		// ~Sequencer() {
+		//   // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
+		//   Dispose(false);
+		// }
+
+		// このコードは、破棄可能なパターンを正しく実装できるように追加されました。
+		public void Dispose()
+		{
+			// このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
+			Dispose(true);
+			// TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
+			// GC.SuppressFinalize(this);
+		}
+		#endregion
+
+
 
 
 	}

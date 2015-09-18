@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using DefenderStory.Util;
-
+using System;
 
 namespace DefenderStory
 {
@@ -12,6 +12,7 @@ namespace DefenderStory
 		/// メイン画面バッファのハンドル。
 		/// </summary>
 		public static int hMainScreen;
+		[STAThread]
 		static void Main(string[] args)
 		{
 

@@ -20,10 +20,7 @@ namespace DefenderStory.Entities
 			}
 		}
 
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override EntityGroup MyGroup
 		{
@@ -111,10 +108,7 @@ namespace DefenderStory.Entities
 			}
 		}
 
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override EntityGroup MyGroup
 		{
@@ -201,6 +195,7 @@ namespace DefenderStory.Entities
 			if (!isRunning)
 			{
 				isRunning = true;
+				CollisionAIs.Add(killai);
 				mutekitime = mutekimax;
 				Owner = null;
 				SoundUtility.PlaySound(Sounds.Killed);
@@ -229,8 +224,6 @@ namespace DefenderStory.Entities
 			}
 			if (mutekitime > 0)
 				mutekitime--;
-			if (isRunning && mutekitime == 0 && CollisionAIs.Count == 0)
-				CollisionAIs.Add(killai);
 			if (CollisionLeft() == ObjectHitFlag.Hit || Location.X <= 0)
 			{
 				Velocity.X = speed;
@@ -249,7 +242,7 @@ namespace DefenderStory.Entities
 			{
 				foreach (EntityLiving ep in Parent.FindEntitiesByType<EntityLiving>())
 				{
-					if (ep == this || ep.IsDying || ep.MyGroup == EntityGroup.Defender || ep.MyGroup != EntityGroup.Monster)
+					if (ep == this || ep.IsDying || ep.MyGroup == EntityGroup.Defender || (ep.MyGroup != EntityGroup.Monster && !(ep is EntityTurcosShell)))
 						continue;
 					if (new Rectangle((int)ep.Location.X, (int)(ep.Location.Y), (int)ep.Size.Width, (int)ep.Size.Height)
 						.CheckCollision(new Rectangle((int)Location.X, (int)Location.Y + 8, (int)Size.Width, (int)Size.Height - 8)))

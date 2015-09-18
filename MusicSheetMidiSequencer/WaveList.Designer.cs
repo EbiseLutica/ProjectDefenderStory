@@ -16,6 +16,7 @@
 			if (disposing && (components != null))
 			{
 				components.Dispose();
+				bitmap.Dispose();
 			}
 			base.Dispose(disposing);
 		}

@@ -91,6 +91,7 @@
     <Compile Include="src\Entities\Monsters\EntityModokee.cs" />
     <Compile Include="src\Entities\Monsters\EntitySolider.cs" />
     <Compile Include="src\Entities\Monsters\EntityArcher.cs" />
+    <Compile Include="src\Entities\Monsters\EntitySpider.cs" />
     <Compile Include="src\Entities\Monsters\EntityTurcos.cs" />
     <Compile Include="src\Entities\Others\Particles.cs" />
     <Compile Include="src\Entities\Others\Stages.cs" />

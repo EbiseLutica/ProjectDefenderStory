@@ -10,10 +10,7 @@ namespace DefenderStory.Entities
 	public class EntityInfinitySpawner : Entity
 	{
 		private dynamic obj = null;
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override EntityGroup MyGroup
 		{
@@ -68,10 +65,7 @@ namespace DefenderStory.Entities
 	public class EntityMiddleFlag : Entity
 	{
 		private dynamic obj = null;
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override EntityGroup MyGroup
 		{
@@ -105,10 +99,7 @@ namespace DefenderStory.Entities
 	public class EntityGoal : Entity
 	{
 		private dynamic obj = null;
-		public override Size Size
-		{
-			get; protected set;
-		}
+		
 
 		public override EntityGroup MyGroup
 		{

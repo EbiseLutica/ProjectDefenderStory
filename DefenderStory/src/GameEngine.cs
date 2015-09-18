@@ -136,7 +136,7 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = 1;
+		public const int START_LEVEL = 2;
 		/// <summary>
 		/// 現在のゲームモード。
 		/// </summary>
