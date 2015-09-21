@@ -136,7 +136,7 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = -1;
+		public const int START_LEVEL = 1;
 		/// <summary>
 		/// 現在のゲームモード。
 		/// </summary>
@@ -190,7 +190,7 @@ namespace DefenderStory
 			NextStage = 0;
 			scrSize = s;
 			IsInit = true;
-			gamemode = GameMode.Action;
+			gamemode = GameMode.Title;
 			#endregion
 			
 			Load(level);
@@ -396,8 +396,8 @@ namespace DefenderStory
 		static EndingMode endmode;
 		static string credit;
 		static int height = 0;
-		static int credithandle;
-		static int starttick = 0;
+		static int graphhandle;
+		static int gametick = 0;
 		private static TitleMode titlemode;
 
 		/// <summary>
@@ -847,7 +847,48 @@ namespace DefenderStory
 					break;
 				case GameMode.Title:
 					#region TitleMode
+					switch (titlemode)
+					{
+						case TitleMode.Opening:
+							titlemode = TitleMode.GameLogoRising;
+							break;
+						case TitleMode.GameLogoRising:
+							if (gametick > 360)
+							{
+								titlemode = TitleMode.GameLogoLightning;
+								gametick = 0;
+								SoundUtility.PlaySound(Sounds.Flash);
+								break;
+							}
+							
+							DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - Math.Min(220, (float)gametick / 300 * 220)), ResourceUtility.Logo[0], 1);
+				
+							gametick++;
+							break;
+						case TitleMode.GameLogoLightning:
+							if (gametick < 60)
+							{
+								DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[Convert.ToInt32(gametick % 8 > 3)], 1);
+							}
+							else
+								DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[0], 1);
+							if (gametick > 120)
+							{
+								gametick = 0;
+								titlemode = TitleMode.MainTitle;
+								graphhandle = DX.LoadGraph("Resources\\Graphics\\story_1.bmp");
+								BGMPlay("c011.mid");
+							}
+							gametick++;
+							break;
+						case TitleMode.MainTitle:
+							DX.DrawGraph(0, 0, graphhandle, 0);
+							DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[0], 1);
 
+
+
+							break;
+					}
 					#endregion
 					break;
 				case GameMode.Ending:
@@ -864,21 +905,21 @@ namespace DefenderStory
 								credit = File.ReadAllText("Resources\\Document\\staffrole.txt");
 								BGMPlay("c011_piano.mid");
 								height = FontUtility.GetDrawingSize(credit).Height + 10;
-								credithandle = DX.MakeScreen(scrSize.Width, height);
-								DX.SetDrawScreen(credithandle);
+								graphhandle = DX.MakeScreen(scrSize.Width, height);
+								DX.SetDrawScreen(graphhandle);
 								FontUtility.DrawString(camera.Y, credit, 0xffffff);
 								DX.SetDrawScreen(Program.hMainScreen);
-								starttick = DX.GetNowCount();
+								gametick = DX.GetNowCount();
 							}
 							break;
 						case EndingMode.Credit:
-							camera.Y = scrSize.Height - (int)(((float)(DX.GetNowCount() - starttick) / seq.MusicTime) * (height + scrSize.Height - 10));
-							DX.DrawGraph(0, camera.Y, credithandle, 0);
+							camera.Y = scrSize.Height - (int)(((float)(DX.GetNowCount() - gametick) / seq.MusicTime) * (height + scrSize.Height - 10));
+							DX.DrawGraph(0, camera.Y, graphhandle, 0);
 							FontUtility.DrawMiniString(0, scrSize.Height - 8, $"{camera.Y} / {-height}", 0xffffff);
 							if (camera.Y < -height)
 							{
 								endmode = EndingMode.TheEnd;
-								DX.DeleteGraph(credithandle);
+								DX.DeleteGraph(graphhandle);
 							}
 							break;
 						case EndingMode.TheEnd:

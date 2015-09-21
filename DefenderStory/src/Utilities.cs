@@ -92,6 +92,10 @@ namespace DefenderStory.Util
 		/// </summary>
 		public static int[] MapChip { get; private set; }
 		/// <summary>
+		/// マップチップ。
+		/// </summary>
+		public static int[] Logo { get; private set; }
+		/// <summary>
 		/// 8pxに分割されたマップチップ。ブロック破壊時などに使う。
 		/// </summary>
 		public static int[] MapChipMini { get; private set; }
@@ -229,7 +233,13 @@ namespace DefenderStory.Util
 
 			}
 
-			
+			Logo = new int[2];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\logo.png", 2, 2, 1, 180, 101, out Logo[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
 
 			Item = new int[7];
 

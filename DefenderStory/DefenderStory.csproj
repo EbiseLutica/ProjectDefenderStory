@@ -204,6 +204,9 @@
     <Content Include="Resources\Graphics\font_mini.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Graphics\logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\mpt1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -318,6 +321,9 @@
     <Content Include="Resources\Graphics\spwoody.png" />
     <Content Include="Resources\Graphics\spyuan.png" />
     <Content Include="Resources\Graphics\spyuanmagic.png" />
+    <Content Include="Resources\Graphics\story_1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\theend.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
