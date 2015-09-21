@@ -850,10 +850,10 @@ namespace DefenderStory.Entities
 	{
 		PointF Location
 		{
-			get; set;
+			get;
 		}
 
-		Rectangle Collision
+		RectangleF Collision
 		{
 			get;
 		}

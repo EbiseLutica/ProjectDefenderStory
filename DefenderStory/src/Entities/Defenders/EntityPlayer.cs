@@ -323,6 +323,11 @@ namespace DefenderStory.Entities
 		{
 			if (IsDying)
 				return;
+			if (IsFall)
+			{
+				base.Kill();
+				return;
+			}
 			if (MutekiTime > 0)
 				return;
 			if (Form == PlayerForm.Mini)

@@ -98,6 +98,8 @@ namespace DefenderStory.Util
 
 		public static int[] StrangeFlower { get; private set; }
 
+		public static int TheEnd { get; private set; }
+
 		private static Dictionary<string, MidiData> musicList = new Dictionary<string, MidiData>();
 		public static Dictionary<string, MidiData> MusicList
 		{
@@ -227,13 +229,7 @@ namespace DefenderStory.Util
 
 			}
 
-			Woody = new int[4];
-
-			if (DX.LoadDivGraph("Resources\\Graphics\\spwoody.png", 4, 4, 1, 64, 64, out Woody[0]) == -1)
-			{
-				throw new Exception("キャラの読み込みに失敗しました。");
-
-			}
+			
 
 			Item = new int[7];
 
@@ -256,10 +252,16 @@ namespace DefenderStory.Util
 				throw new Exception("キャラの読み込みに失敗しました。");
 			}
 
+			if ((TheEnd = DX.LoadGraph("Resources\\Graphics\\theend.png")) == 0)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
 			foreach (var s in Directory.GetFiles(".\\Resources\\Music"))
 			{
 				MusicList[Path.GetFileName(s)] = Sequencer.LoadSMF(s);
 			}
+			
 
 		}
 
@@ -340,6 +342,10 @@ namespace DefenderStory.Util
 			{
 				dicFont[c] = i++;   //文字番号を char によって指定できるよう登録する
 			}
+			DX.ChangeFont("MS Gothic");
+			DX.SetFontSize(9);
+			DX.ChangeFontType(DX.DX_FONTTYPE_ANTIALIASING);
+			DX.SetFontThickness(1);
 			isInit = true;
 		}
 
@@ -370,10 +376,28 @@ namespace DefenderStory.Util
 					_x += 8;
 					continue;
 				}
-				else                                //それ以外なら、存在しない文字として出力する
-					target = 0;
-				DX.DrawGraph(_x, _y, hFont[target], 1);
+				else
+					target = 0;                     //それ以外なら、存在しない文字として出力する
+
+				if (target > 0)
+					DX.DrawGraph(_x, _y, hFont[target], 1);
+				else
+					DX.DrawString(_x, _y, "" + txt[i], DX.GetColor(255, 255, 255)); 
 				_x += ((txt[i] < 128) ? 8 : 10);
+			}
+		}
+
+		/// <summary>
+		/// 中央寄せして文字列を描画します。
+		/// </summary>
+		/// <param name="y"></param>
+		/// <param name="txt"></param>
+		/// <param name="color"></param>
+		public static void DrawString(int y, string txt, int color)
+		{
+			foreach (var t in txt.Split('\n'))
+			{
+				DrawString(GameEngine.scrSize.Width / 2 - GetDrawingSize(t).Width / 2, y += 10, t, color);
 			}
 		}
 
@@ -394,7 +418,7 @@ namespace DefenderStory.Util
 				}
 				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
 				{
-					_x += 8;
+					_x += 6;
 					continue;
 				}
 				else                                //それ以外なら、存在しない文字として出力する
@@ -402,6 +426,60 @@ namespace DefenderStory.Util
 				DX.DrawGraph(_x, _y, hFont_mini[target], 1);
 				_x += ((txt[i] < 128) ? 6 : 8);
 			}
+		}
+
+		public static void DrawMiniString(int y, string txt, int color)
+		{
+			foreach (var t in txt.Split('\n'))
+			{
+				DrawMiniString(GameEngine.scrSize.Width / 2 - GetMiniDrawingSize(t).Width / 2, y += 10, t, color);
+			}
+		}
+
+
+		public static Size GetDrawingSize(string txt)
+		{
+			if (!isInit)
+				throw new Exception("Font Utility が初期化されていません。");
+			int w = 0, h = 0;
+			for (int i = 0; i < txt.Length; i++)
+			{
+				if (txt[i] == '\n')
+				{
+
+					h += 10;
+					continue;
+				}
+				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				{
+					w += 8;
+					continue;
+				}
+				w += ((txt[i] < 128) ? 8 : 10);
+			}
+			return new Size(w, h);
+		}
+		public static Size GetMiniDrawingSize(string txt)
+		{
+			if (!isInit)
+				throw new Exception("Font Utility が初期化されていません。");
+			int w = 0, h = 0;
+			for (int i = 0; i < txt.Length; i++)
+			{
+				if (txt[i] == '\n')
+				{
+
+					h += 8;
+					continue;
+				}
+				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				{
+					w += 6;
+					continue;
+				}
+				w += ((txt[i] < 128) ? 6 : 8);
+			}
+			return new Size(w, h);
 		}
 
 	}

@@ -253,5 +253,11 @@
 		"PosY": 1424,
 		"EntityID": 83,
 		"EntityData": null
+	},
+	{
+		"PosX": 1482,
+		"PosY": 1343,
+		"SpriteID": 18,
+		"SpriteData": { "NextStage": -1 }
 	}
 ]

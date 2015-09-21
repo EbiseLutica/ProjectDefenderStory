@@ -21,7 +21,7 @@ namespace DefenderStory
 
 			DX.SetWindowText("Defender Story");
 			
-			//SetAlwaysRunFlag(1);
+			DX.SetAlwaysRunFlag(1);
 
 			Size scrSize = new Size(640, 480);
 
@@ -50,30 +50,6 @@ namespace DefenderStory
 
 			DX.DrawGraph(640 / 2 - 246 / 2 , 480 / 2 - 64 / 2, logo, 1);
 			DX.ScreenFlip();
-			#region スプラッシュ
-
-			/*
-			int logo = LoadGraph("Resources\\Graphics\\citringo.png");
-			
-			SoundUtility.PlaySound(Sounds.Citringo);
-			ClearDrawScreen();
-			for (int i = 0; i < 120; i++)
-			{
-				ClearDrawScreen();
-				DrawGraph(37, 88, logo, 1);
-				DX.ProcessMessage();
-				if (DX.ScreenFlip() == -1)
-				{
-					DxLib_End();
-					return;
-				}
-			}
-			
-
-			DeleteGraph(logo);
-			*/
-			#endregion
-
 
 			//----モジュールの初期化
 			FontUtility.Init();

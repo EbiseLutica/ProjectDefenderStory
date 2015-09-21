@@ -369,15 +369,16 @@ Music Sheet v1.1.0
 			WorkerCancel();
 			seq.sm.Panic();
 			seq.btick = trackBar1.Value;
-			seq.mc.SetTickCount(trackBar1.Value);
+			seq.mc.TickCount = trackBar1.Value;
 			backgroundWorker1.RunWorkerAsync();
 		}
-
 		bool workerlocked = false;
 		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
 		{
+
 			while (true)
 			{
+				
 				if (backgroundWorker1.CancellationPending)
 				{
 					e.Cancel = true;
@@ -394,7 +395,7 @@ Music Sheet v1.1.0
 					Console.WriteLine(ex.Message);
 				}
 				workerlocked = false;
-				Thread.Sleep(1);
+				DX.WaitVSync(1);
 			}
 		}
 

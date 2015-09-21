@@ -10,9 +10,8 @@ using NextMidi.Data;
 using NextMidi.DataElement.MetaData;
 using DxLibDLL;
 using System.Windows.Forms;
-using NextMidi.MidiPort.Input;
-using NextMidi.MidiPort.Input.Core;
-
+using NextMidi.Time;
+using NextMidi.Data.Score;
 
 namespace MusicSheet.Sequence
 {
@@ -22,85 +21,96 @@ namespace MusicSheet.Sequence
 		Kick, Snare, HihatClose, HihatOpen, Cymbal, Tom1, Tom2, Tom3
 	}
 
-
-
 	public class MidiClock
 	{
-		public int Resolution { get; set; }
-		int tempo = 60000000 / 120;
-		public int Tempo
+		public int BPM
 		{
-			get
-			{
-				return 60000000 / tempo;
-			}
-			set
-			{
-				tempo = 60000000 / value;
-			}
+			get; set;
 		}
-		public float tick;
-		public int milisec;
-		public int fps { get; set; }
-		int deltatick, tickmod;
-		int bmili = DX.GetNowCount();
-
-		public int Tick
+		public int Resolution
 		{
-			get
-			{
-				if (IsRunning && DX.GetNowCount() - bmili >= 1)
-				{
-					deltatick = (tickmod + 3 * Resolution) / Tempo;
-					tickmod += 3 * Resolution - deltatick * Tempo;
-					tick += deltatick;
-					bmili = DX.GetNowCount();
-				}
-				return (int)tick;
-			}
-
-			set
-			{
-				tick = value;
-			}
+			get; set;
 		}
-		public bool IsRunning { get; set; }
 
-		public MidiClock(int resolution, int tempo)
+		int btime;
+		
+
+		public MidiClock(int bpm, int resolution)
 		{
+			BPM = bpm;
 			Resolution = resolution;
-			Tempo = tempo;
-			tick = 0;
-			milisec = 0;
+
 		}
 
-		public void Reset()
+		float _tick;
+		int _mili;
+
+		public int TickCount
 		{
-			tick = 0;
-			milisec = 0;
+			get
+			{
+				int ret;
+				if (IsRunning)
+					ret = (int)(_tick += TempoMap.GetTickLength(DX.GetNowCount() - btime, BPM, Resolution));
+				else
+					ret = (int)_tick;
+				btime = DX.GetNowCount();
+				
+				return ret;
+
+			}
+			set
+			{
+				this._tick = value;
+			}
+		}
+
+		public int MiliSec
+		{
+			get
+			{
+				return _mili += 1000 / Fps;
+			}
+		}
+
+		public bool IsRunning
+		{
+			get; set;
 		}
 
 		public void Start()
 		{
+			btime = DX.GetNowCount();
 			IsRunning = true;
-			
 		}
 
 		public void Stop()
 		{
 			IsRunning = false;
-			
+
 		}
+
+		public void Reset()
+		{
+			_mili = (int)(_tick = 0);
+		}
+
+		public int Fps
+		{
+			get; set;
+		} = 60;
+
+		
+
+
 
 	}
 
-
-
-	public class Sequencer : IDisposable
+	public class Sequencer
 	{
 		public SoundModule sm;
 		public MidiData mfd;
-		public CMIDIClock mc;
+		public MidiClock mc;
 		public int nMillisec, nTickCount, btick, bpm;
 		public int eot = 0;
 		public List<int> drumtracks = new List<int>();
@@ -122,8 +132,7 @@ namespace MusicSheet.Sequence
 		public Sequencer()
 		{
 			this.Reset();
-			mc = new CMIDIClock(CMIDIClock.TPQNBASE, 480, CMIDIClock.TEMPO(120));
-			
+		
 		}
 
 		public Sequencer(MidiData md)
@@ -131,21 +140,35 @@ namespace MusicSheet.Sequence
 		{
 			SetMidiData(md);
 		}
+		TempoMap tm;
+		public int MusicTime
+		{
+			get
+			{
+				return tm?.ToMilliSeconds(eot) ?? 0;
+			}
+		}
 
 		public void SetMidiData(MidiData md)
 		{
+			mfd = md;
+			tm = new TempoMap(mfd);
 			this.Stop();
 			this.Reset();
-			mfd = md;
-
+			eot = 0;
+			drumtracks = new List<int>();
+			if (mfd != null)
+			{
+				mc = new MidiClock(120, mfd.Resolution.Resolution);
+			}
 			int cnt = 0;
 			foreach (NextMidi.Data.Track.MidiTrack lst in mfd.Tracks)
 			{
 				if (lst.Channel.GetValueOrDefault() == 9 && !drumtracks.Contains(cnt))
 					drumtracks.Add(cnt);
 
-				if (eot < (lst.GetData().Last().Tick))
-					eot = lst.GetData().Last().Tick;
+				if (eot < (lst.TickLength))
+					eot = lst.TickLength;
 				cnt++;
 			}
 			
@@ -244,16 +267,10 @@ namespace MusicSheet.Sequence
 		{
 			if (sm != null)
 				sm.Panic();
-			eot = 0;
-			drumtracks = new List<int>();
-			if (mfd != null)
-			{
-				mc = new CMIDIClock(CMIDIClock.TPQNBASE, mfd.Resolution.Resolution, CMIDIClock.TEMPO(120));
-				mc.Reset();
-			}
+			
 			
 			sm = new SoundModule();
-			metas.Clear();
+			
 			MaxChannel = 0;
 			bpm = 120;
 			btick = -1;
@@ -274,15 +291,16 @@ namespace MusicSheet.Sequence
 		public void Load(string filename)
 		{
 			Stop();
-			SetMidiData(LoadSMF(filename));
 			Reset();
+			SetMidiData(LoadSMF(filename));
 		}
 
 		public void Play()
 		{
 			if (!loaded)
 				return;
-		
+
+			metas.Clear();
 			var cnt = 0;
 			foreach (NextMidi.Data.Track.MidiTrack mt in mfd.Tracks)
 			{
@@ -313,6 +331,8 @@ namespace MusicSheet.Sequence
 
 		public void Stop()
 		{
+			if (!loaded)
+				return;
 			if (mc != null)
 				sm.Panic();
 			mc.Stop();
@@ -323,11 +343,11 @@ namespace MusicSheet.Sequence
 		public void	PlayLoop()
 		{
 			//Console.WriteLine("mc:{0}", mc.IsRunning());
-			if (!mc.IsRunning())
+			if (!mc.IsRunning)
 				return;
-			nMillisec = mc.GetMillisec();
-			nTickCount = mc.GetTickCount();
-			mc.SetTempo(CMIDIClock.TEMPO(bpm = CurrentBPM));
+			nMillisec = mc.MiliSec;
+			nTickCount = mc.TickCount;
+			mc.BPM = bpm = CurrentBPM;
 
 
 			//List<MidiEvent> mes = mfd.Tracks[2].GetData();
@@ -376,7 +396,7 @@ namespace MusicSheet.Sequence
 				}
 				else
 				{
-					mc.SetTickCount(loop);
+					mc.TickCount = loop;
 					nTickCount = loop - 1;
 				}
 			}
@@ -384,44 +404,7 @@ namespace MusicSheet.Sequence
 
 			btick = nTickCount;
 		}
-
-		#region IDisposable Support
-		private bool disposedValue = false; // 重複する呼び出しを検出するには
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!disposedValue)
-			{
-				if (disposing)
-				{
-					// TODO: マネージ状態を破棄します (マネージ オブジェクト)。
-					
-				}
-				mc.Dispose();
-				// TODO: アンマネージ リソース (アンマネージ オブジェクト) を解放し、下のファイナライザーをオーバーライドします。
-				// TODO: 大きなフィールドを null に設定します。
-				sm = null;
-
-				disposedValue = true;
-			}
-		}
-
-		// TODO: 上の Dispose(bool disposing) にアンマネージ リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします。
-		// ~Sequencer() {
-		//   // このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-		//   Dispose(false);
-		// }
-
-		// このコードは、破棄可能なパターンを正しく実装できるように追加されました。
-		public void Dispose()
-		{
-			// このコードを変更しないでください。クリーンアップ コードを上の Dispose(bool disposing) に記述します。
-			Dispose(true);
-			// TODO: 上のファイナライザーがオーバーライドされる場合は、次の行のコメントを解除してください。
-			// GC.SuppressFinalize(this);
-		}
-		#endregion
-
+		
 
 
 
@@ -526,7 +509,7 @@ namespace MusicSheet.Sequence
 				}
 		}
 
-		public void SendEvent(MidiEvent me, byte? channel, int miditick, ref CMIDIClock cmc)
+		public void SendEvent(MidiEvent me, byte? channel, int miditick, ref MidiClock cmc)
 		{
 			if (channel == null)
 				return;
@@ -710,7 +693,7 @@ namespace MusicSheet.Sequence
 					if (loop == -1)
 						cmc.Stop();
 					else
-						cmc.SetTickCount(loop);
+						cmc.TickCount = loop;
 				}
 
 			}

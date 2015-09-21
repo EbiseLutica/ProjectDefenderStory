@@ -171,17 +171,21 @@ namespace DefenderStory.Entities
 				return;
 			if (IsDying)
 				return;
-			if (Owner != null && GameEngine.ks.inlshift)
-			{
-				return;
-			}
 			if (!IsCrushed || IsFall)
 			{
 				if (IsFall && !IsCrushed)
 					IsDead = true;
 				else if (!IsCrushed)
+				{
+					Velocity.Y = -3f;
 					IsDying = true;
+				}
 				SoundUtility.PlaySound(Sounds.Killed);
+				
+				return;
+			}
+			if (Owner != null && GameEngine.ks.inlshift)
+			{
 				return;
 			}
 			SwitchMode();
@@ -245,8 +249,11 @@ namespace DefenderStory.Entities
 					if (ep == this || ep.IsDying || ep.MyGroup == EntityGroup.Defender || (ep.MyGroup != EntityGroup.Monster && !(ep is EntityTurcosShell)))
 						continue;
 					if (new Rectangle((int)ep.Location.X, (int)(ep.Location.Y), (int)ep.Size.Width, (int)ep.Size.Height)
-						.CheckCollision(new Rectangle((int)Location.X, (int)Location.Y + 8, (int)Size.Width, (int)Size.Height - 8)))
+						.CheckCollision(new Rectangle((int)Owner.Location.X - Size.Width, (int)Owner.Location.Y - Size.Height, (int)Owner.Size.Width + Size.Width * 2, (int)Owner.Size.Height + Size.Height * 2)))
+					{
 						ep.Kill();
+						this.Kill();
+					}
 				}
 			}
 			if (mutekitime == 0 && !isRunning && !ks.inlshift && new RectangleF(Parent.MainEntity.Location, Parent.MainEntity.Size).CheckCollision(new RectangleF(Location, Size)))
@@ -265,11 +272,7 @@ namespace DefenderStory.Entities
 			if (Owner == null || isRunning)
 				base.Move();
 		}
-
-		public override void Dying()
-		{
-			Velocity.Y = -1f;
-		}
+		
 
 
 	}

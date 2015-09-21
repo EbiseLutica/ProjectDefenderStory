@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,34 +42,20 @@
     <Reference Include="DxLibDotNet">
       <HintPath>..\..\..\..\Lib\DxLibDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="MIDIClock.CSharp">
-      <HintPath>..\MusicSheetMidiSequencer\bin\Debug\MIDIClock.CSharp.dll</HintPath>
-    </Reference>
     <Reference Include="nextmidi.data">
-      <HintPath>..\..\..\..\Lib\nextmidi.data.dll</HintPath>
+      <HintPath>..\ActionGameProj\lib\nextmidi.data.dll</HintPath>
     </Reference>
-    <Reference Include="nextmidi.dataelement, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\nextmidi.dataelement.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.dataelement.status, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\nextmidi.dataelement.status.dll</HintPath>
+    <Reference Include="nextmidi.dataelement">
+      <HintPath>..\ActionGameProj\lib\nextmidi.dataelement.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.filing.midi">
-      <HintPath>..\..\..\..\Lib\nextmidi.filing.midi.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.midiport.bridge">
-      <HintPath>..\..\..\..\Lib\nextmidi.midiport.bridge.dll</HintPath>
+      <HintPath>..\ActionGameProj\lib\nextmidi.filing.midi.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.midiport.core">
-      <HintPath>..\..\..\..\Lib\nextmidi.midiport.core.dll</HintPath>
+      <HintPath>..\ActionGameProj\lib\nextmidi.midiport.core.dll</HintPath>
     </Reference>
-    <Reference Include="nextmidi.midiport.input">
-      <HintPath>..\..\..\..\Lib\nextmidi.midiport.input.dll</HintPath>
-    </Reference>
-    <Reference Include="nextmidi.midiport.input.core">
-      <HintPath>..\..\..\..\Lib\nextmidi.midiport.input.core.dll</HintPath>
+    <Reference Include="nextmidi.time">
+      <HintPath>..\lib\nextmidi.time.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
