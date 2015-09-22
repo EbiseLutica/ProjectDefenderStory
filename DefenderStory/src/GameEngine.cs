@@ -15,6 +15,7 @@ using DefenderStory.Data;
 using DefenderStory.Util;
 using DefenderStory.Entities;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace DefenderStory
 {
@@ -37,9 +38,13 @@ namespace DefenderStory
 		/// </summary>
 		Action,
 		/// <summary>
-		/// エンディング。
+		/// エンディングモード。
 		/// </summary>
-		Ending
+		Ending,
+		/// <summary>
+		/// デバッグモード。
+		/// </summary>
+		Debug
 	}
 
 	public enum TitleMode
@@ -337,6 +342,10 @@ namespace DefenderStory
 			seq.Stop();
 		}
 
+		/// <summary>
+		/// 指定した時間で、 BGM をフェードアウトさせます。
+		/// </summary>
+		/// <param name="time">時間(単位はミリ秒)。</param>
 		public static void BGMStop(int time)
 		{
 			Task.Factory.StartNew(new Action(() =>
@@ -344,8 +353,10 @@ namespace DefenderStory
 				int bvol = seq.sm.Volume;
 				for (int i = 0; i < time; i++)
 				{
-					seq.sm.Volume = (int)(bvol * (i / (float)time));
+					seq.sm.Volume = bvol - (int)(bvol * (i / (float)time));
+					Thread.Sleep(1);
 				}
+				BGMStop();
 			}));
 		}
 
@@ -831,12 +842,7 @@ namespace DefenderStory
 					}
 
 					entitylist.MainEntity.bVelocity.X = entitylist.MainEntity.Velocity.X;
-					binz = ks.inz;
 
-					camera = ks.camera;
-					map = ks.map;
-					binup = ks.inup;
-					bindown = ks.indown;
 
 					bcoin = Coin;
 					break;
@@ -853,7 +859,7 @@ namespace DefenderStory
 							titlemode = TitleMode.GameLogoRising;
 							break;
 						case TitleMode.GameLogoRising:
-							if (gametick > 360)
+							if (gametick > 360 || ks.inz1)
 							{
 								titlemode = TitleMode.GameLogoLightning;
 								gametick = 0;
@@ -872,20 +878,55 @@ namespace DefenderStory
 							}
 							else
 								DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[0], 1);
-							if (gametick > 120)
+							if (gametick > 120 || ks.inz1)
 							{
 								gametick = 0;
 								titlemode = TitleMode.MainTitle;
 								graphhandle = DX.LoadGraph("Resources\\Graphics\\story_1.bmp");
 								BGMPlay("c011.mid");
+								guiCursor = 0;
+								ks.inz1 = false;
 							}
 							gametick++;
 							break;
 						case TitleMode.MainTitle:
 							DX.DrawGraph(0, 0, graphhandle, 0);
 							DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[0], 1);
-
-
+							var uistr = $"{(guiCursor == 0 ? ">" : " ")}はじめから\n\n{(guiCursor == 1 ? ">" : " ")}設定\n\n{(guiCursor == 2 ? ">" : " ")}ジュークボックス";
+							FontUtility.DrawString(scrSize.Width / 2 - 40, scrSize.Height / 2 + 16, uistr, Color.Black);
+							if (binup != ks.inup && ks.inup)
+							{
+								guiCursor--;
+								if (guiCursor < 0)
+									guiCursor = 2;
+								SoundUtility.PlaySound(Sounds.Selected);
+							}
+							if (bindown != ks.indown && ks.indown)
+							{
+								guiCursor++;
+								if (guiCursor > 2)
+									guiCursor = 0;
+								SoundUtility.PlaySound(Sounds.Selected);
+							}
+							if (ks.inz1)
+							{
+								switch (guiCursor)
+								{
+									case 0:
+										gamemode = GameMode.Action;
+										BGMStop(500);
+										break;
+									case 1:
+										titlemode = TitleMode.Setting;
+										break;
+									case 2:
+										titlemode = TitleMode.JukeBox;
+										break;
+									default:
+										break;
+								}
+								SoundUtility.PlaySound(Sounds.Pressed);
+							}
 
 							break;
 					}
@@ -939,7 +980,22 @@ namespace DefenderStory
 					
 					#endregion
 					break;
+				case GameMode.Debug:
+					FontUtility.DrawString(0, "あか", Color.Red);
+					FontUtility.DrawString(10, "だいだい", Color.Orange);
+					FontUtility.DrawString(20, "きいろ", Color.Yellow);
+					FontUtility.DrawString(30, "きみどり", Color.Lime);
+					FontUtility.DrawString(40, "みどり", Color.Green);
+					FontUtility.DrawString(50, "あお", Color.Blue);
+					FontUtility.DrawString(60, "むらさき", Color.Purple);
+					break;
 			}
+			binz = ks.inz;
+
+			camera = ks.camera;
+			map = ks.map;
+			binup = ks.inup;
+			bindown = ks.indown;
 		}
 
 	}

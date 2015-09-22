@@ -370,6 +370,7 @@ namespace DefenderStory.Util
 		{
 			if (!isInit) throw new Exception("Font Utility が初期化されていません。");
 			int _x = x, _y = y;
+			DX.SetDrawBright((color & 0xff0000) >> 16, (color & 0x00ff00) >> 8, color & 0x0000ff);
 			for (int i = 0; i < txt.Length; i++)
 			{
 				int target;
@@ -394,7 +395,9 @@ namespace DefenderStory.Util
 				else
 					DX.DrawString(_x, _y, "" + txt[i], DX.GetColor(255, 255, 255)); 
 				_x += ((txt[i] < 128) ? 8 : 10);
+
 			}
+			DX.SetDrawBright(255, 255, 255);
 		}
 
 		/// <summary>
@@ -415,6 +418,7 @@ namespace DefenderStory.Util
 		{
 			if (!isInit) throw new Exception("Font Utility が初期化されていません。");
 			int _x = x, _y = y;
+			DX.SetDrawBright((color & 0xff0000) >> 16, (color & 0x00ff00) >> 8, color & 0x0000ff);
 			for (int i = 0; i < txt.Length; i++)
 			{
 				int target;
@@ -436,6 +440,7 @@ namespace DefenderStory.Util
 				DX.DrawGraph(_x, _y, hFont_mini[target], 1);
 				_x += ((txt[i] < 128) ? 6 : 8);
 			}
+			DX.SetDrawBright(255, 255, 255);
 		}
 
 		public static void DrawMiniString(int y, string txt, int color)
@@ -446,6 +451,25 @@ namespace DefenderStory.Util
 			}
 		}
 
+		public static void DrawString(int y, string txt, Color color)
+		{
+			DrawString(y, txt, color.R << 16 | color.G << 8 | color.B);
+		}
+
+		public static void DrawString(int x, int y, string txt, Color color)
+		{
+			DrawString(x, y, txt, color.R << 16 | color.G << 8 | color.B);
+		}
+
+		public static void DrawMiniString(int y, string txt, Color color)
+		{
+			DrawMiniString(y, txt, color.R << 16 | color.G << 8 | color.B);
+		}
+
+		public static void DrawMiniString(int x, int y, string txt, Color color)
+		{
+			DrawMiniString(x, y, txt, color.R << 16 | color.G << 8 | color.B);
+		}
 
 		public static Size GetDrawingSize(string txt)
 		{
@@ -655,7 +679,15 @@ namespace DefenderStory.Util
 		/// <summary>
 		/// 23 何かが動く音。
 		/// </summary>
-		Poyo
+		Poyo,
+		/// <summary>
+		/// 24 カーソルが確定される音。
+		/// </summary>
+		Pressed,
+		/// <summary>
+		/// 25 カーソルが移動する音。
+		/// </summary>
+		Selected
 	}
 
 	/// <summary>
