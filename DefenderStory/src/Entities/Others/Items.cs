@@ -4,6 +4,7 @@ using System.Drawing;
 using DefenderStory.AI;
 using DefenderStory.Util;
 using System.Collections.Generic;
+using System.Linq;
 using DxLibDLL;
 using DefenderStory.Data;
 using Codeplex.Data;
@@ -21,7 +22,7 @@ namespace DefenderStory.Entities
 			}
 		}
 
-		
+
 
 		public override void onUpdate(Status ks)
 		{
@@ -30,9 +31,21 @@ namespace DefenderStory.Entities
 			{
 				if (ep.IsDying)
 					continue;
-				if (new RectangleF(ep.Location.X, ep.Location.Y, ep.Size.Width, ep.Size.Height).CheckCollision(new RectangleF(Location.X + 7, Location.Y, 2, 18)))
+				if (new RectangleF(ep.Location.X, ep.Location.Y, ep.Size.Width, ep.Size.Height).CheckCollision(new RectangleF(Location.X + 7, Location.Y + 8, 2, 10)))
 				{
 					OpenItem(ep);
+				}
+			}
+			foreach (EntityTurcosShell m in new List<Entity>(Parent.FindEntitiesByType<EntityTurcosShell>()))
+			{
+				if (m.isRunning && new RectangleF(Location.X - 4, Location.Y + 8, 24, 8).CheckCollision(new RectangleF(m.Location, m.Size)))
+				{
+					try
+					{
+						OpenItem((EntityPlayer)Parent.First(new Func<Entity, bool>((s) => s is EntityPlayer)));
+					}
+					catch (Exception) { }
+					break;
 				}
 			}
 		}
@@ -419,7 +432,7 @@ namespace DefenderStory.Entities
 		public override void onUpdate(Status ks)
 		{
 			if (IsOnLand)
-				this.Velocity.Y = -0.9f;
+				this.Velocity.Y = -Velocity.Y;
 			foreach (EntityPlayer ep in Parent.FindEntitiesByType<EntityPlayer>())
 				if (!ep.IsDying && new RectangleF(ep.Location, ep.Size).CheckCollision(new RectangleF(Location, Size)))
 				{

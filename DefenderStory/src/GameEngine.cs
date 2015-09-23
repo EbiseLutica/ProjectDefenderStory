@@ -44,9 +44,20 @@ namespace DefenderStory
 		/// <summary>
 		/// デバッグモード。
 		/// </summary>
-		Debug
+		Debug,
+		/// <summary>
+		/// 休憩モード。
+		/// </summary>
+		Breaktime,
+		/// <summary>
+		/// あらすじ。
+		/// </summary>
+		Prolog
 	}
 
+	/// <summary>
+	/// タイトル画面のモードを指定します。
+	/// </summary>
 	public enum TitleMode
 	{
 		/// <summary>
@@ -80,10 +91,21 @@ namespace DefenderStory
 	}
 
 	/// <summary>
+	/// エンディングのモードを指定します。
+	/// </summary>
+	public enum EndingMode
+	{
+		Message,
+		Credit,
+		TheEnd
+	}
+
+	/// <summary>
 	/// ゲームモードを制御する静的クラスです。
 	/// </summary>
 	public static class GameEngine
 	{
+		#region フィールド
 		static int bsec, bmsec, level = 1, area;
 		public static Size map;
 		public static byte[,,] chips;
@@ -105,6 +127,7 @@ namespace DefenderStory
 		public static AreaInfo areainfo;
 		public static LevelData data;
 		public static EntityRegister EntityRegister = new EntityRegister();
+		#endregion
 		/// <summary>
 		/// 現在所持しているコインの枚数を取得または設定します。
 		/// </summary>
@@ -240,6 +263,12 @@ namespace DefenderStory
 		/// <param name="pf"></param>
 		public static void Load(int level, int area, PlayerForm pf)
 		{
+			if (level == -1)
+			{
+				gamemode = GameMode.Ending;
+				BGMPlay("omedeto.mid");
+				return;
+			}
 			if (data != null)
 				time = data.Time;
 
@@ -327,6 +356,10 @@ namespace DefenderStory
 			ks = new Status(binz, camera, map);
 		}
 
+		/// <summary>
+		/// ファイル名を指定して、BGM を再生します。
+		/// </summary>
+		/// <param name="name"></param>
 		public static void BGMPlay(string name)
 		{
 			if (seq == null)
@@ -337,13 +370,16 @@ namespace DefenderStory
 			seq.Play();
 		}
 
+		/// <summary>
+		/// BGM を停止します。
+		/// </summary>
 		public static void BGMStop()
 		{
 			seq.Stop();
 		}
 
 		/// <summary>
-		/// 指定した時間で、 BGM をフェードアウトさせます。
+		/// 指定した時間で、 BGM をフェードアウトします。
 		/// </summary>
 		/// <param name="time">時間(単位はミリ秒)。</param>
 		public static void BGMStop(int time)
@@ -369,6 +405,12 @@ namespace DefenderStory
 		{
 			if (!IsInit)
 				throw new Exception("ゲームエンジンが初期化されていません。");
+			if (level == -1)
+			{
+				gamemode = GameMode.Ending;
+				BGMPlay("omedeto.mid");
+				return;
+			}
 			GameEngine.level = level;
 			data = GetJsonData<LevelData>("Resources\\Levels\\Level " + level + "\\lvldat.json");
 			area = data.FirstArea;
@@ -419,6 +461,7 @@ namespace DefenderStory
 			if (!IsInit)
 				throw new Exception("ゲームエンジンが初期化されていません。");
 			ks.Update(binz, camera, map);
+			int inesc = DX.CheckHitKey(DX.KEY_INPUT_ESCAPE);
 			DX.ClearDrawScreen();  //消し去る
 			seq.PlayLoop();
 			//----FPS 測定
@@ -441,6 +484,7 @@ namespace DefenderStory
 						isDebugMode = !isDebugMode;
 					}
 
+					#region スプラッシュ
 					if (splashtime > 0)
 					{
 						DX.ClearDrawScreen();
@@ -454,11 +498,13 @@ namespace DefenderStory
 							IsDyingflag = false;
 							goalflag = false;
 							tick = 0;
-							
+
 						}
 						return;
 					}
+					#endregion
 
+					#region 自動制御
 					//ゴールしたら自動制御
 					if (GameEngine.IsGoal)
 					{
@@ -503,6 +549,7 @@ namespace DefenderStory
 							return;
 						}
 					}
+					#endregion
 
 					//ゴールしたあと画面遷移するときにいろいろリセットする
 					if (GameEngine.IsGoal && !seq.IsPlaying && time == 0)
@@ -514,7 +561,6 @@ namespace DefenderStory
 						return;
 					}
 
-					int inesc = DX.CheckHitKey(DX.KEY_INPUT_ESCAPE);
 					//ESC キーで終了
 					if (inesc == 1)
 					{
@@ -536,11 +582,13 @@ namespace DefenderStory
 						return;
 					}
 
+					#region 主人公処理
 					//主人公が死んだ瞬間に音楽を切り替える
-					if (((EntityLiving)(entitylist.MainEntity)).IsDying && ((EntityPlayer)entitylist.MainEntity).Form == PlayerForm.Mini && !IsDyingflag)
+					if (((EntityLiving)(entitylist.MainEntity)).IsDying && !IsDyingflag)
 					{
 						BGMPlay("zannnenn.mid");
 						Life--;
+						//バイブレーションを鳴らす
 						DX.StartJoypadVibration(DX.DX_INPUT_PAD1, 500, 1500);
 						IsDyingflag = true;
 					}
@@ -548,13 +596,13 @@ namespace DefenderStory
 					//主人公が落下死したらパーティクルを出す
 					if (tick % 2 == 0 && ((EntityLiving)(entitylist.MainEntity)).IsDying && ((EntityLiving)(entitylist.MainEntity)).IsFall)
 					{
-						for (int i = 0; i < 20; i++)
+						for (int i = 0; i < 5; i++)
 							entitylist.Add(EntityRegister.CreateEntity("Star", new Point((int)entitylist.MainEntity.Location.X + DX.GetRand(32) - 16, ks.map.Height * 16 - 1), mptobjects, chips, entitylist));
 					}
+					#endregion
 
 
-
-					//カメラ処理
+					#region カメラ処理
 					if (!((EntityLiving)entitylist.MainEntity).IsDying)
 					{
 						if (entitylist.MainEntity.Location.X + ks.camera.X > scrSize.Width / 2 && entitylist.MainEntity.Velocity.X > 0 && ks.camera.X > -ks.map.Width * 16 + scrSize.Width)
@@ -594,9 +642,11 @@ namespace DefenderStory
 						if (ks.camera.Y < -ks.map.Height * 16 + scrSize.Height)
 							ks.camera = new Point(ks.camera.X, -ks.map.Height * 16 + scrSize.Height);
 					}
+					#endregion
 
 					int bgx = (int)(-((-ks.camera.X * (areainfo.ScrollSpeed / 10.0)) % 320));
 
+					#region 描画
 					//背景を描画
 					DX.DrawGraph(bgx, 0, hndl_bg, 0);
 					DX.DrawGraph(bgx + 320, 0, hndl_bg, 0);    //スクロールするから2枚使ってループできるようにしている
@@ -615,8 +665,8 @@ namespace DefenderStory
 					for (int y = 0; y < map.Height * 16; y += 16)
 						for (int x = 0; x < map.Width * 16; x += 16)
 							DX.DrawGraph(x + camera.X, y + camera.Y, hndl_mpt[chips[x / 16, y / 16, 0]], 1);
+					#endregion
 
-					
 
 					//コイン50枚毎に1UPの処理する
 					if (bcoin != Coin && Coin % 50 == 0)
@@ -625,7 +675,7 @@ namespace DefenderStory
 						SoundUtility.PlaySound(Sounds.Player1Up);
 					}
 
-					
+					#region デバッグモード処理
 					//テキストを表示
 					//通常表示とデバッグモード表示
 					string buf = string.Format("①{0} ♥{1} レベル{2} ⌚{3}", GameEngine.Coin, GameEngine.Life, level, time);
@@ -728,14 +778,15 @@ namespace DefenderStory
 							}).Invoke());
 					}
 					FontUtility.DrawString(0, 0, buf, 0xffffff);
-					
+					#endregion
+
 
 					//タイムをデクリメント、なくなったら殺す
 					if (!IsGoal && tick % 60 == 0 && !((EntityLiving)entitylist.MainEntity).IsDying)
 					{
 						if (time == 0)
 						{
-							((EntityLiving)entitylist.MainEntity).IsDying = true;
+							((EntityLiving)entitylist.MainEntity).Kill(true, false);
 						}
 						else
 							time--;
@@ -746,68 +797,10 @@ namespace DefenderStory
 					bool inenter = DX.CheckHitKey(DX.KEY_INPUT_RETURN) == 1;
 					if (inenter)
 					{
-						seq.Stop();
-						DX.SetDrawScreen(Program.hMainScreen);
-						int moto = DX.MakeGraph(320, 240);
-						DX.GetDrawScreenGraph(0, 0, 320, 240, moto);
-
-
-						DX.SetDrawScreen(Program.hMainScreen);
-						for (int i = 1; i < 16; i += 2)
-						{
-							DX.ProcessMessage();
-							DX.SetDrawScreen(hPauseScreen);
-							DX.DrawGraph(0, 0, moto, 0);
-							DX.GraphFilter(hPauseScreen, DX.DX_GRAPH_FILTER_GAUSS, 16, (i + 1) * 100);
-							DX.SetDrawScreen(Program.hMainScreen);
-							DX.DrawGraph(0, 0, hPauseScreen, 0);
-							Program.CopyToDXScreen();
-							if (DX.ScreenFlip() == -1)
-							{
-								DX.DxLib_End();
-								return;
-							}
-
-						}
-						while (true)
-						{
-							inenter = DX.CheckHitKey(DX.KEY_INPUT_BACK) == 1;
-							if (inenter)
-								break;
-							DX.DrawGraph(0, 0, hPauseScreen, 0);
-							DX.DrawBox(64, 64, 256, 176, 0x7f000000, 1);
-							FontUtility.DrawString(135, 115, "PAUSE", 0xffffff);
-							Program.CopyToDXScreen();
-							if (DX.ScreenFlip() == -1)
-							{
-								DX.DxLib_End();
-								return;
-							}
-						}
-
-						for (int i = 16; i >= 0; i -= 2)
-						{
-							DX.ProcessMessage();
-							DX.SetDrawScreen(hPauseScreen);
-							DX.DrawGraph(0, 0, moto, 0);
-							DX.GraphFilter(hPauseScreen, DX.DX_GRAPH_FILTER_GAUSS, 16, (i + 1) * 100);
-							DX.SetDrawScreen(Program.hMainScreen);
-							DX.DrawGraph(0, 0, hPauseScreen, 0);
-							Program.CopyToDXScreen();
-							if (DX.ScreenFlip() == -1)
-							{
-								DX.DxLib_End();
-								return;
-							}
-
-						}
-
-						DX.DeleteGraph(moto);
-						seq.Resume();
-
+						gamemode = GameMode.Breaktime;
 					}
 
-					//ゲームオーバーダイアログ
+					#region ゲームオーバーダイアログ
 					if (IsGameOver)
 					{
 						DX.DrawBox(64, 64, 256, 176, 0x7f000000, 1);
@@ -835,14 +828,12 @@ namespace DefenderStory
 									Load(level);
 									break;
 								case 1:
-									Application.Exit();
+									GameEngine.Init();
 									break;
 							}
 						}
 					}
-
-					entitylist.MainEntity.bVelocity.X = entitylist.MainEntity.Velocity.X;
-
+					#endregion
 
 					bcoin = Coin;
 					break;
@@ -856,9 +847,11 @@ namespace DefenderStory
 					switch (titlemode)
 					{
 						case TitleMode.Opening:
+							// TODO: オープニングムービーが完成したらここを実装する。
 							titlemode = TitleMode.GameLogoRising;
 							break;
 						case TitleMode.GameLogoRising:
+							#region
 							if (gametick > 360 || ks.inz1)
 							{
 								titlemode = TitleMode.GameLogoLightning;
@@ -871,7 +864,9 @@ namespace DefenderStory
 				
 							gametick++;
 							break;
+						#endregion
 						case TitleMode.GameLogoLightning:
+							#region
 							if (gametick < 60)
 							{
 								DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[Convert.ToInt32(gametick % 8 > 3)], 1);
@@ -889,10 +884,12 @@ namespace DefenderStory
 							}
 							gametick++;
 							break;
+						#endregion
 						case TitleMode.MainTitle:
+							#region 
 							DX.DrawGraph(0, 0, graphhandle, 0);
 							DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[0], 1);
-							var uistr = $"{(guiCursor == 0 ? ">" : " ")}はじめから\n\n{(guiCursor == 1 ? ">" : " ")}設定\n\n{(guiCursor == 2 ? ">" : " ")}ジュークボックス";
+							var uistr = $"{(guiCursor == 0 ? ">" : " ")}はじめから\n\n{(guiCursor == 1 ? ">" : " ")}設定\n\n{(guiCursor == 2 ? ">" : " ")}ジュークボックス\n\n{(guiCursor == 3 ? ">" : " ")}ヘルプ\n\n{(guiCursor == 4 ? ">" : " ")}おわる";
 							FontUtility.DrawString(scrSize.Width / 2 - 40, scrSize.Height / 2 + 16, uistr, Color.Black);
 							if (binup != ks.inup && ks.inup)
 							{
@@ -904,7 +901,7 @@ namespace DefenderStory
 							if (bindown != ks.indown && ks.indown)
 							{
 								guiCursor++;
-								if (guiCursor > 2)
+								if (guiCursor > 4)
 									guiCursor = 0;
 								SoundUtility.PlaySound(Sounds.Selected);
 							}
@@ -913,8 +910,12 @@ namespace DefenderStory
 								switch (guiCursor)
 								{
 									case 0:
-										gamemode = GameMode.Action;
-										BGMStop(500);
+										gamemode = GameMode.Prolog;
+										BGMStop();
+										BGMPlay("nothing.mid");
+										ks.inz1 = false;
+										DX.DeleteGraph(graphhandle);
+										graphhandle = 0;
 										break;
 									case 1:
 										titlemode = TitleMode.Setting;
@@ -922,12 +923,34 @@ namespace DefenderStory
 									case 2:
 										titlemode = TitleMode.JukeBox;
 										break;
+									case 3:
+										titlemode = TitleMode.Help;
+										break;
+									case 4:
+										Environment.Exit(0);
+										break;
 									default:
+
 										break;
 								}
 								SoundUtility.PlaySound(Sounds.Pressed);
 							}
-
+							break;
+						#endregion
+						case TitleMode.Setting:
+							FontUtility.DrawString(32, "Not implemented, sorry. \nPress Esc Key.", Color.White);
+							if (inesc == 1)
+								titlemode = TitleMode.MainTitle;
+							break;
+						case TitleMode.Help:
+							FontUtility.DrawString(32, "Not implemented, sorry. \nPress Esc Key.", Color.White);
+							if (inesc == 1)
+								titlemode = TitleMode.MainTitle;
+							break;
+						case TitleMode.JukeBox:
+							FontUtility.DrawString(32, "Not implemented, sorry. \nPress Esc Key.", Color.White);
+							if (inesc == 1)
+								titlemode = TitleMode.MainTitle;
 							break;
 					}
 					#endregion
@@ -956,7 +979,7 @@ namespace DefenderStory
 						case EndingMode.Credit:
 							camera.Y = scrSize.Height - (int)(((float)(DX.GetNowCount() - gametick) / seq.MusicTime) * (height + scrSize.Height - 10));
 							DX.DrawGraph(0, camera.Y, graphhandle, 0);
-							FontUtility.DrawMiniString(0, scrSize.Height - 8, $"{camera.Y} / {-height}", 0xffffff);
+							//FontUtility.DrawMiniString(0, scrSize.Height - 8, $"{camera.Y} / {-height}", 0xffffff);
 							if (camera.Y < -height)
 							{
 								endmode = EndingMode.TheEnd;
@@ -972,6 +995,7 @@ namespace DefenderStory
 							{
 								gamemode = GameMode.Title;
 								titlemode = TitleMode.Opening;
+								ks.inz1 = false;
 							}
 							break;
 						default:
@@ -988,6 +1012,31 @@ namespace DefenderStory
 					FontUtility.DrawString(40, "みどり", Color.Green);
 					FontUtility.DrawString(50, "あお", Color.Blue);
 					FontUtility.DrawString(60, "むらさき", Color.Purple);
+					break;
+				case GameMode.Prolog:
+					#region PrologMode
+					if (graphhandle == 0)
+					{
+						var story = File.ReadAllText("Resources\\Document\\prolog.txt");
+						graphhandle = DX.MakeScreen(scrSize.Width, height = FontUtility.GetDrawingSize(story).Height);
+						DX.SetDrawScreen(graphhandle);
+						FontUtility.DrawString(0, story, Color.White);
+						DX.SetDrawScreen(Program.hMainScreen);
+						camera.Y = scrSize.Height;
+						
+					}
+					camera.Y--;
+					DX.DrawGraph(0, camera.Y, graphhandle, 0);
+					if (camera.Y < scrSize.Height - height)
+					{
+						FontUtility.DrawMiniString(scrSize.Width - 100, "PUSH (X) BUTTON", Color.White);
+						if (ks.inz1)
+						{
+							ks.inz1 = false;
+							gamemode = GameMode.Story;
+						}
+					}
+					#endregion
 					break;
 			}
 			binz = ks.inz;
@@ -1077,11 +1126,6 @@ namespace DefenderStory
 
 	}
 
-	public enum EndingMode
-	{
-		Message,
-		Credit,
-		TheEnd
-	}
+
 
 }

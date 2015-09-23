@@ -4,6 +4,7 @@ using System.Drawing;
 using DefenderStory.AI;
 using DefenderStory.Util;
 using DefenderStory.Data;
+using System.Collections.Generic;
 
 namespace DefenderStory.Entities
 {
@@ -35,14 +36,14 @@ namespace DefenderStory.Entities
 			Mpts = obj;
 			Map = chips;
 			Parent = par;
-			Size = new Size(64, 64);
+			Size = new Size(48, 48);
 		}
 
 		public override RectangleF Collision
 		{
 			get
 			{
-				return new RectangleF(0, 32, 64, 32);
+				return new RectangleF(16, 16, 16, 32);
 			}
 		}
 
@@ -68,7 +69,10 @@ namespace DefenderStory.Entities
 		{
 			//TODO: ここにこの Entity が行う処理を記述してください。
 			UpdateStatus();
+			//int x = (int)(ks.camera.X + Location.X);
+			//int y = (int)(ks.camera.Y + Location.Y);
 
+			//DxLibDLL.DX.DrawBox(x, y, x + Size.Width, y + Size.Height, DxLibDLL.DX.GetColor(255, 0, 0), 1);
 			base.onUpdate(ks);
 		}
 
@@ -82,18 +86,22 @@ namespace DefenderStory.Entities
 			{
 				case 0: // 構え
 					SetGraphic(0);
-					foreach (EntityLiving sp in Parent.FindEntitiesByType<EntityLiving>())
+					foreach (EntityLiving sp in new List<Entity>(Parent.FindEntitiesByType<EntityLiving>()))
 					{
 						if (sp.MyGroup != EntityGroup.Defender && sp.MyGroup != EntityGroup.Monster)
 							continue;
 
 						if (sp.IsDying)
 							continue;
-						if (sp != this && new RectangleF(sp.Location.X, sp.Location.Y, sp.Size.Width, sp.Size.Height).CheckCollision(new RectangleF(this.Location.X, this.Location.Y, this.Size.Width, this.Size.Height)))
+						if (new Rectangle((int)(sp.Location.X + sp.Collision.Left), (int)(sp.Location.Y + sp.Collision.Bottom), (int)sp.Collision.Width, 3).CheckCollision(
+							new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)Collision.Width, (int)Collision.Height)))
 						{
+							nowstatus = 1;
+							tick = -1;
 							sp.Velocity = Vector.Zero;
 						}
 					}
+					
 					if (tick > 240)
 					{
 						tick = -1;
@@ -104,12 +112,25 @@ namespace DefenderStory.Entities
 					break;
 				case 1: // 閉じようとする
 					SetGraphic(1);
+					foreach (EntityLiving sp in new List<Entity>(Parent.FindEntitiesByType<EntityLiving>()))
+					{
+						if (sp.MyGroup != EntityGroup.Defender && sp.MyGroup != EntityGroup.Monster)
+							continue;
+
+						if (sp.IsDying)
+							continue;
+						if (new Rectangle((int)(sp.Location.X + sp.Collision.Left), (int)(sp.Location.Y + sp.Collision.Bottom), (int)sp.Collision.Width, 3).CheckCollision(
+							new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)Collision.Width, (int)Collision.Height)))
+						{
+							sp.Velocity = Vector.Zero;
+						}
+					}
 					if (tick > 30)
 					{
 						tick = -1;
 						nowstatus++;
 						SoundUtility.PlaySound(Sounds.Paku2);
-						foreach (EntityLiving sp in Parent.FindEntitiesByType<EntityLiving>())
+						foreach (EntityLiving sp in new List<Entity>(Parent.FindEntitiesByType<EntityLiving>()))
 						{
 							if (sp.MyGroup != EntityGroup.Defender && sp.MyGroup != EntityGroup.Monster)
 								continue;
@@ -118,7 +139,8 @@ namespace DefenderStory.Entities
 								continue;
 							if (sp != this && new RectangleF(sp.Location.X, sp.Location.Y, sp.Size.Width, sp.Size.Height).CheckCollision(new RectangleF(this.Location.X, this.Location.Y, this.Size.Width, this.Size.Height)))
 							{
-								sp.IsDying = true;
+								sp.Kill();
+								nowstatus = 2;
 								tick = -1;
 							}
 						}
@@ -159,6 +181,7 @@ namespace DefenderStory.Entities
 					}
 					break;
 			}
+			tick++;
 		}
 
 		public override Entity SetEntityData(dynamic jsonobj)

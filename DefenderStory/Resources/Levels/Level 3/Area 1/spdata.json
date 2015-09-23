@@ -1,5 +1,14 @@
 [
 	{
+		"PosX": 32,
+		"PosY": 1552,
+		"EntityID": 0,
+		"EntityData": {
+			"SpawnFromDoor": false,
+			"TargetDoorIndex": 0
+		}
+	},
+	{
 		"PosX": 112,
 		"PosY": 1424,
 		"EntityID": 22,
@@ -240,24 +249,15 @@
 		"EntityData": { "WorkingType": 0 }
 	},
 	{
-		"PosX": 32,
-		"PosY": 1552,
-		"EntityID": 0,
-		"EntityData": {
-			"SpawnFromDoor": false,
-			"TargetDoorIndex": 0
-		}
-	},
-	{
 		"PosX": 752,
 		"PosY": 1424,
 		"EntityID": 83,
 		"EntityData": null
 	},
 	{
-		"PosX": 1482,
+		"PosX": 1472,
 		"PosY": 1343,
-		"SpriteID": 18,
-		"SpriteData": { "NextStage": -1 }
+		"EntityID": 18,
+		"EntityData": { "NextStage": -1 }
 	}
 ]

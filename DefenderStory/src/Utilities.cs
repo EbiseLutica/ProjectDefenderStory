@@ -551,6 +551,9 @@ namespace DefenderStory.Util
 		/// <param name="snd">再生するサウンド。</param>
 		public static void PlaySound(Sounds snd)
 		{
+			if (snd == Sounds.Null)
+				return;
+			snd--;
 			DX.PlaySoundMem(soundlist[(int)snd], DX.DX_PLAYTYPE_BACK);
 		}
 
@@ -563,7 +566,9 @@ namespace DefenderStory.Util
 		/// <param name="pan">パンポット(-255 ~ 255)。</param>
 		public static void PlaySound(Sounds snd, int freq, int volume, int pan)
 		{
-
+			if (snd == Sounds.Null)
+				return;
+			snd--;
 			DX.SetFrequencySoundMem(freq, soundlist[(int)snd]);
 			DX.ChangeNextPlayVolumeSoundMem(volume, soundlist[(int)snd]);
 			DX.ChangeNextPlayPanSoundMem(pan, soundlist[(int)snd]);
@@ -584,6 +589,10 @@ namespace DefenderStory.Util
 	/// </summary>
 	public enum Sounds
 	{
+		/// <summary>
+		/// サウンドを再生しない。
+		/// </summary>
+		Null,
 		/// <summary>
 		/// 0 コインの音。
 		/// </summary>

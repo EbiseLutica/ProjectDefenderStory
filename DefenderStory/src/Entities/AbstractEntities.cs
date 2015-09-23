@@ -485,10 +485,12 @@ namespace DefenderStory.Entities
 			}
 			foreach (IScaffold sc in Parent.FindEntitiesByType<IScaffold>())
 			{
+				if (sc == this)
+					continue;
 				if (new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)Collision.Width, 1).CheckCollision(
 					new Rectangle((int)(sc.Location.X + sc.Collision.Left), (int)(sc.Location.Y + sc.Collision.Y), (int)sc.Collision.Width, (int)sc.Collision.Height)))
 				{
-					Location.Y++;
+					//Location.Y++;
 					Velocity.Y = 0;
 				}
 			}
@@ -540,14 +542,18 @@ namespace DefenderStory.Entities
 			}
 			foreach (IScaffold sc in Parent.FindEntitiesByType<IScaffold>())
 			{
-				if (new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y + Collision.Height), (int)Collision.Width, 1).CheckCollision(
+				if (sc == this)
+					continue;
+				if (new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Bottom), (int)Collision.Width, 1).CheckCollision(
 					new Rectangle((int)(sc.Location.X + sc.Collision.Left), (int)(sc.Location.Y + sc.Collision.Y), (int)sc.Collision.Width, (int)sc.Collision.Height)))
 				{
 					Location.Y--;
 					IsOnLand = true;
-					Velocity.Y = 0;
+					if (Velocity.Y > 0)
+						Velocity.Y = 0;
 					retval = ObjectHitFlag.Hit;
 				}
+				
 			}
 			return retval;
 		}
@@ -606,6 +612,8 @@ namespace DefenderStory.Entities
 			}
 			foreach (IScaffold sc in Parent.FindEntitiesByType<IScaffold>())
 			{
+				if (sc == this)
+					continue;
 				if (new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)1, (int)(Collision.Height)).CheckCollision(
 					new Rectangle((int)(sc.Location.X + sc.Collision.Left), (int)(sc.Location.Y + sc.Collision.Y), (int)sc.Collision.Width, (int)sc.Collision.Height)))
 				{
@@ -668,6 +676,8 @@ namespace DefenderStory.Entities
 			}
 			foreach (IScaffold sc in Parent.FindEntitiesByType<IScaffold>())
 			{
+				if (sc == this)
+					continue;
 				if (new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)1, (int)(Collision.Height)).CheckCollision(
 					new Rectangle((int)(sc.Location.X + sc.Collision.Left), (int)(sc.Location.Y + sc.Collision.Y), (int)sc.Collision.Width, (int)sc.Collision.Height)))
 				{
@@ -687,8 +697,12 @@ namespace DefenderStory.Entities
 				SetKilledAnime();
 			if (IsCrushed)
 				SetCrushedAnime();
+			if (MyGroup == EntityGroup.Monster && !IsCrushed && !IsFall)
+				SoundUtility.PlaySound(KilledSound);
 			Velocity = Vector.Zero;
 		}
+
+		public virtual Sounds KilledSound => Sounds.Killed;
 
 		public override void onDraw(PointF p, Status ks)
 		{
@@ -868,4 +882,5 @@ namespace DefenderStory.Entities
 				base.UpdateGravity();
 		}
 	}
+
 }

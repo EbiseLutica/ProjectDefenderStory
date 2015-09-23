@@ -7,6 +7,7 @@ using DefenderStory.Util;
 using System.Drawing;
 using DefenderStory.Data;
 using DefenderStory.AI;
+using Codeplex.Data;
 
 namespace DefenderStory.Entities
 {
@@ -133,7 +134,19 @@ namespace DefenderStory.Entities
 			if (PowerupTime > 0)
 				PowerupTime--;
 			if (MutekiTime > 0)
+			{
 				MutekiTime--;
+				if (MutekiTime == 90 && IsItemMuteki)
+				{
+					SoundUtility.PlaySound(Sounds.WarningMuteki);
+				}
+				if (MutekiTime == 0 && IsItemMuteki)
+				{
+					IsItemMuteki = false;
+					GameEngine.BGMStop();
+					GameEngine.BGMPlay(GameEngine.areainfo.Music);
+				}
+			}
 		}
 
 		private void AnimeControl()
@@ -269,9 +282,20 @@ namespace DefenderStory.Entities
 					{
 						case PlayerForm.Fire:
 							SoundUtility.PlaySound(Sounds.ShootFire);
-							//Parent.Add(new Fire_PlayerWeapon(this.Point, mptobjects, Parent, (isRight ? Fire_PlayerWeapon.SPEED_X : -Fire_PlayerWeapon.SPEED_X)));
+							Parent.Add(new EntityFireWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""Speed"": " + (Direction == Direction.Right ? EntityFireWeapon.SPEED_X : -EntityFireWeapon.SPEED_X) + "}")));
 							break;
 					}
+				}
+
+				foreach (EntityLiving e in Parent.FindEntitiesByType<EntityLiving>())
+				{
+					if (e.IsDying)
+						continue;
+					if (this.MutekiTime > 0 && this.IsItemMuteki && (e.MyGroup == EntityGroup.Monster || e.MyGroup == EntityGroup.MonsterWeapon) && new RectangleF(e.Location.X, e.Location.Y, e.Size.Width, e.Size.Height).CheckCollision(new RectangleF(this.Location.X, this.Location.Y, this.Size.Width, this.Size.Height)))
+					{
+						e.Kill();
+					}
+
 				}
 
 				foreach (EntityTurcosShell e in Parent.FindEntitiesByType<EntityTurcosShell>())
@@ -303,6 +327,8 @@ namespace DefenderStory.Entities
 			base.onOutOfWater();
 		}
 
+		public override Sounds KilledSound => Sounds.PlayerMiss;
+
 		public EntityPlayer(PointF pnt, Data.Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -326,6 +352,7 @@ namespace DefenderStory.Entities
 			if (IsFall)
 			{
 				base.Kill();
+				//SoundUtility.PlaySound(Sounds.PlayerMiss);
 				return;
 			}
 			if (MutekiTime > 0)
@@ -334,7 +361,7 @@ namespace DefenderStory.Entities
 			{
 				SetGraphic(5);
 				base.Kill();
-				SoundUtility.PlaySound(Sounds.PlayerMiss);
+				//SoundUtility.PlaySound(Sounds.PlayerMiss);
 			}
 			else if (Form == PlayerForm.Big)
 			{

@@ -180,7 +180,6 @@ namespace DefenderStory.Entities
 					Velocity.Y = -3f;
 					IsDying = true;
 				}
-				SoundUtility.PlaySound(Sounds.Killed);
 				
 				return;
 			}
@@ -193,7 +192,7 @@ namespace DefenderStory.Entities
 
 
 
-		const int mutekimax = 20;
+		const int mutekimax = 60;
 		protected virtual void SwitchMode()
 		{
 			if (!isRunning)
@@ -249,10 +248,10 @@ namespace DefenderStory.Entities
 					if (ep == this || ep.IsDying || ep.MyGroup == EntityGroup.Defender || (ep.MyGroup != EntityGroup.Monster && !(ep is EntityTurcosShell)))
 						continue;
 					if (new Rectangle((int)ep.Location.X, (int)(ep.Location.Y), (int)ep.Size.Width, (int)ep.Size.Height)
-						.CheckCollision(new Rectangle((int)Owner.Location.X - Size.Width, (int)Owner.Location.Y - Size.Height, (int)Owner.Size.Width + Size.Width * 2, (int)Owner.Size.Height + Size.Height * 2)))
+						.CheckCollision(new Rectangle((int)Owner.Location.X - 4, (int)Owner.Location.Y - 4, (int)Owner.Size.Width + 8, (int)Owner.Size.Height + 8))) 
 					{
 						ep.Kill();
-						this.Kill();
+						this.IsDead = true;
 					}
 				}
 			}
