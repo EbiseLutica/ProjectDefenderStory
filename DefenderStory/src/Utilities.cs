@@ -92,6 +92,23 @@ namespace DefenderStory.Util
 		/// </summary>
 		public static int[] MapChip { get; private set; }
 		/// <summary>
+		/// ボクサー。
+		/// </summary>
+		public static int[] Boxer { get; private set; }
+		/// <summary>
+		/// 転がる岩。
+		/// </summary>
+		public static int[] RollingRock { get; private set; }
+		/// <summary>
+		/// ターボ。
+		/// </summary>
+		public static int[] Turbo { get; private set; }
+		/// <summary>
+		/// ファイター。
+		/// </summary>
+		public static int[] Fighter { get; private set; }
+
+		/// <summary>
 		/// マップチップ。
 		/// </summary>
 		public static int[] Logo { get; private set; }
@@ -209,6 +226,39 @@ namespace DefenderStory.Util
 
 			}
 
+			Fighter = new int[2];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spfighter.png", 2, 2, 1, 16, 32, out Fighter[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			Turbo = new int[6];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spturbo.png", 6, 6, 1, 16, 16, out Turbo[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			Boxer = new int[6];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spboxer.png", 2, 2, 1, 32, 32, out Boxer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			RollingRock = new int[2];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\sprollingrock.png", 2, 2, 1, 32, 32, out RollingRock[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
 			Turcos = new int[12];
 
 			if (DX.LoadDivGraph("Resources\\Graphics\\spTurcos.png", 12, 11, 2, 24, 16, out Turcos[0]) == -1)
@@ -271,9 +321,220 @@ namespace DefenderStory.Util
 			{
 				MusicList[Path.GetFileName(s)] = Sequencer.LoadSMF(s);
 			}
-			
-
 		}
+
+		public static void Reload()
+		{
+
+			foreach (var h in LeafPlayer)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spplayer_leaf.png", 72, 18, 4, 16, 32, out LeafPlayer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			foreach (var h in IcePlayer)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spplayer_ice.png", 72, 18, 4, 16, 32, out IcePlayer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+
+			foreach (var h in FirePlayer)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spplayer_fire.png", 72, 18, 4, 16, 32, out FirePlayer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			foreach (var h in BigPlayer)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spplayer.png", 72, 18, 4, 16, 32, out BigPlayer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			foreach (var h in MiniPlayer)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spplayermini.png", 72, 18, 4, 16, 16, out MiniPlayer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			foreach (var h in CommonMob)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\commonMob.png", 144, 16, 4, 16, 16, out CommonMob[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			foreach (var h in Modokee_Ground)
+				DX.DeleteGraph(h);
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spModokee.png", 8, 8, 1, 32, 16, out Modokee_Ground[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Modokee_Cave)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spCaveModokee.png", 8, 8, 1, 32, 16, out Modokee_Cave[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Daemon)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spdaemon.png", 14, 14, 1, 16, 16, out Daemon[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Archer)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\sparcher.png", 8, 8, 1, 32, 32, out Archer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Weapon)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spweapon.png", 14, 14, 1, 16, 16, out Weapon[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Dwarf)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spdwarf.png", 5, 5, 1, 16, 32, out Dwarf[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Fighter)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spfighter.png", 2, 2, 1, 16, 32, out Fighter[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Turbo)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spturbo.png", 6, 6, 1, 16, 16, out Turbo[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Boxer)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spboxer.png", 2, 2, 1, 32, 32, out Boxer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			foreach (var h in RollingRock)
+				DX.DeleteGraph(h);
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\sprollingrock.png", 2, 2, 1, 32, 32, out RollingRock[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Turcos)
+				DX.DeleteGraph(h);
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spTurcos.png", 12, 11, 2, 24, 16, out Turcos[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			foreach (var h in TurcosShell)
+				DX.DeleteGraph(h);
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spTurcosShell.png", 4, 4, 1, 16, 16, out TurcosShell[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			foreach (var h in Spider)
+				DX.DeleteGraph(h);
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spSpider.png", 1, 1, 1, 16, 16, out Spider[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+			foreach (var h in Logo)
+				DX.DeleteGraph(h);
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\logo.png", 2, 2, 1, 180, 101, out Logo[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+
+			}
+
+
+			foreach (var h in Item)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spitem.png", 7, 7, 1, 16, 16, out Item[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+
+			foreach (var h in Particle)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spparticle.png", 7, 7, 1, 8, 8, out Particle[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+
+			foreach (var h in StrangeFlower)
+				DX.DeleteGraph(h);
+			if (DX.LoadDivGraph("Resources\\Graphics\\spstrangeflower.png", 5, 5, 1, 48, 48, out StrangeFlower[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+			DX.DeleteGraph(TheEnd);
+
+			if ((TheEnd = DX.LoadGraph("Resources\\Graphics\\theend.png")) == 0)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			MusicList.Clear();
+
+			foreach (var s in Directory.GetFiles(".\\Resources\\Music"))
+			{
+				MusicList[Path.GetFileName(s)] = Sequencer.LoadSMF(s);
+			}
+		}
+
 
 		public static int[] GetMpt(string mptname)
 		{
@@ -343,8 +604,8 @@ namespace DefenderStory.Util
 		static bool isInit = false;
 		public static void Init()
 		{
-			hFont = new int[320];
-			DX.LoadDivGraph("Resources\\Graphics\\font.png", 320, 16, 20, 10, 10, out hFont[0]);
+			hFont = new int[384];
+			DX.LoadDivGraph("Resources\\Graphics\\font.png", 384, 16, 24, 10, 10, out hFont[0]);
 			hFont_mini = new int[320];
 			DX.LoadDivGraph("Resources\\Graphics\\font_mini.png", 320, 16, 20, 8, 8, out hFont_mini[0]);
 			int i = 1;  //0番目は、存在しない文字があったときに表示する文字なので、1から始まる
@@ -353,8 +614,8 @@ namespace DefenderStory.Util
 				dicFont[c] = i++;   //文字番号を char によって指定できるよう登録する
 			}
 			DX.ChangeFont("MS Gothic");
-			DX.SetFontSize(9);
-			DX.ChangeFontType(DX.DX_FONTTYPE_ANTIALIASING);
+			DX.SetFontSize(11);
+			//DX.ChangeFontType(DX.DX_FONTTYPE_ANTIALIASING);
 			DX.SetFontThickness(1);
 			isInit = true;
 		}
@@ -398,6 +659,54 @@ namespace DefenderStory.Util
 
 			}
 			DX.SetDrawBright(255, 255, 255);
+			//var p = GetDrawingSize(txt);
+			//DX.DrawBox(x, y, x + p.Width, y + p.Height, DX.GetColor(255, 0, 0), 0);
+
+		}
+
+		public static void DrawString(int x, int y, int xx, int yy, string txt, int color)
+		{
+			if (!isInit)
+				throw new Exception("Font Utility が初期化されていません。");
+			int _x = x, _y = y;
+			DX.SetDrawBright((color & 0xff0000) >> 16, (color & 0x00ff00) >> 8, color & 0x0000ff);
+			for (int i = 0; i < txt.Length; i++)
+			{
+				int target;
+				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
+					target = dicFont[txt[i]];
+				else if (txt[i] == '\n')
+				{
+					_x = x;
+					_y += 10;
+					continue;
+				}
+				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				{
+					_x += 8;
+					continue;
+				}
+				else
+					target = 0;                     //それ以外なら、存在しない文字として出力する
+				if (_x > xx)
+				{
+					_y += 10;
+					_x = x;
+				}
+				if (_y > yy)
+				{
+					break;
+				}
+				if (target > 0)
+					DX.DrawGraph(_x, _y, hFont[target], 1);
+				else
+					DX.DrawString(_x, _y, "" + txt[i], DX.GetColor(255, 255, 255));
+				_x += ((txt[i] < 128) ? 8 : 10);
+
+			}
+			DX.SetDrawBright(255, 255, 255);
+			//var p = GetDrawingSize(txt);
+			//DX.DrawBox(x, y, x + p.Width, y + p.Height, DX.GetColor(255, 0, 0), 0);
 		}
 
 		/// <summary>
@@ -461,6 +770,12 @@ namespace DefenderStory.Util
 			DrawString(x, y, txt, color.R << 16 | color.G << 8 | color.B);
 		}
 
+		public static void DrawString(int x, int y, int xx, int yy, string txt, Color color)
+		{
+			DrawString(x, y, xx, yy, txt, color.R << 16 | color.G << 8 | color.B);
+		}
+
+
 		public static void DrawMiniString(int y, string txt, Color color)
 		{
 			DrawMiniString(y, txt, color.R << 16 | color.G << 8 | color.B);
@@ -476,33 +791,50 @@ namespace DefenderStory.Util
 			if (!isInit)
 				throw new Exception("Font Utility が初期化されていません。");
 			int w = 0, h = 0;
+			int bw = 0;
 			for (int i = 0; i < txt.Length; i++)
 			{
-				if (txt[i] == '\n')
+				int target;
+				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
+					target = dicFont[txt[i]];
+				else if (txt[i] == '\n')
 				{
-
+					if (bw < w)
+						bw = w;
+					w = 0;
 					h += 10;
 					continue;
 				}
-				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				else if (txt[i] == ' ')             //空白文字はないので開ける
 				{
 					w += 8;
 					continue;
 				}
+
 				w += ((txt[i] < 128) ? 8 : 10);
 			}
+			if (bw < w)
+				bw = w;
+			w = bw;
+			h += 10;
 			return new Size(w, h);
 		}
+
 		public static Size GetMiniDrawingSize(string txt)
 		{
 			if (!isInit)
 				throw new Exception("Font Utility が初期化されていません。");
-			int w = 0, h = 0;
+			int w = 0, h = 0, bw = 0;
 			for (int i = 0; i < txt.Length; i++)
 			{
-				if (txt[i] == '\n')
+				int target;
+				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
+					target = dicFont[txt[i]];
+				else if (txt[i] == '\n')
 				{
-
+					if (bw < w)
+						bw = w;
+					w = 0;
 					h += 8;
 					continue;
 				}
@@ -513,6 +845,11 @@ namespace DefenderStory.Util
 				}
 				w += ((txt[i] < 128) ? 6 : 8);
 			}
+			if (bw < w)
+				bw = w;
+			w = bw;
+			h += 8;
+
 			return new Size(w, h);
 		}
 
@@ -556,6 +893,15 @@ namespace DefenderStory.Util
 			snd--;
 			DX.PlaySoundMem(soundlist[(int)snd], DX.DX_PLAYTYPE_BACK);
 		}
+
+		public static void PlaySound(int snd)
+		{
+			if (snd == 0)
+				return;
+			snd--;
+			DX.PlaySoundMem(soundlist[snd], DX.DX_PLAYTYPE_BACK);
+		}
+
 
 		/// <summary>
 		/// 細かいパラメーターを設定し、指定されたサウンドを再生します。
@@ -696,7 +1042,11 @@ namespace DefenderStory.Util
 		/// <summary>
 		/// 25 カーソルが移動する音。
 		/// </summary>
-		Selected
+		Selected,
+		/// <summary>
+		/// 26 しゃべる音。 
+		/// </summary>
+		Saying
 	}
 
 	/// <summary>

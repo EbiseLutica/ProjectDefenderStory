@@ -16,6 +16,8 @@ using DefenderStory.Util;
 using DefenderStory.Entities;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace DefenderStory
 {
@@ -164,7 +166,7 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = 1;
+		public const int START_LEVEL = 2;
 		/// <summary>
 		/// 現在のゲームモード。
 		/// </summary>
@@ -173,9 +175,9 @@ namespace DefenderStory
 		/// <summary>
 		/// ゲームエンジンを初期化します。
 		/// </summary>
-		public static void Init()
+		public static void Init(int w, int h)
 		{
-			Init(1, new Size(320, 240));
+			Init(1, new Size(w, h));
 		}
 
 		/// <summary>
@@ -209,7 +211,7 @@ namespace DefenderStory
 			bmsec = DateTime.Now.Millisecond;
 			level = START_LEVEL;
 			map = new Size(20, 15);
-			hPauseScreen = DX.MakeScreen(320, 240);
+			hPauseScreen = DX.MakeScreen(s.Width, s.Height);
 			entitylist = new EntityList();
 			Coin = 0;
 			Life = 5;
@@ -219,8 +221,9 @@ namespace DefenderStory
 			scrSize = s;
 			IsInit = true;
 			gamemode = GameMode.Title;
+			hMainScreen = DX.MakeScreen(s.Width, s.Height);
 			#endregion
-			
+
 			Load(level);
 		}
 
@@ -415,6 +418,7 @@ namespace DefenderStory
 			data = GetJsonData<LevelData>("Resources\\Levels\\Level " + level + "\\lvldat.json");
 			area = data.FirstArea;
 			time = data.Time;
+			storytext = File.ReadAllText("Resources\\Levels\\Level " + level + "\\story.txt");
 			Load(level, area, pf);
 			seq.Stop();
 			splashtime = 120;
@@ -445,27 +449,59 @@ namespace DefenderStory
 		static int hPauseScreen;
 		static bool binf3, inf3;
 		static bool binup, bindown;
+		static int binesc;
 		static int splashtime = 0;
 		static EndingMode endmode;
 		static string credit;
 		static int height = 0;
 		static int graphhandle;
+		static int graphhandle2;
 		static int gametick = 0;
 		private static TitleMode titlemode;
+		static bool storyflag = false;
+		static string storytext;
+		static string[] storylines;
+		static int storyline = 0;
+		static string serif = "";
+		static string storyimg = "";
+		static bool storywaiting = false;
+		static bool nowserif = false;
+		static string[] serifs;
+		static int serifptr = 0;
+		static string bgpath = "";
+		static string bgpath2;
+        static GameMode bgamemode;
+		static Dictionary<string, string> facealias = new Dictionary<string, string>();
+		static Regex regpreprc = new Regex(@"\[(.+)?\:(.+)\]");
+		public static string GameVersion
+		{ get; set; } = "1.0.0-a";
+		public static string Copyright
+		{ get; set; } = "(C)2014-2015 ＣCitringo";
+		static int helppage = 0;
+		static MatchCollection m;
+		/// <summary>
+		/// メイン画面バッファのハンドル。
+		/// </summary>
+		public static int hMainScreen;
+
+		public static Action finallyprocess;
 
 		/// <summary>
 		/// ゲームのループ処理をします。
 		/// </summary>
-		public static void DoGameLoop()
+		public static int DoGameLoop()
 		{
 			if (!IsInit)
 				throw new Exception("ゲームエンジンが初期化されていません。");
+			int h = DX.GetDrawScreen();
+			DX.SetDrawScreen(hMainScreen);
 			ks.Update(binz, camera, map);
 			int inesc = DX.CheckHitKey(DX.KEY_INPUT_ESCAPE);
 			DX.ClearDrawScreen();  //消し去る
 			seq.PlayLoop();
 			//----FPS 測定
 			f++;
+			
 			if (bsec != DateTime.Now.Second)
 			{
 				fps = f;
@@ -500,7 +536,8 @@ namespace DefenderStory
 							tick = 0;
 
 						}
-						return;
+						
+						break;
 					}
 					#endregion
 
@@ -546,7 +583,8 @@ namespace DefenderStory
 							level = 2;
 							area = 2;
 							Load(2, 2, ((entitylist.MainEntity is EntityPlayer) ? ((EntityPlayer)entitylist.MainEntity).Form : PlayerForm.Mini));
-							return;
+							
+							break;
 						}
 					}
 					#endregion
@@ -557,15 +595,18 @@ namespace DefenderStory
 						GameEngine.IsGoal = false;
 						GameEngine.Middle = Point.Empty;
 						level = GameEngine.NextStage;
+						gamemode = GameMode.Story;
 						Load(level, ((entitylist.MainEntity is EntityPlayer) ? ((EntityPlayer)entitylist.MainEntity).Form : PlayerForm.Mini));
-						return;
+						
+						break;
+
 					}
 
-					//ESC キーで終了
-					if (inesc == 1)
+					//ESC キーでブレイクタイム
+					if (inesc == 1 && binesc != 1)
 					{
-						DX.DxLib_End();
-						return;
+						SetBreakTime(null, GameMode.Action);
+						break;
 					}
 
 					//主人公が死んでしばらくしたら振り出しに戻して始める処理をする
@@ -576,10 +617,12 @@ namespace DefenderStory
 							BGMPlay("nahha.mid");
 							guiCursor = 0;
 							IsGameOver = true;
-							return;
+							
+							break;
 						}
 						Load(level, area);
-						return;
+						
+						break;
 					}
 
 					#region 主人公処理
@@ -644,12 +687,12 @@ namespace DefenderStory
 					}
 					#endregion
 
-					int bgx = (int)(-((-ks.camera.X * (areainfo.ScrollSpeed / 10.0)) % 320));
+					int bgx = (int)(-((-ks.camera.X * (areainfo.ScrollSpeed / 10.0)) % scrSize.Width));
 
 					#region 描画
 					//背景を描画
-					DX.DrawGraph(bgx, 0, hndl_bg, 0);
-					DX.DrawGraph(bgx + 320, 0, hndl_bg, 0);    //スクロールするから2枚使ってループできるようにしている
+					DX.DrawExtendGraph(bgx, 0, bgx + scrSize.Width, scrSize.Height, hndl_bg, 0);
+					DX.DrawExtendGraph(bgx + scrSize.Width, 0, bgx + scrSize.Width * 2, scrSize.Height, hndl_bg, 0);    //スクロールするから2枚使ってループできるようにしている
 
 					//----背面の mpt を描画している
 					for (int y = 0; y < map.Height * 16; y += 16)
@@ -786,19 +829,19 @@ namespace DefenderStory
 					{
 						if (time == 0)
 						{
-							((EntityLiving)entitylist.MainEntity).Kill(true, false);
+							((EntityLiving)entitylist.MainEntity).Kill();
 						}
 						else
 							time--;
 					}
 					//ポーズの切り替え
-					tick = (tick + 1) % 3600;
+
 
 					bool inenter = DX.CheckHitKey(DX.KEY_INPUT_RETURN) == 1;
-					if (inenter)
+					/*if (inenter)
 					{
 						gamemode = GameMode.Breaktime;
-					}
+					}*/
 
 					#region ゲームオーバーダイアログ
 					if (IsGameOver)
@@ -828,7 +871,9 @@ namespace DefenderStory
 									Load(level);
 									break;
 								case 1:
-									GameEngine.Init();
+									ks.inz1 = false;
+									titlemode = TitleMode.Opening;
+									gamemode = GameMode.Title;
 									break;
 							}
 						}
@@ -840,10 +885,160 @@ namespace DefenderStory
 				#endregion
 				case GameMode.Story:
 					#region StoryMode
+					//ESC キーでブレイクタイム
+					if (inesc == 1 && binesc != 1)
+					{
+						SetBreakTime(new Action(() =>
+						{
+							storyflag = false;
+							if (graphhandle != 0)
+								DX.DeleteGraph(graphhandle);
+							graphhandle = 0;
+							if (graphhandle2 != 0)
+								DX.DeleteGraph(graphhandle2);
+							graphhandle2 = 0;
+						}), gamemode);
+						
+						break;
+					}
+					if (!storyflag) //初期化
+					{
+						storyflag = true;
+						storyline = 0;
+						serif = "";
+						storylines = storytext.Split('\n');
+						facealias.Clear();
+					}
+
+
+
+					if (regpreprc.IsMatch(storylines[storyline]))	//プリプロセッサ
+					{
+						m = regpreprc.Matches(storylines[storyline]);
+						
+						switch (m[0].Groups[1].Value)
+						{
+							case "img":
+								if (graphhandle != 0)
+								{
+									DX.DeleteGraph(graphhandle);
+									graphhandle = 0;
+								}
+								if (m[0].Groups[2].Value == "white")
+								{
+									bgpath = "white";
+									graphhandle = DX.MakeScreen(scrSize.Width, scrSize.Height);
+									DX.FillGraph(graphhandle, 255, 255, 255);
+									break;
+								}
+								graphhandle = DX.LoadGraph(bgpath = "Resources\\Graphics\\" + m[0].Groups[2].Value);
+								break;
+							case "bgm":
+								if (seq.IsPlaying)
+									BGMStop();
+								BGMPlay(m[0].Groups[2].Value);
+								break;
+							case "face":
+								string[] val = m[0].Groups[2].Value.Split(',');
+								facealias.Add(val[0], val[1]);
+								break;
+
+						}
+					}
+					if (!storywaiting && !nowserif && !regpreprc.IsMatch(storylines[storyline]) && storylines[storyline].IndexOf(',') > -1)
+					{
+						nowserif = true;
+						serifs = storylines[storyline].Split(',');
+						serifptr = 0;
+						serif = "";
+						if (graphhandle2 != 0)
+						{
+							DX.DeleteGraph(graphhandle2);
+							graphhandle2 = 0;
+						}
+						if (facealias.ContainsKey(serifs[0]))
+						{
+							graphhandle2 = DX.LoadGraph(bgpath2 = "Resources\\Graphics\\" + facealias[serifs[0]] + "\\" + serifs[2] + ".png");
+						}
+						else
+						{
+							graphhandle2 = DX.LoadGraph(bgpath2 = "Resources\\Graphics\\" + serifs[0] + "\\" + serifs[2] + ".png");
+						}
+						if (serifs.Length != 3)
+						{
+							throw new Exception("セリフの記述が不適切です。");
+						}
+					}
+
+					if (!storywaiting && nowserif && tick % (ks.inz ? 1 : 4) == 0)
+					{
+						serif += serifs[1][serifptr];
+						SoundUtility.PlaySound(Sounds.Saying);
+						if (serifs[1][serifptr] == '。')
+						{
+							storywaiting = true;
+						}
+						serifptr++;
+						if (serifs[1].Length <= serifptr)
+						{
+							storywaiting = true;
+							nowserif = false;
+						}
+					}
+
+
+					if (graphhandle != 0)
+					{
+						DX.DrawGraph(0, 0, graphhandle, 0);
+					}
+
+					if (serifs != null)
+					{
+						DX.DrawBox(0, scrSize.Height - 64, 8 + FontUtility.GetDrawingSize(serifs[0]).Width, scrSize.Height - 64 - 16, DX.GetColor(64, 64, 64), 1);
+						FontUtility.DrawString(4, scrSize.Height - 64 - 13, serifs[0], Color.White);
+					}
+
+					DX.DrawBox(0, scrSize.Height - 64, scrSize.Width, scrSize.Height, DX.GetColor(64, 64, 64), 1);
+					FontUtility.DrawString(8, scrSize.Height - 56, scrSize.Width - 8, scrSize.Height - 8, serif, Color.White);
+					if (storywaiting)
+					{
+						FontUtility.DrawMiniString(scrSize.Width - 12, scrSize.Height - 12, (tick % 16 < 8 ? "▼" : "▽"), Color.White);
+					}
+
+					DX.DrawExtendGraph(90, 16, 230, 156, graphhandle2, 0);
+
+					if (storywaiting)
+					{
+						if (ks.inz1)
+						{
+							ks.inz1 = false;
+							storywaiting = false;
+						}
+					}
+
+					if (!nowserif && !storywaiting)
+						storyline++;
+					if (storylines.Length <= storyline)
+					{
+						storyflag = false;
+						DX.DeleteGraph(graphhandle);
+						graphhandle = 0;
+						DX.DeleteGraph(graphhandle2);
+						graphhandle2 = 0;
+						gamemode = GameMode.Action;
+						if (seq.IsPlaying)
+							BGMStop(500);
+					}
 					#endregion
 					break;
 				case GameMode.Title:
 					#region TitleMode
+					if (inesc == 1 && binesc != 1　&& titlemode == TitleMode.MainTitle)
+					{
+						Environment.Exit(0);
+						
+						break;
+					}
 					switch (titlemode)
 					{
 						case TitleMode.Opening:
@@ -857,6 +1052,7 @@ namespace DefenderStory
 								titlemode = TitleMode.GameLogoLightning;
 								gametick = 0;
 								SoundUtility.PlaySound(Sounds.Flash);
+								ks.inz1 = false;
 								break;
 							}
 							
@@ -887,21 +1083,30 @@ namespace DefenderStory
 						#endregion
 						case TitleMode.MainTitle:
 							#region 
+
+							#region 描画
 							DX.DrawGraph(0, 0, graphhandle, 0);
 							DX.DrawGraph(scrSize.Width / 2 - 180 / 2, (int)(scrSize.Height - 220), ResourceUtility.Logo[0], 1);
-							var uistr = $"{(guiCursor == 0 ? ">" : " ")}はじめから\n\n{(guiCursor == 1 ? ">" : " ")}設定\n\n{(guiCursor == 2 ? ">" : " ")}ジュークボックス\n\n{(guiCursor == 3 ? ">" : " ")}ヘルプ\n\n{(guiCursor == 4 ? ">" : " ")}おわる";
+							var uistr = $"{(guiCursor == 0 ? ">" : " ")}はじめから\n\n{(guiCursor == 1 ? ">" : " ")}設定\n\n{(guiCursor == 2 ? ">" : " ")}ヘルプ\n\n{(guiCursor == 3 ? ">" : " ")}おわる";
 							FontUtility.DrawString(scrSize.Width / 2 - 40, scrSize.Height / 2 + 16, uistr, Color.Black);
+							FontUtility.DrawMiniString(0, scrSize.Height - 8, Copyright, Color.Black);
+							FontUtility.DrawMiniString(scrSize.Width - GameVersion.Length * 6, scrSize.Height - 8, GameVersion, Color.Black);
+
+							#endregion
+
+							#region 判定
 							if (binup != ks.inup && ks.inup)
 							{
 								guiCursor--;
 								if (guiCursor < 0)
-									guiCursor = 2;
+									guiCursor = 3;
 								SoundUtility.PlaySound(Sounds.Selected);
 							}
+							
 							if (bindown != ks.indown && ks.indown)
 							{
 								guiCursor++;
-								if (guiCursor > 4)
+								if (guiCursor > 3)
 									guiCursor = 0;
 								SoundUtility.PlaySound(Sounds.Selected);
 							}
@@ -910,7 +1115,7 @@ namespace DefenderStory
 								switch (guiCursor)
 								{
 									case 0:
-										gamemode = GameMode.Prolog;
+										gamemode = GameMode.Story;
 										BGMStop();
 										BGMPlay("nothing.mid");
 										ks.inz1 = false;
@@ -921,12 +1126,9 @@ namespace DefenderStory
 										titlemode = TitleMode.Setting;
 										break;
 									case 2:
-										titlemode = TitleMode.JukeBox;
-										break;
-									case 3:
 										titlemode = TitleMode.Help;
 										break;
-									case 4:
+									case 3:
 										Environment.Exit(0);
 										break;
 									default:
@@ -937,26 +1139,60 @@ namespace DefenderStory
 							}
 							break;
 						#endregion
+						#endregion
 						case TitleMode.Setting:
-							FontUtility.DrawString(32, "Not implemented, sorry. \nPress Esc Key.", Color.White);
-							if (inesc == 1)
+							FontUtility.DrawString(32, "設定できることは何もありません。\nEsc キーまたは [START] ボタンを押してください", Color.White);
+							if (inesc == 1 && binesc != 1)
 								titlemode = TitleMode.MainTitle;
 							break;
 						case TitleMode.Help:
-							FontUtility.DrawString(32, "Not implemented, sorry. \nPress Esc Key.", Color.White);
-							if (inesc == 1)
+							if (graphhandle2 == 0)
+							{
+								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadactgame.png");
+							}
+							if (helppage == 1 && ks.inlshift)
+							{
+								DX.DeleteGraph(graphhandle2);
+								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadactgame.png");
+								helppage--;
+							}
+							if (ks.inz1)
+							{
+								ks.inz1 = false;
+								helppage++;
+								DX.DeleteGraph(graphhandle2);
+								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadstory.png");
+								if (helppage == 2)
+								{
+									helppage = 0;
+									DX.DeleteGraph(graphhandle2);
+									graphhandle2 = 0;
+									titlemode = TitleMode.MainTitle;
+								}
+							}
+							DX.DrawGraph(0, 0, graphhandle2, 0);
+							if (inesc == 1 && binesc != 1)
+							{
+								helppage = 0;
+								DX.DeleteGraph(graphhandle2);
+								graphhandle2 = 0;
 								titlemode = TitleMode.MainTitle;
-							break;
-						case TitleMode.JukeBox:
-							FontUtility.DrawString(32, "Not implemented, sorry. \nPress Esc Key.", Color.White);
-							if (inesc == 1)
-								titlemode = TitleMode.MainTitle;
+							}
 							break;
 					}
 					#endregion
 					break;
 				case GameMode.Ending:
 					#region EndingMode
+					//ESC キーでブレイクタイム
+					if (inesc == 1 && binesc != 1)
+					{
+						gamemode = GameMode.Breaktime;
+						bgamemode = GameMode.Ending;
+						guiCursor = 0;
+						
+						break;
+					}
 					switch (endmode)
 					{
 						case EndingMode.Message:
@@ -972,7 +1208,7 @@ namespace DefenderStory
 								graphhandle = DX.MakeScreen(scrSize.Width, height);
 								DX.SetDrawScreen(graphhandle);
 								FontUtility.DrawString(camera.Y, credit, 0xffffff);
-								DX.SetDrawScreen(Program.hMainScreen);
+								DX.SetDrawScreen(hMainScreen);
 								gametick = DX.GetNowCount();
 							}
 							break;
@@ -1005,6 +1241,16 @@ namespace DefenderStory
 					#endregion
 					break;
 				case GameMode.Debug:
+					#region Debug
+					//ESC キーでブレイクタイム
+					if (inesc == 1 && binesc != 1)
+					{
+						gamemode = GameMode.Breaktime;
+						bgamemode = GameMode.Debug;
+						guiCursor = 0;
+						
+						break;
+					}
 					FontUtility.DrawString(0, "あか", Color.Red);
 					FontUtility.DrawString(10, "だいだい", Color.Orange);
 					FontUtility.DrawString(20, "きいろ", Color.Yellow);
@@ -1012,39 +1258,183 @@ namespace DefenderStory
 					FontUtility.DrawString(40, "みどり", Color.Green);
 					FontUtility.DrawString(50, "あお", Color.Blue);
 					FontUtility.DrawString(60, "むらさき", Color.Purple);
+					#endregion
 					break;
 				case GameMode.Prolog:
 					#region PrologMode
+					//ESC キーでブレイクタイム
+					if (inesc == 1 && binesc != 1)
+					{
+						gamemode = GameMode.Breaktime;
+						bgamemode = GameMode.Prolog;
+						guiCursor = 0;
+						
+						break;
+					}
 					if (graphhandle == 0)
 					{
 						var story = File.ReadAllText("Resources\\Document\\prolog.txt");
-						graphhandle = DX.MakeScreen(scrSize.Width, height = FontUtility.GetDrawingSize(story).Height);
+						graphhandle = DX.MakeScreen(scrSize.Width, height = FontUtility.GetDrawingSize(story).Height + 32);
 						DX.SetDrawScreen(graphhandle);
 						FontUtility.DrawString(0, story, Color.White);
-						DX.SetDrawScreen(Program.hMainScreen);
-						camera.Y = scrSize.Height;
+						DX.SetDrawScreen(hMainScreen);
+						ks.camera.Y = scrSize.Height;
 						
 					}
-					camera.Y--;
-					DX.DrawGraph(0, camera.Y, graphhandle, 0);
-					if (camera.Y < scrSize.Height - height)
+					if (tick % 3 == 0)
+						ks.camera.Y--;
+					DX.DrawGraph(0, ks.camera.Y, graphhandle, 0);
+					if (ks.camera.Y < scrSize.Height - height)
 					{
 						FontUtility.DrawMiniString(scrSize.Width - 100, "PUSH (X) BUTTON", Color.White);
 						if (ks.inz1)
 						{
 							ks.inz1 = false;
 							gamemode = GameMode.Story;
+							BGMStop();
+							DX.DeleteGraph(graphhandle);
+							graphhandle = 0;
 						}
+					}
+					#endregion
+					break;
+				case GameMode.Breaktime:
+					#region BreakTime
+					FontUtility.DrawString(48, "P A U S E", Color.White);
+					FontUtility.DrawString(80, $"{(guiCursor == 0 ? ">" : " ")}つづける", (guiCursor == 0 ? Color.Yellow : Color.White));
+					FontUtility.DrawString(90, $"{(guiCursor == 1 ? ">" : " ")}おわる　", (guiCursor == 1 ? Color.Yellow : Color.White));
+					if ((ks.inup && !binup) || (ks.indown && !bindown))
+						guiCursor ^= 1;
+					
+					if ((ks.inz1))
+                    {
+						if (guiCursor == 0)
+						{
+							gamemode = bgamemode;
+						}
+						else
+						{
+							guiCursor = 0;
+							if (finallyprocess != null)
+								finallyprocess();
+							
+							titlemode = TitleMode.Opening;
+							gamemode = GameMode.Title;
+						}
+						ks.inz1 = false;
 					}
 					#endregion
 					break;
 			}
 			binz = ks.inz;
-
+			tick = (tick + 1) % 3600;
 			camera = ks.camera;
 			map = ks.map;
 			binup = ks.inup;
 			bindown = ks.indown;
+			binesc = inesc;
+			DX.SetDrawScreen(h);
+			return hMainScreen;
+		}
+
+		private static void SetBreakTime(Action a, GameMode g)
+		{
+			bgamemode = g;
+			finallyprocess = a;
+			gamemode = GameMode.Breaktime;
+			guiCursor = 0;
+		}
+	
+		public static void Reload()
+		{
+			var h = DX.GetDrawScreen();
+			hMainScreen = DX.MakeScreen(scrSize.Width, scrSize.Height);
+			DX.SetDrawScreen(hMainScreen);
+			ResourceUtility.Init();
+			FontUtility.Init();
+			switch (gamemode)
+			{
+				case GameMode.Title:
+					switch (titlemode)
+					{
+						case TitleMode.MainTitle:
+							graphhandle = DX.LoadGraph("Resources\\Graphics\\story_1.bmp");
+							break;
+						case TitleMode.Help:
+							if (helppage == 0)
+								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadactgame.png");
+							if (helppage == 1)
+								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadstory.png");
+							break;
+					}
+					break;
+				case GameMode.Story:
+					if (bgpath == "white")
+					{
+						graphhandle = DX.MakeScreen(scrSize.Width, scrSize.Height);
+						DX.FillGraph(graphhandle, 255, 255, 255);
+					}
+					else
+						graphhandle = DX.LoadGraph(bgpath);
+					graphhandle2 = DX.LoadGraph(bgpath2);
+					break;
+				case GameMode.Ending:
+					switch (endmode)
+					{
+						case EndingMode.Credit:
+
+							graphhandle = DX.MakeScreen(scrSize.Width, height);
+							DX.SetDrawScreen(graphhandle);
+							FontUtility.DrawString(camera.Y, credit, 0xffffff);
+							DX.SetDrawScreen(hMainScreen);
+							break;
+					}
+					break;
+				case GameMode.Prolog:
+					var story = File.ReadAllText("Resources\\Document\\prolog.txt");
+					graphhandle = DX.MakeScreen(scrSize.Width, height = FontUtility.GetDrawingSize(story).Height + 32);
+					DX.SetDrawScreen(graphhandle);
+					FontUtility.DrawString(0, story, Color.White);
+					DX.SetDrawScreen(hMainScreen);
+					ks.camera.Y = scrSize.Height;
+
+					break;
+			}
+
+			hndl_bg = DX.LoadGraph("Resources\\Graphics\\" + areainfo.BG);
+			hndl_mpt = ResourceUtility.GetMpt(mptname);
+			int hndl_mptsoft = DX.LoadSoftImage("Resources\\Graphics\\" + mptname + "_hj.png");
+
+
+
+			mptobjects = new Data.Object[64];
+
+			int r, g, b, a;
+			Color[] hits = new Color[5];
+			for (int i = 0; i < 5; i++)
+			{
+				DX.GetPixelSoftImage(hndl_mptsoft, i, 64, out r, out g, out b, out a);
+				hits[i] = Color.FromArgb(r, g, b, a);
+			}
+
+			List<Color> hitlist = hits.ToList();
+			byte[,] mask = new byte[16, 16];
+			for (int iy = 0; iy < 4; iy++)
+			{
+				for (int ix = 0; ix < 16; ix++)
+				{
+					for (int y = 0; y < 16; y++)
+						for (int x = 0; x < 16; x++)
+						{
+							DX.GetPixelSoftImage(hndl_mptsoft, x + ix * 16, y + iy * 16, out r, out g, out b, out a);
+							mask[x, y] = (byte)hitlist.IndexOf(Color.FromArgb(r, g, b, a));
+						}
+					mptobjects[iy * 16 + ix] = new Data.Object(hndl_mpt[iy * 16 + ix], (byte[,])mask.Clone());
+				}
+			}
+
+			DX.DeleteSoftImage(hndl_mptsoft);
+			DX.SetDrawScreen(h);
 		}
 
 	}

@@ -431,7 +431,7 @@ namespace DefenderStory.Entities
 				Location.X = GameEngine.map.Width * 16 - Size.Width;
 			if (Location.Y < 0)
 				Location.Y = 0;
-			if (Location.Y > GameEngine.map.Height * 16 - Size.Height)
+			if (Location.Y > GameEngine.map.Height * 16)
 				Kill(true, false);
 			CollisionTop();
 			CollisionBottom();
@@ -457,8 +457,8 @@ namespace DefenderStory.Entities
 				switch (hit)
 				{
 					case ObjectHitFlag.Hit:
-						if (Mpts[Map[x / 16, y / 16, 0]].CheckHit(x % 16, (y + 1) % 16) == ObjectHitFlag.Hit)
-							Location.Y++;
+						//if (Mpts[Map[x / 16, y / 16, 0]].CheckHit(x % 16, (y + 1) % 16) == ObjectHitFlag.Hit)
+						Location.Y++;
 						Velocity.Y = 0;
 						if (this is EntityPlayer && ((EntityPlayer)this).Form != PlayerForm.Mini)
 						{
@@ -490,7 +490,7 @@ namespace DefenderStory.Entities
 				if (new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)Collision.Width, 1).CheckCollision(
 					new Rectangle((int)(sc.Location.X + sc.Collision.Left), (int)(sc.Location.Y + sc.Collision.Y), (int)sc.Collision.Width, (int)sc.Collision.Height)))
 				{
-					//Location.Y++;
+					Location.Y++;
 					Velocity.Y = 0;
 				}
 			}
@@ -697,7 +697,7 @@ namespace DefenderStory.Entities
 				SetKilledAnime();
 			if (IsCrushed)
 				SetCrushedAnime();
-			if (MyGroup == EntityGroup.Monster && !IsCrushed && !IsFall)
+			if (!IsCrushed && !IsFall)
 				SoundUtility.PlaySound(KilledSound);
 			Velocity = Vector.Zero;
 		}

@@ -51,6 +51,8 @@ namespace DefenderStory.Entities
 		private float spddivition;
 		private bool lshifted;
 
+		private int flowtimer = 0;
+
 		public override int[] ImageHandle
 		{
 			get
@@ -246,7 +248,7 @@ namespace DefenderStory.Entities
 						IsJumping = false;
 						IsOnLand = true;
 					}
-					else if (IsOnLand)
+					else if (IsOnLand || flowtimer < 10)
 					{
 						if (!IsJumping)
 						{
@@ -262,6 +264,10 @@ namespace DefenderStory.Entities
 				}
 				ks.inz1 = false;
 			}
+			if (IsOnLand)
+				flowtimer = 0;
+			else
+				flowtimer++;
 			//if (!ks.inz && IsJumping)
 			//	Velocity.Y += 0.1f;
 
@@ -284,6 +290,12 @@ namespace DefenderStory.Entities
 							SoundUtility.PlaySound(Sounds.ShootFire);
 							Parent.Add(new EntityFireWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""Speed"": " + (Direction == Direction.Right ? EntityFireWeapon.SPEED_X : -EntityFireWeapon.SPEED_X) + "}")));
 							break;
+						case PlayerForm.Leaf:
+							SoundUtility.PlaySound(Sounds.ShootFire);
+							Parent.Add(new EntityLeafWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""SpeedX"": " + (Direction == Direction.Right ? EntityFireWeapon.SPEED_X : -EntityFireWeapon.SPEED_X) + @", ""SpeedY"": -2 }")));
+							Parent.Add(new EntityLeafWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""SpeedX"": " + (Direction == Direction.Right ? EntityFireWeapon.SPEED_X : -EntityFireWeapon.SPEED_X) + @", ""SpeedY"": 0 }")));
+							Parent.Add(new EntityLeafWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""SpeedX"": " + (Direction == Direction.Right ? EntityFireWeapon.SPEED_X : -EntityFireWeapon.SPEED_X) + @", ""SpeedY"": 2 }")));
+							break;
 					}
 				}
 
@@ -302,8 +314,8 @@ namespace DefenderStory.Entities
 				{
 					if (e.isRunning)
 						continue;
-					if (e.mutekitime > 0)
-						continue;
+					//if (e.mutekitime > 0)
+					//	continue;
 					if (new RectangleF(Location, Size).CheckCollision(new RectangleF(e.Location, e.Size)))
 					{
 						e.Owner = this;
@@ -352,7 +364,13 @@ namespace DefenderStory.Entities
 			if (IsFall)
 			{
 				base.Kill();
-				//SoundUtility.PlaySound(Sounds.PlayerMiss);
+				SoundUtility.PlaySound(Sounds.PlayerMiss);
+				return;
+			}
+			if (GameEngine.time == 0)
+			{
+				SetGraphic(5);
+				base.Kill();
 				return;
 			}
 			if (MutekiTime > 0)

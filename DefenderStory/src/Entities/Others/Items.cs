@@ -23,7 +23,6 @@ namespace DefenderStory.Entities
 		}
 
 
-
 		public override void onUpdate(Status ks)
 		{
 			var lst = new List<Entity>(Parent.FindEntitiesByType<EntityPlayer>());
@@ -122,11 +121,11 @@ namespace DefenderStory.Entities
 						);
 						SoundUtility.PlaySound(Sounds.ItemSpawn);
 					}
-					//else
-					//	Parent.Add(new Coin(this.Point, mptobjects, Parent, ResourceUtility.Item, WorkingType.FromBlock));
+					else
+						Parent.Add(GameEngine.EntityRegister.CreateEntity("Coin", Location, Mpts, Map, Parent, DynamicJson.Parse(@"{""WorkingType"": 1}")));
 					break;
 				case Items.PoisonMushroom:
-					//Parent.Add(new PoisonMushroom(new Point(Point.X, Point.Y - 16), mptobjects, Parent, ResourceUtility.Item));
+					Parent.Add(GameEngine.EntityRegister.CreateEntity("PoisonMushroom", new PointF(Location.X, Location.Y - 16), Mpts, Map, Parent));
 					SoundUtility.PlaySound(Sounds.ItemSpawn);
 					break;
 			}
@@ -262,6 +261,75 @@ namespace DefenderStory.Entities
 					ep.PowerUp(PlayerForm.Big);
 					this.IsDead = true;
 				}
+			base.onUpdate(ks);
+		}
+
+	}
+
+	[EntityRegistry("PoisonMushroom", 36)]
+	public class EntityPoisonMushroom : EntityLiving
+	{
+
+		public override int[] ImageHandle
+		{
+			get
+			{
+				return ResourceUtility.Item;
+			}
+		}
+
+
+		const float spdmax = 2;
+
+		public override EntityGroup MyGroup
+		{
+			get
+			{
+				return EntityGroup.Stage;
+			}
+		}
+
+		public override RectangleF Collision
+		{
+			get
+			{
+				return new RectangleF(2, 2, 12, 14);
+			}
+		}
+
+		public EntityPoisonMushroom(PointF pnt, Data.Object[] obj, byte[,,] chips, EntityList par)
+		{
+			Location = pnt;
+			Mpts = obj;
+			Map = chips;
+			Parent = par;
+			Size = new Size(16, 16);
+			this.MainAI = new AIWalk(this, -1, 4, 4, 4, 4);
+		}
+
+		public override void SetKilledAnime()
+		{
+
+		}
+
+		public override void SetCrushedAnime()
+		{
+
+		}
+
+		public override void onUpdate(Status ks)
+		{
+			foreach (EntityPlayer ep in Parent.FindEntitiesByType<EntityPlayer>())
+				if (!ep.IsDying && new RectangleF(ep.Location, ep.Size).CheckCollision(new RectangleF(Location, Size)))
+				{
+					ep.Kill();
+					this.IsDead = true;
+				}
+			if (Parent.MainEntity.Location.X < this.Location.X && Velocity.X > -spdmax)
+				Velocity.X -= 0.2f;
+			if (Parent.MainEntity.Location.X > this.Location.X && Velocity.X < spdmax)
+				Velocity.X += 0.2f;
+
 			base.onUpdate(ks);
 		}
 
