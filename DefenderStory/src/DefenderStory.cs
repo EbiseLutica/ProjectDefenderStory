@@ -12,11 +12,10 @@ namespace DefenderStory
 		[STAThread]
         static void Main(string[] args)
 		{
-			bool inf11 = false, binf11 = false, isfullscreen = true;
+			bool inf11 = false, binf11 = false, isfullscreen = false;
 			DX.SetUseGraphAlphaChannel(1);
-			DX.ChangeWindowMode(0);
-
-			scrSize = new Size(1366, 768);
+			DX.ChangeWindowMode(1);
+			scrSize = new Size(640, 480);
 			
 			DX.SetWindowText("Defender Story");
 			

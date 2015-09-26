@@ -19,6 +19,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Reflection;
 
+
 namespace DefenderStory
 {
 
@@ -166,7 +167,9 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = 2;
+		public const int START_LEVEL = 1;
+
+		public const string HELP_TYPE = "kb";
 		/// <summary>
 		/// 現在のゲームモード。
 		/// </summary>
@@ -222,6 +225,22 @@ namespace DefenderStory
 			IsInit = true;
 			gamemode = GameMode.Title;
 			hMainScreen = DX.MakeScreen(s.Width, s.Height);
+
+			splashtime = 0;
+			endmode = EndingMode.Message;
+			height = 0;
+			gametick = 0;
+			titlemode = TitleMode.Opening;
+			storyflag = false;
+			storyline = 0;
+			serif = "";
+			storyimg = "";
+			storywaiting = false;
+			nowserif = false;
+			serifptr = 0;
+			bgpath = "";
+			
+
 			#endregion
 
 			Load(level);
@@ -448,8 +467,7 @@ namespace DefenderStory
 		/// </summary>
 		static int hPauseScreen;
 		static bool binf3, inf3;
-		static bool binup, bindown;
-		static int binesc;
+		static bool binup, bindown, binesc, binlshift;
 		static int splashtime = 0;
 		static EndingMode endmode;
 		static string credit;
@@ -496,7 +514,9 @@ namespace DefenderStory
 			int h = DX.GetDrawScreen();
 			DX.SetDrawScreen(hMainScreen);
 			ks.Update(binz, camera, map);
-			int inesc = DX.CheckHitKey(DX.KEY_INPUT_ESCAPE);
+			bool inesc = DX.CheckHitKey(DX.KEY_INPUT_ESCAPE) == 1;
+			if (!inesc)
+				inesc = (DX.GetJoypadInputState(DX.DX_INPUT_PAD1) & DX.PAD_INPUT_10) == DX.PAD_INPUT_10;
 			DX.ClearDrawScreen();  //消し去る
 			seq.PlayLoop();
 			//----FPS 測定
@@ -525,7 +545,7 @@ namespace DefenderStory
 					{
 						DX.ClearDrawScreen();
 						string ahi = string.Format("Level {0}", level);
-						FontUtility.DrawString(160 - ahi.Length * 5, 96, ahi, 0xffffff);
+						FontUtility.DrawString(scrSize.Width / 2 - ahi.Length * 5, scrSize.Height / 2 - 5, ahi, 0xffffff);
 
 						splashtime--;
 						if (splashtime == 0)
@@ -603,7 +623,7 @@ namespace DefenderStory
 					}
 
 					//ESC キーでブレイクタイム
-					if (inesc == 1 && binesc != 1)
+					if (inesc && !binesc)
 					{
 						SetBreakTime(null, GameMode.Action);
 						break;
@@ -648,6 +668,7 @@ namespace DefenderStory
 					#region カメラ処理
 					if (!((EntityLiving)entitylist.MainEntity).IsDying)
 					{
+						
 						if (entitylist.MainEntity.Location.X + ks.camera.X > scrSize.Width / 2 && entitylist.MainEntity.Velocity.X > 0 && ks.camera.X > -ks.map.Width * 16 + scrSize.Width)
 						{
 							//ks.camera.Offset(-(int)entitylist.MainEntity.Velocity.X, 0);
@@ -662,15 +683,15 @@ namespace DefenderStory
 
 						if (entitylist.MainEntity.Location.Y + ks.camera.Y > scrSize.Height / 2 && entitylist.MainEntity.Velocity.Y > 0 && ks.camera.Y > -ks.map.Height * 16 + scrSize.Height)
 						{
-							ks.camera.Offset(0, -(int)entitylist.MainEntity.Velocity.Y);
-							//ks.camera = new Point(ks.camera.X , -(int)entitylist.MainEntity.Location.Y + scrSize.Height / 2);
+							//ks.camera.Offset(0, -(int)entitylist.MainEntity.Velocity.Y);
+							ks.camera = new Point(ks.camera.X , -(int)entitylist.MainEntity.Location.Y + scrSize.Height / 2);
 						}
 
 						if (ks.map.Height * 16 - entitylist.MainEntity.Location.Y > scrSize.Height / 2 && entitylist.MainEntity.Velocity.Y < 0 && ks.camera.Y < 0)
 						{
-							ks.camera.Offset(0, -(int)entitylist.MainEntity.Velocity.Y);
+							//ks.camera.Offset(0, -(int)entitylist.MainEntity.Velocity.Y);
 							//ks.camera.Offset(ks.camera.X, -(int)entitylist.MainEntity.Location.Y + scrSize.Height / 2);
-
+							ks.camera = new Point(ks.camera.X, -(int)entitylist.MainEntity.Location.Y + scrSize.Height / 2);
 						}
 
 						if (ks.camera.X > 0)
@@ -696,9 +717,16 @@ namespace DefenderStory
 
 					//----背面の mpt を描画している
 					for (int y = 0; y < map.Height * 16; y += 16)
-						for (int x = 0; x < map.Width * 16; x += 16)
+					{
+						if (y + camera.Y < -16 || y + camera.Y > scrSize.Height)
+							continue;
+                        for (int x = 0; x < map.Width * 16; x += 16)
+						{
+							if (x + camera.X < -16 || x + camera.X > scrSize.Width)
+								continue;
 							DX.DrawGraph(x + camera.X, y + camera.Y, hndl_mpt[chips[x / 16, y / 16, 1]], 1);
-
+						}
+					}
 					//----エンティティ達を動かす
 					entitylist.Draw(ref ks, ref chips);
 					if (((EntityLiving)entitylist.MainEntity).IsDying && IsGoal)
@@ -718,14 +746,14 @@ namespace DefenderStory
 						SoundUtility.PlaySound(Sounds.Player1Up);
 					}
 
-					#region デバッグモード処理
+					#region HUD 表示
 					//テキストを表示
 					//通常表示とデバッグモード表示
 					string buf = string.Format("①{0} ♥{1} レベル{2} ⌚{3}", GameEngine.Coin, GameEngine.Life, level, time);
 					if (isDebugMode)
 					{
 						entitylist.DebugDraw(ref ks, ref chips);
-						buf = string.Format("MS{0}/{1} P({2},{3}) {4}\nS{5} MS({6},{7}) CP({8},{9})\nV({10},{11}) AS{12} SS({13},{14})\nEntityPlayer: {15}\nLift: {16}\nIRun: {17}\nINPUT: {18}",
+						buf = string.Format("MS{0}/{1} P({2},{3}) {4}\nS{5} MS({6},{7}) CP({8},{9})\nV({10},{11}) AS{12} SS({13},{14})\nEntityPlayer: {15}\nLift: {16}\nIRun: {17}\nINPUT: {18}\nPOV: {19}",
 							//Music Sheet データと主人公の座標
 							seq.nTickCount, seq.eot, (int)entitylist.MainEntity.Location.X, (int)entitylist.MainEntity.Location.Y, fps,
 							//マップとカメラとエンティティ数
@@ -739,23 +767,25 @@ namespace DefenderStory
 							})), scrSize.Width, scrSize.Height,
 							//主人公の安否
 							((EntityLiving)entitylist.MainEntity).IsDying ? "DEAD" : "ALIVE",
-							//甲羅が持たれているかどうかの取得
+						#region 甲羅が持たれているかどうかの取得
 							new Func<IEnumerable<EntityTurcosShell>, string>((sps) =>
 							{
 								string retval = "";
 								foreach (EntityTurcosShell tsb in sps)
 									retval += (tsb.Owner != null ? "T" : "F");
 								return retval;
-							}).Invoke(entitylist.OfType<EntityTurcosShell>()),
-							//甲羅が投げられているかどうかの取得
+							})(entitylist.OfType<EntityTurcosShell>()),
+						#endregion
+						#region 甲羅が投げられているかどうかの取得
 							new Func<IEnumerable<EntityTurcosShell>, string>((sps) =>
 							{
 								string retval = "";
 								foreach (EntityTurcosShell tsb in sps)
 									retval += (tsb.isRunning ? "T" : "F");
 								return retval;
-							}).Invoke(entitylist.OfType<EntityTurcosShell>()),
-							//入力の取得
+							})(entitylist.OfType<EntityTurcosShell>()),
+						#endregion
+						#region 入力の取得
 							new Func<string>(() =>
 							{
 								var lastdata = "";
@@ -818,11 +848,15 @@ namespace DefenderStory
 								if ((joydata & DX.PAD_INPUT_28) == DX.PAD_INPUT_28)
 									lastdata += "28 ";
 								return lastdata;
-							}).Invoke());
+							})(),
+						#endregion
+							DX.GetJoypadPOVState(DX.DX_INPUT_PAD1, 0));
 					}
-					FontUtility.DrawString(0, 0, buf, 0xffffff);
-					#endregion
 
+					FontUtility.DrawString(1, 1, buf, 0);
+					FontUtility.DrawString(0, 0, buf, 0xffffff);
+
+					#endregion
 
 					//タイムをデクリメント、なくなったら殺す
 					if (!IsGoal && tick % 60 == 0 && !((EntityLiving)entitylist.MainEntity).IsDying)
@@ -836,12 +870,6 @@ namespace DefenderStory
 					}
 					//ポーズの切り替え
 
-
-					bool inenter = DX.CheckHitKey(DX.KEY_INPUT_RETURN) == 1;
-					/*if (inenter)
-					{
-						gamemode = GameMode.Breaktime;
-					}*/
 
 					#region ゲームオーバーダイアログ
 					if (IsGameOver)
@@ -881,12 +909,12 @@ namespace DefenderStory
 					#endregion
 
 					bcoin = Coin;
+#endregion
 					break;
-				#endregion
 				case GameMode.Story:
 					#region StoryMode
 					//ESC キーでブレイクタイム
-					if (inesc == 1 && binesc != 1)
+					if (inesc && !binesc)
 					{
 						SetBreakTime(new Action(() =>
 						{
@@ -972,20 +1000,23 @@ namespace DefenderStory
 
 					if (!storywaiting && nowserif && tick % (ks.inz ? 1 : 4) == 0)
 					{
-						serif += serifs[1][serifptr];
-						SoundUtility.PlaySound(Sounds.Saying);
-						if (serifs[1][serifptr] == '。')
+						for (int i = 0; i < (ks.inlshift ? 7 : 1); i++)
 						{
-							storywaiting = true;
-						}
-						serifptr++;
-						if (serifs[1].Length <= serifptr)
-						{
-							storywaiting = true;
-							nowserif = false;
+							serif += serifs[1][serifptr];
+							SoundUtility.PlaySound(Sounds.Saying);
+							if (serifs[1][serifptr] == '。')
+							{
+								storywaiting = true;
+							}
+							serifptr++;
+							if (serifs[1].Length <= serifptr)
+							{
+								storywaiting = true;
+								nowserif = false;
+								break;
+							}
 						}
 					}
-
 
 					if (graphhandle != 0)
 					{
@@ -1009,9 +1040,8 @@ namespace DefenderStory
 
 					if (storywaiting)
 					{
-						if (ks.inz1)
+						if (ks.inz1 || ks.inlshift)
 						{
-							ks.inz1 = false;
 							storywaiting = false;
 						}
 					}
@@ -1033,10 +1063,10 @@ namespace DefenderStory
 					break;
 				case GameMode.Title:
 					#region TitleMode
-					if (inesc == 1 && binesc != 1　&& titlemode == TitleMode.MainTitle)
+					if (inesc && !binesc　&& titlemode == TitleMode.MainTitle)
 					{
-						Environment.Exit(0);
-						
+						if (HELP_TYPE == "kb")
+							Environment.Exit(0);
 						break;
 					}
 					switch (titlemode)
@@ -1115,12 +1145,13 @@ namespace DefenderStory
 								switch (guiCursor)
 								{
 									case 0:
-										gamemode = GameMode.Story;
+										gamemode = GameMode.Prolog;
 										BGMStop();
 										BGMPlay("nothing.mid");
 										ks.inz1 = false;
 										DX.DeleteGraph(graphhandle);
 										graphhandle = 0;
+										gametick = 0;
 										break;
 									case 1:
 										titlemode = TitleMode.Setting;
@@ -1129,7 +1160,8 @@ namespace DefenderStory
 										titlemode = TitleMode.Help;
 										break;
 									case 3:
-										Environment.Exit(0);
+										if (HELP_TYPE == "kb")
+											Environment.Exit(0);
 										break;
 									default:
 
@@ -1141,19 +1173,19 @@ namespace DefenderStory
 						#endregion
 						#endregion
 						case TitleMode.Setting:
-							FontUtility.DrawString(32, "設定できることは何もありません。\nEsc キーまたは [START] ボタンを押してください", Color.White);
-							if (inesc == 1 && binesc != 1)
+							FontUtility.DrawString(32, $"設定できることは何もありません。\n{(HELP_TYPE == "kb" ? "Esc キー" : "[START] ボタン")} を押してください", Color.White);
+							if (inesc && !binesc)
 								titlemode = TitleMode.MainTitle;
 							break;
 						case TitleMode.Help:
 							if (graphhandle2 == 0)
 							{
-								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadactgame.png");
+								graphhandle2 = DX.LoadGraph($"Resources\\Graphics\\{HELP_TYPE}actgame.png");
 							}
 							if (helppage == 1 && ks.inlshift)
 							{
 								DX.DeleteGraph(graphhandle2);
-								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadactgame.png");
+								graphhandle2 = DX.LoadGraph($"Resources\\Graphics\\{HELP_TYPE}actgame.png");
 								helppage--;
 							}
 							if (ks.inz1)
@@ -1161,7 +1193,7 @@ namespace DefenderStory
 								ks.inz1 = false;
 								helppage++;
 								DX.DeleteGraph(graphhandle2);
-								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadstory.png");
+								graphhandle2 = DX.LoadGraph($"Resources\\Graphics\\{HELP_TYPE}story.png");
 								if (helppage == 2)
 								{
 									helppage = 0;
@@ -1171,7 +1203,7 @@ namespace DefenderStory
 								}
 							}
 							DX.DrawGraph(0, 0, graphhandle2, 0);
-							if (inesc == 1 && binesc != 1)
+							if (inesc && !binesc)
 							{
 								helppage = 0;
 								DX.DeleteGraph(graphhandle2);
@@ -1185,7 +1217,7 @@ namespace DefenderStory
 				case GameMode.Ending:
 					#region EndingMode
 					//ESC キーでブレイクタイム
-					if (inesc == 1 && binesc != 1)
+					if (inesc && !binesc)
 					{
 						gamemode = GameMode.Breaktime;
 						bgamemode = GameMode.Ending;
@@ -1226,11 +1258,11 @@ namespace DefenderStory
 							DX.DrawGraph(scrSize.Width / 2 - 128 / 2, scrSize.Height / 2 - 32 / 2 - 32, ResourceUtility.TheEnd, 0);
 							//DX.DrawGraph(0, 0, ResourceUtility.TheEnd, 0);
 							//DX.DrawBox(scrSize.Width / 2 - 128 / 2, scrSize.Height / 2 - 32 / 2 - 32, scrSize.Width / 2 - 128 / 2 + 128, scrSize.Height / 2 - 32 / 2 - 32 + 32, DX.GetColor(255, 0, 0), 0);
-							FontUtility.DrawMiniString(180, "PUSH ANY BUTTON", 0xffffff);
+							FontUtility.DrawMiniString(180, $"どれか{(HELP_TYPE == "kb" ? "キー" : "ボタン")}を押してください", 0xffffff);
 							if (ks.AnyKeyPressed)
 							{
-								gamemode = GameMode.Title;
-								titlemode = TitleMode.Opening;
+
+								Init(scrSize.Width, scrSize.Height);
 								ks.inz1 = false;
 							}
 							break;
@@ -1243,7 +1275,7 @@ namespace DefenderStory
 				case GameMode.Debug:
 					#region Debug
 					//ESC キーでブレイクタイム
-					if (inesc == 1 && binesc != 1)
+					if (inesc && !binesc)
 					{
 						gamemode = GameMode.Breaktime;
 						bgamemode = GameMode.Debug;
@@ -1263,7 +1295,7 @@ namespace DefenderStory
 				case GameMode.Prolog:
 					#region PrologMode
 					//ESC キーでブレイクタイム
-					if (inesc == 1 && binesc != 1)
+					if (inesc && !binesc)
 					{
 						gamemode = GameMode.Breaktime;
 						bgamemode = GameMode.Prolog;
@@ -1284,10 +1316,11 @@ namespace DefenderStory
 					if (tick % 3 == 0)
 						ks.camera.Y--;
 					DX.DrawGraph(0, ks.camera.Y, graphhandle, 0);
-					if (ks.camera.Y < scrSize.Height - height)
+					DX.DrawBox(0, scrSize.Height - 10, scrSize.Width, scrSize.Height, 0, 1);
+					if (gametick > 60)
 					{
-						FontUtility.DrawMiniString(scrSize.Width - 100, "PUSH (X) BUTTON", Color.White);
-						if (ks.inz1)
+						FontUtility.DrawString(scrSize.Width - 100, $"{(HELP_TYPE == "kb" ? "Z キー" : "×ボタン")}でスキップ", Color.White);
+                        if (ks.inz1)
 						{
 							ks.inz1 = false;
 							gamemode = GameMode.Story;
@@ -1296,11 +1329,12 @@ namespace DefenderStory
 							graphhandle = 0;
 						}
 					}
+					gametick++;
 					#endregion
 					break;
 				case GameMode.Breaktime:
 					#region BreakTime
-					FontUtility.DrawString(48, "P A U S E", Color.White);
+					FontUtility.DrawString(48, "きゅうけい！！", Color.White);
 					FontUtility.DrawString(80, $"{(guiCursor == 0 ? ">" : " ")}つづける", (guiCursor == 0 ? Color.Yellow : Color.White));
 					FontUtility.DrawString(90, $"{(guiCursor == 1 ? ">" : " ")}おわる　", (guiCursor == 1 ? Color.Yellow : Color.White));
 					if ((ks.inup && !binup) || (ks.indown && !bindown))
@@ -1317,9 +1351,8 @@ namespace DefenderStory
 							guiCursor = 0;
 							if (finallyprocess != null)
 								finallyprocess();
-							
-							titlemode = TitleMode.Opening;
-							gamemode = GameMode.Title;
+
+							Init(scrSize.Width, scrSize.Height);
 						}
 						ks.inz1 = false;
 					}
@@ -1333,6 +1366,8 @@ namespace DefenderStory
 			binup = ks.inup;
 			bindown = ks.indown;
 			binesc = inesc;
+			binlshift = ks.inlshift;
+			
 			DX.SetDrawScreen(h);
 			return hMainScreen;
 		}
@@ -1362,9 +1397,9 @@ namespace DefenderStory
 							break;
 						case TitleMode.Help:
 							if (helppage == 0)
-								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadactgame.png");
+								graphhandle2 = DX.LoadGraph($"Resources\\Graphics\\{HELP_TYPE}actgame.png");
 							if (helppage == 1)
-								graphhandle2 = DX.LoadGraph("Resources\\Graphics\\joypadstory.png");
+								graphhandle2 = DX.LoadGraph($"Resources\\Graphics\\{HELP_TYPE}story.png");
 							break;
 					}
 					break;
@@ -1464,7 +1499,6 @@ namespace DefenderStory
 			if (!inlshift) inlshift = (joy & DX.PAD_INPUT_1) == DX.PAD_INPUT_1;
 			if (!inz) inz = (joy & DX.PAD_INPUT_2) == DX.PAD_INPUT_2;
 
-
 			inz1 = false;
 			if (inz)
 				inz1 = inz;
@@ -1473,6 +1507,12 @@ namespace DefenderStory
 				inz1 = false;
 			camera = c;
 			map = m;
+		}
+
+		void set(ref bool a)
+		{
+			if (!a)
+				a = true;
 		}
 
 		public void Update(bool binz, Point c, Size m)
@@ -1496,12 +1536,47 @@ namespace DefenderStory
 			inlshift = DX.CheckHitKey(DX.KEY_INPUT_LSHIFT) == 1;
 			inz = DX.CheckHitKey(DX.KEY_INPUT_Z) == 1;
 			int joy = DX.GetJoypadInputState(DX.DX_INPUT_PAD1);
+			
 			if (!inup) inup = (joy & DX.PAD_INPUT_UP) == DX.PAD_INPUT_UP;
 			if (!indown) indown = (joy & DX.PAD_INPUT_DOWN) == DX.PAD_INPUT_DOWN;
 			if (!inleft) inleft = (joy & DX.PAD_INPUT_LEFT) == DX.PAD_INPUT_LEFT;
 			if (!inright) inright = (joy & DX.PAD_INPUT_RIGHT) == DX.PAD_INPUT_RIGHT;
 			if (!inlshift) inlshift = (joy & DX.PAD_INPUT_1) == DX.PAD_INPUT_1;
 			if (!inz) inz = (joy & DX.PAD_INPUT_2) == DX.PAD_INPUT_2;
+
+			int pov = DX.GetJoypadPOVState(DX.DX_INPUT_PAD1, 0);
+			switch (pov)
+			{
+				case 0:
+					set(ref inup);
+					break;
+				case 4500:
+					set(ref inup);
+					set(ref inright);
+					break;
+				case 9000:
+					set(ref inright);
+					break;
+				case 13500:
+					set(ref inright);
+					set(ref indown);
+					break;
+				case 18000:
+					set(ref indown);
+					break;
+				case 22500:
+					set(ref indown);
+					set(ref inleft);
+					break;
+				case 27000:
+					set(ref inleft);
+					break;
+				case 31500:
+					set(ref inleft);
+					set(ref inup);
+					break;
+			}
+
 
 			if (inz)
 				inz1 = inz;
