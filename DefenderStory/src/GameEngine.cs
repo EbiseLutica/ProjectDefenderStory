@@ -437,7 +437,10 @@ namespace DefenderStory
 			data = GetJsonData<LevelData>("Resources\\Levels\\Level " + level + "\\lvldat.json");
 			area = data.FirstArea;
 			time = data.Time;
-			storytext = File.ReadAllText("Resources\\Levels\\Level " + level + "\\story.txt");
+			if (File.Exists("Resources\\Levels\\Level " + level + "\\story.txt"))
+				storytext = File.ReadAllText("Resources\\Levels\\Level " + level + "\\story.txt");
+			else
+				storytext = "";
 			Load(level, area, pf);
 			seq.Stop();
 			splashtime = 120;
@@ -931,6 +934,11 @@ namespace DefenderStory
 					}
 					if (!storyflag) //初期化
 					{
+						if (storytext == "")
+						{
+							gamemode = GameMode.Action;
+							break;
+						}
 						storyflag = true;
 						storyline = 0;
 						serif = "";

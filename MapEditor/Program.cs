@@ -153,7 +153,7 @@ namespace MapEditor
 			bool editing = false;
 			int spselidx = 0;
 			Point relativepoint = Point.Empty;
-			List<Sprite> splist = new List<Sprite>();
+			List<Entity> splist = new List<Entity>();
 
 			osf.StatusMessage = "準備が出来ました。";
 			DX.SetWindowVisibleFlag(1);
@@ -345,7 +345,7 @@ namespace MapEditor
 								case ToolFlag.SpSel:
 									if (bmf == 0)
 									{
-										spselidx = splist.FindIndex(new Predicate<Sprite>((sp) => new Rectangle((int)(sp.PosX * (1 + (100 - zoom) / 100.0)), (int)(sp.PosY * (1 + (100 - zoom) / 100.0)), wari, wari).Contains((int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0)))));
+										spselidx = splist.FindIndex(new Predicate<Entity>((sp) => new Rectangle((int)(sp.PosX * (1 + (100 - zoom) / 100.0)), (int)(sp.PosY * (1 + (100 - zoom) / 100.0)), wari, wari).Contains((int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0)))));
 										if (spselidx == -1)
 											break;
 										relativepoint = new Point((int)((mousex - camera.X - splist[spselidx].PosX) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y - splist[spselidx].PosY) * (1 + (100 - zoom) / 100.0)));
@@ -383,10 +383,10 @@ namespace MapEditor
 
 								break;
 							case ToolFlag.Fill:
-								FillBoxToArray(thx, thy, (bmousex - camera.X) / wari, (bmousey - camera.Y) / wari, ref chips, osf.sf, (byte)osf.chipno);
+								FillBoxToArray(thx, thy, (bmousex - camera.X) / wari, (bmousey - camera.Y) / wari, ref chips, osf.sf, pack);
 								break;
 							case ToolFlag.SpPut:
-								Sprite sp = new Sprite();
+								Entity sp = new Entity();
 								sp.PosX = (int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0));
 								sp.PosY = (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0));
 								if (ks.inlshift == 1)
@@ -394,22 +394,22 @@ namespace MapEditor
 									sp.PosX = (int)Math.Round(sp.PosX / 16.0) * 16;
 									sp.PosY = (int)Math.Round(sp.PosY / 16.0) * 16;
 								}
-								sp.SpriteID = osf.SpriteID;
+								sp.EntityID = osf.EntityID;
 								sp.Visible = true;
 								splist.Add(sp);
 								break;
 							case ToolFlag.SpSel:
-								osf.StatusMessage = (string)(osf.listBox1.Items[splist[spselidx].SpriteID]);
+								osf.StatusMessage = (string)(osf.listBox1.Items[splist[spselidx].EntityID]);
 								break;
 							case ToolFlag.SpVisible:
-								spselidx = splist.FindIndex(new Predicate<Sprite>((spr) => new Rectangle((int)(spr.PosX * (1 + (100 - zoom) / 100.0)), (int)(spr.PosY * (1 + (100 - zoom) / 100.0)), wari, wari).Contains((int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0)))));
+								spselidx = splist.FindIndex(new Predicate<Entity>((spr) => new Rectangle((int)(spr.PosX * (1 + (100 - zoom) / 100.0)), (int)(spr.PosY * (1 + (100 - zoom) / 100.0)), wari, wari).Contains((int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0)))));
 								if (spselidx == -1)
 									break;
 								splist[spselidx].Visible = !splist[spselidx].Visible;
 								break;
 							case ToolFlag.SpDel:
 									spselidx = splist.FindIndex(
-										new Predicate<Sprite>((spr) => 
+										new Predicate<Entity>((spr) => 
 											new Rectangle(
 												(int)(spr.PosX * (1 + (100 - zoom) / 100.0)), 
 												(int)(spr.PosY * (1 + (100 - zoom) / 100.0)), 
@@ -428,7 +428,7 @@ namespace MapEditor
 				}
 				catch (Exception ex)
 				{
-					osf.StatusMessage = string.Format("例外 {0} : {1}", ex.GetType().Name, ex.Message);
+					osf.StatusMessage = string.Format("例外 {0} : {1} : {2}", ex.GetType().Name, ex.Message, ex.TargetSite);
 				}
 
 				if (inesc == 1)
@@ -487,12 +487,12 @@ namespace MapEditor
 								if (x > -camera.X - 16 && x < -camera.X + scrSize.Width)
 									DX.DrawGraph(x + camera.X, y + camera.Y, hndl_mpt[chips[x / wari, y / wari, 0]], 1);
 
-				foreach (Sprite sp in splist)
+				foreach (Entity sp in splist)
 				{
 					DX.DrawBox((int)(sp.PosX * (zoom / 100.0) + camera.X), (int)(sp.PosY * (zoom / 100.0) + camera.Y), (int)(sp.PosX * (zoom / 100.0) + camera.X) + wari, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + wari, (spselidx != -1 && sp == splist[spselidx]) ? DX.GetColor(255, 0, 0) : DX.GetColor(255, 255, 255), 0);
 					if (!sp.Visible)
 						DX.DrawBox((int)(sp.PosX * (zoom / 100.0) + camera.X), (int)(sp.PosY * (zoom / 100.0) + camera.Y), (int)(sp.PosX * (zoom / 100.0) + camera.X) + wari, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + wari, DX.GetColor(79, 79, 79), 0);
-					 NumFont.DrawNumFontString((int)(sp.PosX * (zoom / 100.0) + camera.X) + 2, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + 2, sp.Visible ? DX.GetColor(255, 255, 255) : DX.GetColor(79, 79, 79), sp.SpriteID.ToString());
+					 NumFont.DrawNumFontString((int)(sp.PosX * (zoom / 100.0) + camera.X) + 2, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + 2, sp.Visible ? DX.GetColor(255, 255, 255) : DX.GetColor(79, 79, 79), sp.EntityID.ToString());
 				}
 
 				f++;
@@ -583,7 +583,7 @@ namespace MapEditor
 			}
 		}
 
-		public static void FillBoxToArray(int x1, int y1, int x2, int y2, ref byte[, ,] array, ScreenFlag dimension, byte value)
+		public static void FillBoxToArray(int x1, int y1, int x2, int y2, ref byte[, ,] array, ScreenFlag dimension, ChipPack value)
 		{
 
 
@@ -594,9 +594,23 @@ namespace MapEditor
 				Swap(ref x1, ref x2);
 
 
-			for (int y = y1; y <= y2; y++)
-				for (int x = x1; x <= x2; x++)
-					array[x, y, (int)dimension] = value;
+			for (int y = y1; y <= y2; y += value.height)
+				for (int x = x1; x <= x2; x += value.width)
+				{
+					for (int px = 0; px < value.width; px++)
+					{
+						int nx = x + px;
+						if (nx > x2)
+							continue;
+                        for (int py = 0; py < value.height; py++)
+						{
+							int ny = y + py;
+							if (ny > y2)
+								continue;
+							array[nx, ny, (int)dimension] = value.chips[py * value.width + px];
+						}
+					}
+				}
 		}
 
 		static void Swap<T>(ref T var1, ref T var2)
@@ -667,13 +681,13 @@ namespace MapEditor
 	
 	public static class SpdataUtility
 	{
-		public static void Save(List<Sprite> array, string path)
+		public static void Save(List<Entity> array, string path)
 		{
 			StringBuilder sb = new StringBuilder();	//Json を書き込む StringBuilder
 			sb.Append("[");
-			foreach(Sprite sp in array)
+			foreach(Entity sp in array)
 			{
-				sb.AppendFormat("{{\"PosX\": {0}, \"PosY\": {1}, \"SpriteID\": {2}, \"SpriteData\": {3}}}, ", sp.PosX, sp.PosY, sp.SpriteID, GetPropertyJson(sp.SpriteID));
+				sb.AppendFormat("{{\"PosX\": {0}, \"PosY\": {1}, \"EntityID\": {2}, \"EntityData\": {3}}}, ", sp.PosX, sp.PosY, sp.EntityID, GetPropertyJson(sp.EntityID));
 			}
 			sb.Remove(sb.Length - 2, 2);	//最後の, を消去
 			sb.Append("]");
@@ -689,15 +703,15 @@ namespace MapEditor
 				case 0:
 					return "{\"SpawnFromDoor\": false, \"TargetDoorIndex\": 0}";
 				case 5:
-					return "{\"TargetSprite\": null}";
+					return "{\"TargetEntity\": null}";
 				case 7:	
 					return "{\"StartX\": 0}";
 				case 12:
-					return "{\"TargetSpriteIndex\": 0}";
+					return "{\"TargetEntityIndex\": 0}";
 				case 18:
 					return "{\"NextStage\": 0}";
 				case 22:
-					return "{\"SpriteType\": 0}";
+					return "{\"EntityType\": 0}";
 				case 28:
 					return "{\"WorkingType\": 0}";
 				case 44:

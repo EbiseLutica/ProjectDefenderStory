@@ -131,13 +131,20 @@ namespace MapEditor
 
 		private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
 		{
-			int w = Math.Abs(e.X / 16 - tmpx) + 1, h = Math.Abs(e.Y / 16 - tmpy) + 1;
+			int ex = e.X;
+			int ey = e.Y;
+			if (ex / 16 > 15)
+				ex = 15 * 16;
+			if (ey / 16 > 3)
+				ey = 3 * 16;
+			int w = Math.Abs(ex / 16 - tmpx) + 1, h = Math.Abs(ey / 16 - tmpy) + 1;
+			
 			byte[] c = new byte[w * h];
 			int ox = tmpx, oy = tmpy;
-			if (e.X / 16 < tmpx)
-				ox = e.X / 16;
-			if (e.Y / 16 < tmpy)
-				oy = e.Y / 16;
+			if (ex / 16 < tmpx)
+				ox = ex / 16;
+			if (ey / 16 < tmpy)
+				oy = ey / 16;
 			for (int x = ox; x < ox + w; x++)
 				for (int y = oy; y < oy + h; y++)
 					c[(y - oy) * w + (x - ox)] = (byte)(y * 16 + x);
@@ -337,7 +344,7 @@ namespace MapEditor
 			Tool = ToolFlag.SpDel;
 		}
 
-		public int SpriteID
+		public int EntityID
 		{
 			get
 			{
@@ -524,11 +531,11 @@ namespace MapEditor
 
 	}
 
-	public class Sprite
+	public class Entity
 	{
 		public int PosX { get; set; }
 		public int PosY { get; set; }
-		public int SpriteID { get; set; }
+		public int EntityID { get; set; }
 		public bool Visible { get; set; }
 	}
 
