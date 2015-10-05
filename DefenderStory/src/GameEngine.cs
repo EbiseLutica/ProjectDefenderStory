@@ -127,6 +127,8 @@ namespace DefenderStory
 		public static Size scrSize;
 		static int[] hndl_mpt;
 		static int hndl_bg;
+		static int hndl_fg;
+
 		public static AreaInfo areainfo;
 		public static LevelData data;
 		public static EntityRegister EntityRegister = new EntityRegister();
@@ -167,7 +169,7 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = 1;
+		public const int START_LEVEL = 2;
 
 		public const string HELP_TYPE = "kb";
 		/// <summary>
@@ -294,7 +296,23 @@ namespace DefenderStory
 			if (data != null)
 				time = data.Time;
 
-			areainfo = GetJsonData<AreaInfo>("Resources\\Levels\\Level " + level + "\\Area " + area + "\\area.json");
+			//areainfo = GetJsonData<AreaInfo>("Resources\\Levels\\Level " + level + "\\Area " + area + "\\area.json");
+			var o = DynamicJson.Parse(File.ReadAllText("Resources\\Levels\\Level " + level + "\\Area " + area + "\\area.json"));
+
+			areainfo = new AreaInfo
+			{
+				Mpt = o.Mpt,
+				Music = o.Music,
+				BG = o.BG,
+				ScrollSpeed = (int)o.ScrollSpeed
+			};
+
+			if (o.IsDefined("FG"))
+				areainfo.FG = o.FG;
+			if (o.IsDefined("FGScrollSpeed"))
+				areainfo.FGScrollSpeed = (int)o.FGScrollSpeed;
+			else
+				areainfo.FGScrollSpeed = areainfo.ScrollSpeed;
 
 			mptname = areainfo.Mpt;
 
@@ -338,6 +356,10 @@ namespace DefenderStory
 
 			hndl_bg = DX.LoadGraph("Resources\\Graphics\\" + areainfo.BG);
 
+			if (areainfo.FG != "")
+				hndl_fg = DX.LoadGraph("Resources\\Graphics\\" + areainfo.FG);
+			else
+				hndl_fg = 0;
 			dynamic spdata = DynamicJson.Parse(File.ReadAllText("Resources\\Levels\\Level " + level + "\\Area " + area + "\\spdata.json"));
 
 			foreach (dynamic obj in spdata)
@@ -662,7 +684,7 @@ namespace DefenderStory
 					//主人公が落下死したらパーティクルを出す
 					if (tick % 2 == 0 && ((EntityLiving)(entitylist.MainEntity)).IsDying && ((EntityLiving)(entitylist.MainEntity)).IsFall)
 					{
-						for (int i = 0; i < 5; i++)
+						for (int i = 0; i < 60; i++)
 							entitylist.Add(EntityRegister.CreateEntity("Star", new Point((int)entitylist.MainEntity.Location.X + DX.GetRand(32) - 16, ks.map.Height * 16 - 1), mptobjects, chips, entitylist));
 					}
 					#endregion
@@ -711,35 +733,68 @@ namespace DefenderStory
 					}
 					#endregion
 
-					int bgx = (int)(-((-ks.camera.X * (areainfo.ScrollSpeed / 10.0)) % scrSize.Width));
-
 					#region 描画
-					//背景を描画
-					DX.DrawExtendGraph(bgx, 0, bgx + scrSize.Width, scrSize.Height, hndl_bg, 0);
-					DX.DrawExtendGraph(bgx + scrSize.Width, 0, bgx + scrSize.Width * 2, scrSize.Height, hndl_bg, 0);    //スクロールするから2枚使ってループできるようにしている
+					// +--------------+
+					// |Background    |
+					// | +--------------+
+					// | |Mpt Back      |
+					// | | +--------------+
+					// +-| |Entities      |
+					//   | | +--------------+
+					//   +-| |Mpt Forward   |
+					//     | | +--------------+
+					//     +-| |Foreground    |
+					//       | |              |
+					//       +-|              |
+					//         |              |
+					//         +--------------+
 
-					//----背面の mpt を描画している
+					#region Background
+					int bgx = (int)(-((-ks.camera.X * (areainfo.ScrollSpeed / 10.0)) % (scrSize.Width + 1)));
+					DX.DrawExtendGraph(bgx, 0, bgx + scrSize.Width, scrSize.Height, hndl_bg, 0);
+					DX.DrawExtendGraph(bgx + scrSize.Width, 0, bgx + scrSize.Width * 2, scrSize.Height + 1, hndl_bg, 1);    //スクロールするから2枚使ってループできるようにしている
+					#endregion
+
+					#region Mpt Back
 					for (int y = 0; y < map.Height * 16; y += 16)
 					{
 						if (y + camera.Y < -16 || y + camera.Y > scrSize.Height)
 							continue;
-                        for (int x = 0; x < map.Width * 16; x += 16)
+						for (int x = 0; x < map.Width * 16; x += 16)
 						{
 							if (x + camera.X < -16 || x + camera.X > scrSize.Width)
 								continue;
 							DX.DrawGraph(x + camera.X, y + camera.Y, hndl_mpt[chips[x / 16, y / 16, 1]], 1);
 						}
 					}
-					//----エンティティ達を動かす
+					#endregion
+
+					#region Entities
 					entitylist.Draw(ref ks, ref chips);
 					if (((EntityLiving)entitylist.MainEntity).IsDying && IsGoal)
 						((EntityLiving)entitylist.MainEntity).IsDying = false;
+					#endregion
 
-					//----前面の mpt を描画している
+					#region Mpt Forward
 					for (int y = 0; y < map.Height * 16; y += 16)
 						for (int x = 0; x < map.Width * 16; x += 16)
 							DX.DrawGraph(x + camera.X, y + camera.Y, hndl_mpt[chips[x / 16, y / 16, 0]], 1);
 					#endregion
+
+					#region Foreground
+					int fgx = (int)(-((-ks.camera.X * (areainfo.FGScrollSpeed / 10.0)) % (scrSize.Width + 1)));
+
+					if (hndl_fg != 0)
+					{
+						DX.DrawExtendGraph(fgx, 0, fgx + scrSize.Width, scrSize.Height, hndl_fg, 1);
+						DX.DrawExtendGraph(fgx + scrSize.Width, 0, fgx + scrSize.Width * 2, scrSize.Height, hndl_fg, 1);    //スクロールするから2枚使ってループできるようにしている
+					}
+					#endregion
+
+
+					#endregion
+
+
 
 
 					//コイン50枚毎に1UPの処理する
@@ -756,7 +811,7 @@ namespace DefenderStory
 					if (isDebugMode)
 					{
 						entitylist.DebugDraw(ref ks, ref chips);
-						buf = string.Format("MS{0}/{1} P({2},{3}) {4}\nS{5} MS({6},{7}) CP({8},{9})\nV({10},{11}) AS{12} SS({13},{14})\nEntityPlayer: {15}\nLift: {16}\nIRun: {17}\nINPUT: {18}\nPOV: {19}",
+						buf = string.Format("MS{0}/{1} P({2},{3}) {4}\nS{5} MS({6},{7}) CP({8},{9})\nV({10},{11}) AS{12} SS({13},{14})\nEntityPlayer: {15}\nLift: {16}\nIRun: {17}\nINPUT: {18}\nPOV: {19}\nbgx: {20} fgx: {21}",
 							//Music Sheet データと主人公の座標
 							seq.nTickCount, seq.eot, (int)entitylist.MainEntity.Location.X, (int)entitylist.MainEntity.Location.Y, fps,
 							//マップとカメラとエンティティ数
@@ -853,7 +908,9 @@ namespace DefenderStory
 								return lastdata;
 							})(),
 						#endregion
-							DX.GetJoypadPOVState(DX.DX_INPUT_PAD1, 0));
+						DX.GetJoypadPOVState(DX.DX_INPUT_PAD1, 0),
+						bgx,fgx
+						);
 					}
 
 					FontUtility.DrawString(1, 1, buf, 0);
@@ -1181,7 +1238,7 @@ namespace DefenderStory
 						#endregion
 						#endregion
 						case TitleMode.Setting:
-							FontUtility.DrawString(32, $"設定できることは何もありません。\n{(HELP_TYPE == "kb" ? "Esc キー" : "[START] ボタン")} を押してください", Color.White);
+							FontUtility.DrawString(32, $"設定するには髪が足りません。\n{(HELP_TYPE == "kb" ? "Esc キー" : "[START] ボタン")} を押すとゆうあしの毛が散ります", Color.White);
 							if (inesc && !binesc)
 								titlemode = TitleMode.MainTitle;
 							break;
@@ -1447,6 +1504,10 @@ namespace DefenderStory
 			hndl_bg = DX.LoadGraph("Resources\\Graphics\\" + areainfo.BG);
 			hndl_mpt = ResourceUtility.GetMpt(mptname);
 			int hndl_mptsoft = DX.LoadSoftImage("Resources\\Graphics\\" + mptname + "_hj.png");
+			if (areainfo.FG != "")
+				hndl_fg = DX.LoadGraph("Resources\\Graphics\\" + areainfo.FG);
+			else
+				hndl_fg = 0;
 
 
 

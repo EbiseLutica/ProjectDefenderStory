@@ -24,29 +24,32 @@ namespace DefenderStory.Data
 	/// <summary>
 	/// エリアに関する情報を表します。
 	/// </summary>
-	[DataContract]
 	public class AreaInfo
 	{
 		/// <summary>
 		/// このエリアが使用するマップチップ名を取得します。
 		/// </summary>
-		[DataMember]
 		public string Mpt { get; set; }
 		/// <summary>
 		/// このエリアの BGM 名を取得します。
 		/// </summary>
-		[DataMember]
 		public string Music { get; set; }
 		/// <summary>
 		/// このエリアの BG 画像名を取得します。
 		/// </summary>
-		[DataMember]
 		public string BG { get; set; }
 		/// <summary>
 		/// このエリアの BG のスクロール速度を取得します。
 		/// </summary>
-		[DataMember]
 		public int ScrollSpeed { get; set; }
+		/// <summary>
+		/// このエリアの FG 画像名を取得します。
+		/// </summary>
+		public string FG { get; set; }
+		/// <summary>
+		/// このエリアの FG のスクロール速度を取得します。
+		/// </summary>
+		public int FGScrollSpeed { get; set; }
 	}
 
 	/// <summary>

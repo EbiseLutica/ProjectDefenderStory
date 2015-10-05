@@ -258,6 +258,6 @@
 		"PosX": 1472,
 		"PosY": 1343,
 		"EntityID": 18,
-		"EntityData": { "NextStage": -1 }
+		"EntityData": { "NextStage": 4 }
 	}
 ]

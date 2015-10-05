@@ -49,13 +49,12 @@ namespace MusicSheet.Sequence
 		{
 			get
 			{
-				int ret;
-				if (IsRunning)
-					ret = (int)(_tick += TempoMap.GetTickLength(DX.GetNowCount() - btime, BPM, Resolution));
+				int ret, ntime = DX.GetNowCount();
+				if (IsRunning || ntime > btime)
+					ret = (int)(_tick += TempoMap.GetTickLength(ntime - btime, BPM, Resolution));
 				else
 					ret = (int)_tick;
 				btime = DX.GetNowCount();
-				
 				return ret;
 
 			}

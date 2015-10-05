@@ -472,10 +472,10 @@ namespace DefenderStory.Entities
 						break;
 					case ObjectHitFlag.Damage:
 						this.Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 					case ObjectHitFlag.Death:
 						this.Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 				}
 				if (y > 0)
 					if (Mpts[Map[x / 16, (y - 1) / 16, 0]].CheckHit(x % 16, (y - 1) % 16) == ObjectHitFlag.Hit)
@@ -529,10 +529,10 @@ namespace DefenderStory.Entities
 						break;
 					case ObjectHitFlag.Damage:
 						Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 					case ObjectHitFlag.Death:
 						Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 				}
 				if (y < GameEngine.map.Height * 16 - 1)
 					if (Mpts[Map[x / 16, (y + 1) / 16, 0]].CheckHit(x % 16, (y + 1) % 16) == ObjectHitFlag.Hit)
@@ -599,10 +599,10 @@ namespace DefenderStory.Entities
 						break;
 					case ObjectHitFlag.Damage:
 						Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 					case ObjectHitFlag.Death:
 						Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 				}
 				if (x > 0)
 					if (Mpts[Map[(x - 1) / 16, y / 16, 0]].CheckHit((x - 1) % 16, y % 16) == ObjectHitFlag.Hit)
@@ -663,10 +663,10 @@ namespace DefenderStory.Entities
 						break;
 					case ObjectHitFlag.Damage:
 						Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 					case ObjectHitFlag.Death:
 						Kill();
-						break;
+						goto case ObjectHitFlag.Hit;
 				}
 				if (x < GameEngine.map.Width * 16 - 1)
 					if (Mpts[Map[(x + 1) / 16, y / 16, 0]].CheckHit((x + 1) % 16, y % 16) == ObjectHitFlag.Hit)

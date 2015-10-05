@@ -94,10 +94,10 @@ namespace DefenderStory.Entities
 					SoundUtility.PlaySound(Sounds.ItemSpawn);
 					break;
 				case Items.IceOrPillow:
-					Parent.Add((player.Form == PlayerForm.Mini) ?
-						GameEngine.EntityRegister.CreateEntity("Pillow", new PointF(Location.X, Location.Y - 16), Mpts, Map, Parent) :
-						GameEngine.EntityRegister.CreateEntity("Ice", new PointF(Location.X, Location.Y - 16), Mpts, Map, Parent)
-						);
+					//Parent.Add((player.Form == PlayerForm.Mini) ?
+					//	GameEngine.EntityRegister.CreateEntity("Pillow", new PointF(Location.X, Location.Y - 16), Mpts, Map, Parent) :
+					//	GameEngine.EntityRegister.CreateEntity("Ice", new PointF(Location.X, Location.Y - 16), Mpts, Map, Parent)
+					//	);
 					SoundUtility.PlaySound(Sounds.ItemSpawn);
 					break;
 				case Items.LeafOrPillow:
@@ -540,7 +540,8 @@ namespace DefenderStory.Entities
 			Map = chips;
 			Parent = par;
 			Size = new Size(16, 16);
-			SetGraphic(6);
+			SetAnime(6, 9, 8);
+			
 			Velocity.Y = -12;
 		}
 		WorkingType worktype = WorkingType.Normal;
@@ -549,6 +550,8 @@ namespace DefenderStory.Entities
 			if (jsonobj.IsDefined("WorkingType"))
                 this.worktype = (WorkingType)jsonobj.WorkingType;
 			base.SetEntityData((object)jsonobj);
+			if (worktype == WorkingType.FromBlock)
+				AnimeSpeed = 3;
 			return this;
 		}
 

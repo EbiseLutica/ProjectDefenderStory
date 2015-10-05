@@ -1,0 +1,185 @@
+[
+	{
+		"PosX": 128,
+		"PosY": 16,
+		"EntityID": 0,
+		"EntityData": {
+			"SpawnFromDoor": false,
+			"TargetDoorIndex": 0
+		}
+	},
+	{
+		"PosX": 144,
+		"PosY": 112,
+		"EntityID": 22,
+		"EntityData": { "EntityType": 7 }
+	},
+	{
+		"PosX": 192,
+		"PosY": 112,
+		"EntityID": 22,
+		"EntityData": { "EntityType": 10 }
+	},
+	{
+		"PosX": 272,
+		"PosY": 144,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 304,
+		"PosY": 128,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 336,
+		"PosY": 144,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 368,
+		"PosY": 128,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 640,
+		"PosY": 144,
+		"EntityID": 26,
+		"EntityData": null
+	},
+	{
+		"PosX": 638,
+		"PosY": 67,
+		"EntityID": 24,
+		"EntityData": null
+	},
+	{
+		"PosX": 774,
+		"PosY": 150,
+		"EntityID": 27,
+		"EntityData": null
+	},
+	{
+		"PosX": 867,
+		"PosY": 105,
+		"EntityID": 27,
+		"EntityData": null
+	},
+	{
+		"PosX": 770,
+		"PosY": 47,
+		"EntityID": 27,
+		"EntityData": null
+	},
+	{
+		"PosX": 968,
+		"PosY": 224,
+		"EntityID": 29,
+		"EntityData": null
+	},
+	{
+		"PosX": 976,
+		"PosY": 208,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 960,
+		"PosY": 208,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 960,
+		"PosY": 192,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 976,
+		"PosY": 192,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1088,
+		"PosY": 151,
+		"EntityID": 26,
+		"EntityData": null
+	},
+	{
+		"PosX": 1151,
+		"PosY": 111,
+		"EntityID": 30,
+		"EntityData": null
+	},
+	{
+		"PosX": 1226,
+		"PosY": 134,
+		"EntityID": 30,
+		"EntityData": null
+	},
+	{
+		"PosX": 672,
+		"PosY": 96,
+		"EntityID": 22,
+		"EntityData": { "EntityType": 7 }
+	},
+	{
+		"PosX": 1344,
+		"PosY": 64,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1360,
+		"PosY": 64,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1376,
+		"PosY": 64,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1328,
+		"PosY": 48,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1392,
+		"PosY": 48,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1472,
+		"PosY": 64,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1488,
+		"PosY": 64,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1504,
+		"PosY": 64,
+		"EntityID": 28,
+		"EntityData": { "WorkingType": 0 }
+	},
+	{
+		"PosX": 1560,
+		"PosY": 158,
+		"EntityID": 18,
+		"EntityData": { "NextStage": -1 }
+	}
+]

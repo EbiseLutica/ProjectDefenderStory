@@ -55,7 +55,7 @@ namespace MapEditor
 				return;
 			}
 			//--------------------------------------------------------
-
+			//DX.SetMouseDispFlag(0);
 
 			int bsec = DateTime.Now.Second;
 			int bmsec = DateTime.Now.Millisecond;
@@ -470,8 +470,9 @@ namespace MapEditor
 							for (int x = 0; x < map.Width * wari; x += wari)
 								if (x > -camera.X - 16 && x < -camera.X + scrSize.Width)
 									DX.DrawBox(x + camera.X, y + camera.Y, x + camera.X + wari + 1, y + camera.Y + wari + 1, DX.GetColor(127, 127, 127), 0);
-					DX.DrawString(mousex, mousey, string.Format("{0}, {1}", ((ks.inlshift == 1) ? ((mousex - camera.X) / wari * wari) : mousex - camera.X), ((ks.inlshift == 1) ? ((mousey - camera.Y) / wari * wari) : mousey - camera.Y)), DX.GetColor(255, 255, 255));
 				}
+
+				DX.DrawString(mousex + 16, mousey, string.Format("{0}, {1}", ((ks.inlshift == 1) ? ((mousex - camera.X) / wari * wari) : mousex - camera.X), ((ks.inlshift == 1) ? ((mousey - camera.Y) / wari * wari) : mousey - camera.Y)), DX.GetColor(255, 255, 255));
 
 				if (osf.BackVisible)
 					for (int y = 0; y < map.Height * wari; y += wari)
