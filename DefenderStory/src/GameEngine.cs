@@ -169,7 +169,7 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = 4;
+		public const int START_LEVEL = 1;
 
 		public const string HELP_TYPE = "kb";
 		/// <summary>
