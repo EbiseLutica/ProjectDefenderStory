@@ -69,19 +69,17 @@ namespace DefenderStory.Entities
 	}
 
 	[EntityRegistry("RollingRock", 15)]
-	public class EntityRollingRock : EntityLiving
+	public class EntityRollingRock : EntityTurbo
 	{
 
 		public override int[] ImageHandle
 		{
 			get
 			{
-				return ResourceUtility.Turbo;
+				return ResourceUtility.RollingRock;
 			}
 		}
-
-
-
+		
 		public override EntityGroup MyGroup
 		{
 			get
@@ -91,14 +89,9 @@ namespace DefenderStory.Entities
 		}
 
 		public EntityRollingRock(PointF pnt, Data.Object[] obj, byte[,,] chips, EntityList par)
+			: base(pnt, obj, chips, par)
 		{
-			Location = pnt;
-			Mpts = obj;
-			Map = chips;
-			Parent = par;
-			Size = new Size(16, 16);
-			CollisionAIs.Add(new AIKillDefender(this));
-			SetAnime(0, 1, 8);
+			Size = new Size(32, 32);
 		}
 
 		public override void SetKilledAnime()
@@ -119,20 +112,6 @@ namespace DefenderStory.Entities
 			Parent.Add(new EntityTurbo(Location, Mpts, Map, Parent) { Velocity = new Data.Vector(-2, -3) });
 		}
 
-		public override void onUpdate(Status ks)
-		{
-			//TODO: ここにこの Entity が行う処理を記述してください。
-			base.onUpdate(ks);
-			Velocity.X = -2f;
-			if (IsDying)
-				Velocity = Vector.Zero;
-		}
-
-		public override Entity SetEntityData(dynamic jsonobj)
-		{
-			base.SetEntityData((object)jsonobj);
-			return this;
-		}
 
 	}
 }

@@ -169,7 +169,7 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = 2;
+		public const int START_LEVEL = 4;
 
 		public const string HELP_TYPE = "kb";
 		/// <summary>
@@ -192,6 +192,7 @@ namespace DefenderStory
 		public static void Init(Size s)
 		{
 			Init(1, s);
+			
 		}
 
 		/// <summary>
@@ -517,10 +518,11 @@ namespace DefenderStory
 		static Dictionary<string, string> facealias = new Dictionary<string, string>();
 		static Regex regpreprc = new Regex(@"\[(.+)?\:(.+)\]");
 		public static string GameVersion
-		{ get; set; } = "1.0.0-a";
+		{ get; set; } = "1.1.0-a";
 		public static string Copyright
 		{ get; set; } = "(C)2014-2015 ＣCitringo";
 		static int helppage = 0;
+		static int timer = -1;
 		static MatchCollection m;
 		/// <summary>
 		/// メイン画面バッファのハンドル。
@@ -684,7 +686,7 @@ namespace DefenderStory
 					//主人公が落下死したらパーティクルを出す
 					if (tick % 2 == 0 && ((EntityLiving)(entitylist.MainEntity)).IsDying && ((EntityLiving)(entitylist.MainEntity)).IsFall)
 					{
-						for (int i = 0; i < 60; i++)
+						for (int i = 0; i < 8; i++)
 							entitylist.Add(EntityRegister.CreateEntity("Star", new Point((int)entitylist.MainEntity.Location.X + DX.GetRand(32) - 16, ks.map.Height * 16 - 1), mptobjects, chips, entitylist));
 					}
 					#endregion
@@ -1027,6 +1029,11 @@ namespace DefenderStory
 								graphhandle = DX.LoadGraph(bgpath = "Resources\\Graphics\\" + m[0].Groups[2].Value);
 								break;
 							case "bgm":
+								if (m[0].Groups[2].Value == "stop")
+								{
+									BGMStop();
+									break;
+								}
 								if (seq.IsPlaying)
 									BGMStop();
 								BGMPlay(m[0].Groups[2].Value);
@@ -1034,6 +1041,21 @@ namespace DefenderStory
 							case "face":
 								string[] val = m[0].Groups[2].Value.Split(',');
 								facealias.Add(val[0], val[1]);
+								break;
+							case "se":
+								SoundUtility.PlaySound((Sounds)Enum.Parse(typeof(Sounds), m[0].Groups[2].Value));
+								break;
+							case "wait":
+								if (timer == -1)
+								{
+									timer = int.Parse(m[0].Groups[2].Value);
+								}
+								if (timer > 0)
+								{
+									timer--;
+									if (timer == 0)
+										timer = -1;
+								}
 								break;
 
 						}
@@ -1088,20 +1110,26 @@ namespace DefenderStory
 						DX.DrawGraph(0, 0, graphhandle, 0);
 					}
 
-					if (serifs != null)
+					if (timer == -1)
 					{
-						DX.DrawBox(0, scrSize.Height - 64, 8 + FontUtility.GetDrawingSize(serifs[0]).Width, scrSize.Height - 64 - 16, DX.GetColor(64, 64, 64), 1);
-						FontUtility.DrawString(4, scrSize.Height - 64 - 13, serifs[0], Color.White);
-					}
 
-					DX.DrawBox(0, scrSize.Height - 64, scrSize.Width, scrSize.Height, DX.GetColor(64, 64, 64), 1);
-					FontUtility.DrawString(8, scrSize.Height - 56, scrSize.Width - 8, scrSize.Height - 8, serif, Color.White);
-					if (storywaiting)
-					{
-						FontUtility.DrawMiniString(scrSize.Width - 12, scrSize.Height - 12, (tick % 16 < 8 ? "▼" : "▽"), Color.White);
-					}
+						if (serifs != null)
+						{
+							DX.DrawBox(0, scrSize.Height - 64, 8 + FontUtility.GetDrawingSize(serifs[0]).Width, scrSize.Height - 64 - 16, DX.GetColor(64, 64, 64), 1);
+							FontUtility.DrawString(4, scrSize.Height - 64 - 13, serifs[0], Color.White);
+						}
 
-					DX.DrawExtendGraph(90, 16, 230, 156, graphhandle2, 0);
+						DX.DrawBox(0, scrSize.Height - 64, scrSize.Width, scrSize.Height, DX.GetColor(64, 64, 64), 1);
+						FontUtility.DrawString(8, scrSize.Height - 56, scrSize.Width - 8, scrSize.Height - 8, serif, Color.White);
+						if (storywaiting)
+						{
+							FontUtility.DrawMiniString(scrSize.Width - 12, scrSize.Height - 12, (tick % 16 < 8 ? "▼" : "▽"), Color.White);
+						}
+
+
+						DX.DrawExtendGraph(90, 16, 230, 156, graphhandle2, 0);
+
+					}
 
 					if (storywaiting)
 					{
@@ -1111,7 +1139,7 @@ namespace DefenderStory
 						}
 					}
 
-					if (!nowserif && !storywaiting)
+					if (!nowserif && !storywaiting && !(timer > 0))
 						storyline++;
 					if (storylines.Length <= storyline)
 					{
@@ -1238,7 +1266,7 @@ namespace DefenderStory
 						#endregion
 						#endregion
 						case TitleMode.Setting:
-							FontUtility.DrawString(32, $"設定するには髪が足りません。\n{(HELP_TYPE == "kb" ? "Esc キー" : "[START] ボタン")} を押すとゆうあしの毛が散ります", Color.White);
+							FontUtility.DrawString(32, $"このビルドではまだ設定する項目がありません。\n{(HELP_TYPE == "kb" ? "Esc キー" : "[START] ボタン")} を押してタイトルへ戻る", Color.White);
 							if (inesc && !binesc)
 								titlemode = TitleMode.MainTitle;
 							break;
@@ -1424,6 +1452,8 @@ namespace DefenderStory
 					#endregion
 					break;
 			}
+			
+
 			binz = ks.inz;
 			tick = (tick + 1) % 3600;
 			camera = ks.camera;

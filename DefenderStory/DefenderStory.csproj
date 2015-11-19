@@ -95,6 +95,10 @@
     <Compile Include="src\Entities\Monsters\EntitySpider.cs" />
     <Compile Include="src\Entities\Monsters\EntityStrangeFlower.cs" />
     <Compile Include="src\Entities\Monsters\EntityBoxer.cs" />
+    <Compile Include="src\Entities\Monsters\EntityDensy.cs" />
+    <Compile Include="src\Entities\Monsters\EntityFolderFly.cs" />
+    <Compile Include="src\Entities\Monsters\EntityBlackServer.cs" />
+    <Compile Include="src\Entities\Monsters\EntityCameraMan.cs" />
     <Compile Include="src\Entities\Monsters\EntityTurbo.cs" />
     <Compile Include="src\Entities\Monsters\EntityTurcos.cs" />
     <Compile Include="src\Entities\Others\Particles.cs" />
@@ -289,15 +293,24 @@
     <Content Include="Resources\Graphics\sparcher.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Graphics\spblackserver.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spboxer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\spbrotherspainting.png" />
+    <Content Include="Resources\Graphics\spCameraMan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spCaveModokee.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\spcloud.png" />
     <Content Include="Resources\Graphics\spdaemon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Graphics\spDensy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\spDevilTsubasa.png" />
@@ -310,6 +323,9 @@
     </Content>
     <Content Include="Resources\Graphics\spfireball.bmp" />
     <Content Include="Resources\Graphics\spfireball.png" />
+    <Content Include="Resources\Graphics\spFolderFly.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spfox.png" />
     <Content Include="Resources\Graphics\spgirlpainting.png" />
     <Content Include="Resources\Graphics\spgoblingirl.bmp" />
@@ -426,6 +442,9 @@
     <Content Include="Resources\Graphics\セシル\驚.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Graphics\デンジー\機.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\翔\イラッ.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -457,6 +476,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Levels\Level 3\story.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Levels\Level 4\story.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Music\c011.mid">
@@ -554,6 +576,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Sounds\26.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\27.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\28.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\29.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Sounds\3.wav">

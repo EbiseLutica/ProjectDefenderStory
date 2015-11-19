@@ -164,12 +164,19 @@ namespace DefenderStory.AI
 
 		private int deg = 0;
 
+		private int tick = 60;
+
 		public override void onUpdate()
 		{
-			float atan = (float)Math.Atan2(HostEntity.Parent.MainEntity.Location.Y - HostEntity.Location.Y, HostEntity.Parent.MainEntity.Location.X - HostEntity.Location.X);
-			HostEntity.Velocity.X = (float)Math.Cos(atan);
-			HostEntity.Velocity.Y = (float)Math.Sin(atan);
+			tick++;
 
+			if (tick > 60)
+			{
+				float atan = (float)Math.Atan2(HostEntity.Parent.MainEntity.Location.Y - HostEntity.Location.Y, HostEntity.Parent.MainEntity.Location.X - HostEntity.Location.X);
+				HostEntity.Velocity.X = (float)Math.Cos(atan);
+				HostEntity.Velocity.Y = (float)Math.Sin(atan);
+				tick = 0;
+			}
 			if (HostEntity.Direction == Direction.Left)
 				HostEntity.SetAnime(LeftAnimeStartIndex, LeftAnimeEndIndex, 8);
 			else
@@ -266,7 +273,7 @@ namespace DefenderStory.AI
 
 		public override void onUpdate()
 		{
-			foreach (EntityLiving ep in HostEntity.Parent.FindEntitiesByType<EntityLiving>())
+			foreach (EntityLiving ep in new List<Entity>(HostEntity.Parent.FindEntitiesByType<EntityLiving>()))
 			{
 				if (ep == HostEntity ||  ep.IsDying || (ep.MyGroup != EntityGroup.Defender && ep.MyGroup != EntityGroup.Monster))
 					continue;

@@ -107,7 +107,22 @@ namespace DefenderStory.Util
 		/// ファイター。
 		/// </summary>
 		public static int[] Fighter { get; private set; }
-
+		/// <summary>
+		/// デンジー。
+		/// </summary>
+		public static int[] Densy { get; private set; }
+		/// <summary>
+		/// フォルダーフライ。
+		/// </summary>
+		public static int[] FolderFly { get; private set; }
+		/// <summary>
+		/// ブラックサーバー。
+		/// </summary>
+		public static int[] BlackServer { get; private set; }
+		/// <summary>
+		/// カメラマン。
+		/// </summary>
+		public static int[] CameraMan { get; private set; }
 		/// <summary>
 		/// マップチップ。
 		/// </summary>
@@ -294,6 +309,34 @@ namespace DefenderStory.Util
 			Item = new int[10];
 
 			if (DX.LoadDivGraph("Resources\\Graphics\\spitem.png", 10, 10, 1, 16, 16, out Item[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			Densy = new int[4];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spDensy.png", 4, 4, 1, 16, 16, out Densy[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			FolderFly = new int[5];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spFolderFly.png", 5, 5, 1, 16, 16, out FolderFly[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			BlackServer = new int[10];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spblackserver.png", 10, 10, 1, 16, 32, out BlackServer[0]) == -1)
+			{
+				throw new Exception("キャラの読み込みに失敗しました。");
+			}
+
+			CameraMan = new int[6];
+
+			if (DX.LoadDivGraph("Resources\\Graphics\\spCameraMan.png", 6, 6, 1, 16, 32, out CameraMan[0]) == -1)
 			{
 				throw new Exception("キャラの読み込みに失敗しました。");
 			}
@@ -685,9 +728,8 @@ namespace DefenderStory.Util
 
 		public static void PlaySound(int snd)
 		{
-			if (snd == 0)
+			if (snd == -1)
 				return;
-			snd--;
 			DX.PlaySoundMem(soundlist[snd], DX.DX_PLAYTYPE_BACK);
 		}
 
@@ -835,7 +877,19 @@ namespace DefenderStory.Util
 		/// <summary>
 		/// 26 しゃべる音。 
 		/// </summary>
-		Saying
+		Saying,
+		/// <summary>
+		/// 27 シャッターを閉める音。
+		/// </summary>
+		Shutter,
+		/// <summary>
+		/// 28 レーザーが発射される音。
+		/// </summary>
+		Razer,
+		/// <summary>
+		/// 29 カメラがオートフォーカスする音。
+		/// </summary>
+		Focus
 	}
 
 	/// <summary>

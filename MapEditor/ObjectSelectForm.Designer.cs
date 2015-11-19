@@ -108,7 +108,7 @@
 			this.toolStripContainer1.ContentPanel.Controls.Add(this.numericTextBox2);
 			this.toolStripContainer1.ContentPanel.Controls.Add(this.numericTextBox1);
 			this.toolStripContainer1.ContentPanel.Controls.Add(this.pictureBox1);
-			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(551, 294);
+			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(551, 301);
 			this.toolStripContainer1.ContentPanel.Load += new System.EventHandler(this.toolStripContainer1_ContentPanel_Load);
 			this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -130,7 +130,7 @@
             this.toolStripStatusLabel1});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 0);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(551, 25);
+			this.statusStrip1.Size = new System.Drawing.Size(551, 22);
 			this.statusStrip1.TabIndex = 9;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -139,7 +139,7 @@
 			this.toolStripStatusLabel1.BackColor = System.Drawing.Color.Transparent;
 			this.toolStripStatusLabel1.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(198, 20);
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(160, 17);
 			this.toolStripStatusLabel1.Text = "何かあると、ここに表示されます。";
 			// 
 			// button7
@@ -225,52 +225,56 @@
             "0035 SodaIce",
             "0036 PoisonMushroom",
             "0037 Feather",
-            "0038 Witch",
-            "0039 Sadako",
-            "0040 Hobgoblin",
-            "0041 MovableTeddyBear",
-            "0042 Door_HountedHouse",
-            "0043 Boss_GoblinGirl",
-            "0044 Strap",
-            "0045 Staff",
-            "0046 Train",
-            "0047 Fox",
-            "0048 FireBall",
-            "0049 Ninja",
-            "0050 UmbrellaBoy",
-            "0051 Rokurokkubi",
-            "0052 Kappa",
-            "0053 CatMonster",
-            "0054 Gargoyle",
-            "0055 PacmanFlower",
-            "0056 Bomb",
-            "0057 Dwarf",
-            "0058 DestructibleBlock",
-            "0059 HalfGoal",
-            "0060 Boss_DevilTsubasa",
-            "0061 NormalTsubasa",
-            "0062 Yuan",
-            "0063 Elise",
-            "0064 Boss_MagicCore",
-            "0065 ThunderCloud",
-            "0066 Arrow",
-            "0067 Spanner",
-            "0068 Electricity",
-            "0069 Rock",
-            "0070 LeafGun",
-            "0071 LazerBeam",
-            "0072 Knife",
-            "0073 Blast",
-            "0074 Magic_Fire",
-            "0075 Magic_Water",
-            "0076 Magic_Poison",
-            "0077 Fire_KakeruWeapon",
-            "0078 Leaf_KakeruWeapon",
-            "0079 Ice_KakeruWeapon",
-            "0080 Fish",
-            "0081 SafeBlast",
-            "0082 MiddleFlag",
-            "0083 Sign"});
+            "0039 Witch",
+            "0040 Sadako",
+            "0041 Hobgoblin",
+            "0042 MovableTeddyBear",
+            "0043 Door_HountedHouse",
+            "0044 Boss_GoblinGirl",
+            "0045 Strap",
+            "0046 Staff",
+            "0047 Train",
+            "0048 Fox",
+            "0049 FireBall",
+            "0050 Ninja",
+            "0051 UmbrellaBoy",
+            "0052 Rokurokkubi",
+            "0053 Kappa",
+            "0054 CatMonster",
+            "0055 Gargoyle",
+            "0056 PacmanFlower",
+            "0057 Bomb",
+            "0058 Dwarf",
+            "0059 DestructibleBlock",
+            "0060 HalfGoal",
+            "0061 Boss_DevilTsubasa",
+            "0062 NormalTsubasa",
+            "0063 Yuan",
+            "0064 Elise",
+            "0065 Boss_MagicCore",
+            "0066 ThunderCloud",
+            "0067 Arrow",
+            "0068 Spanner",
+            "0069 Electricity",
+            "0070 Rock",
+            "0071 LeafGun",
+            "0072 LazerBeam",
+            "0073 Knife",
+            "0074 Blast",
+            "0075 Magic_Fire",
+            "0076 Magic_Water",
+            "0077 Magic_Poison",
+            "0078 Fire_KakeruWeapon",
+            "0079 Leaf_KakeruWeapon",
+            "0080 Ice_KakeruWeapon",
+            "0081 Fish",
+            "0082 SafeBlast",
+            "0083 MiddleFlag",
+            "0084 Sign",
+            "0085 BlackServer",
+            "0086 FolderFly",
+            "0087 CameraMan",
+            "0088 Densy"});
 			this.listBox1.Location = new System.Drawing.Point(12, 85);
 			this.listBox1.Name = "listBox1";
 			this.listBox1.Size = new System.Drawing.Size(403, 208);
@@ -375,7 +379,7 @@
 			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-			this.toolStrip1.Size = new System.Drawing.Size(336, 27);
+			this.toolStrip1.Size = new System.Drawing.Size(321, 25);
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -385,7 +389,7 @@
 			this.新規作成NToolStripButton.Image = global::MapEditor.Properties.Resources.NewFile_6276;
 			this.新規作成NToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.新規作成NToolStripButton.Name = "新規作成NToolStripButton";
-			this.新規作成NToolStripButton.Size = new System.Drawing.Size(23, 24);
+			this.新規作成NToolStripButton.Size = new System.Drawing.Size(23, 22);
 			this.新規作成NToolStripButton.Text = "新規作成(&N)";
 			this.新規作成NToolStripButton.Click += new System.EventHandler(this.新規作成NToolStripButton_Click);
 			// 
@@ -398,21 +402,21 @@
 			this.開くOToolStripButton.Image = global::MapEditor.Properties.Resources.Open_6529;
 			this.開くOToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.開くOToolStripButton.Name = "開くOToolStripButton";
-			this.開くOToolStripButton.Size = new System.Drawing.Size(32, 24);
+			this.開くOToolStripButton.Size = new System.Drawing.Size(32, 22);
 			this.開くOToolStripButton.Text = "開く(&O)";
 			this.開くOToolStripButton.Click += new System.EventHandler(this.開くOToolStripButton_Click);
 			// 
 			// マップを開くToolStripMenuItem
 			// 
 			this.マップを開くToolStripMenuItem.Name = "マップを開くToolStripMenuItem";
-			this.マップを開くToolStripMenuItem.Size = new System.Drawing.Size(162, 24);
+			this.マップを開くToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.マップを開くToolStripMenuItem.Text = "マップを開く";
 			this.マップを開くToolStripMenuItem.Click += new System.EventHandler(this.マップを開くToolStripMenuItem_Click);
 			// 
 			// spdataを開くToolStripMenuItem
 			// 
 			this.spdataを開くToolStripMenuItem.Name = "spdataを開くToolStripMenuItem";
-			this.spdataを開くToolStripMenuItem.Size = new System.Drawing.Size(162, 24);
+			this.spdataを開くToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.spdataを開くToolStripMenuItem.Text = "spdata を開く";
 			this.spdataを開くToolStripMenuItem.Click += new System.EventHandler(this.spdataを開くToolStripMenuItem_Click);
 			// 
@@ -425,28 +429,28 @@
 			this.上書き保存SToolStripButton.Image = global::MapEditor.Properties.Resources.Save_6530;
 			this.上書き保存SToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.上書き保存SToolStripButton.Name = "上書き保存SToolStripButton";
-			this.上書き保存SToolStripButton.Size = new System.Drawing.Size(32, 24);
+			this.上書き保存SToolStripButton.Size = new System.Drawing.Size(32, 22);
 			this.上書き保存SToolStripButton.Text = "上書き保存(&S)";
 			this.上書き保存SToolStripButton.ButtonClick += new System.EventHandler(this.上書き保存SToolStripButton_Click);
 			// 
 			// citmapを保存ToolStripMenuItem
 			// 
 			this.citmapを保存ToolStripMenuItem.Name = "citmapを保存ToolStripMenuItem";
-			this.citmapを保存ToolStripMenuItem.Size = new System.Drawing.Size(168, 24);
+			this.citmapを保存ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.citmapを保存ToolStripMenuItem.Text = "マップを保存";
 			this.citmapを保存ToolStripMenuItem.Click += new System.EventHandler(this.citmapを保存ToolStripMenuItem_Click);
 			// 
 			// spdataを保存ToolStripMenuItem
 			// 
 			this.spdataを保存ToolStripMenuItem.Name = "spdataを保存ToolStripMenuItem";
-			this.spdataを保存ToolStripMenuItem.Size = new System.Drawing.Size(168, 24);
+			this.spdataを保存ToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
 			this.spdataを保存ToolStripMenuItem.Text = "spdata を保存";
 			this.spdataを保存ToolStripMenuItem.Click += new System.EventHandler(this.spdataを保存ToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator
 			// 
 			this.toolStripSeparator.Name = "toolStripSeparator";
-			this.toolStripSeparator.Size = new System.Drawing.Size(6, 27);
+			this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripButton1
 			// 
@@ -454,33 +458,33 @@
 			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(28, 24);
+			this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton1.Text = "表";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripLabel1
 			// 
 			this.toolStripLabel1.BackColor = System.Drawing.Color.Transparent;
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(47, 24);
+			this.toolStripLabel1.Size = new System.Drawing.Size(37, 22);
 			this.toolStripLabel1.Text = "mpt:  ";
 			// 
 			// toolStripButton2
 			// 
 			this.toolStripButton2.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.toolStripButton2.Name = "toolStripButton2";
-			this.toolStripButton2.Size = new System.Drawing.Size(96, 27);
+			this.toolStripButton2.Size = new System.Drawing.Size(96, 25);
 			this.toolStripButton2.Text = "mpt1";
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
+			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripButton3
 			// 
@@ -488,7 +492,7 @@
 			this.toolStripButton3.Image = global::MapEditor.Properties.Resources.GotoNextRow_289_color;
 			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton3.Name = "toolStripButton3";
-			this.toolStripButton3.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
 			// 
 			// toolStripButton16
@@ -497,7 +501,7 @@
 			this.toolStripButton16.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton16.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton16.Name = "toolStripButton16";
-			this.toolStripButton16.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton16.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton16.Text = "toolStripButton16";
 			this.toolStripButton16.Click += new System.EventHandler(this.toolStripButton16_Click);
 			// 
@@ -519,10 +523,10 @@
             this.toolStripButton9,
             this.toolStripButton8,
             this.toolStripButton11});
-			this.toolStrip2.Location = new System.Drawing.Point(3, 27);
+			this.toolStrip2.Location = new System.Drawing.Point(3, 25);
 			this.toolStrip2.Name = "toolStrip2";
 			this.toolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-			this.toolStrip2.Size = new System.Drawing.Size(425, 27);
+			this.toolStrip2.Size = new System.Drawing.Size(364, 25);
 			this.toolStrip2.TabIndex = 0;
 			this.toolStrip2.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip2_ItemClicked);
 			// 
@@ -534,7 +538,7 @@
 			this.toolStripButton5.Image = global::MapEditor.Properties.Resources.PencilTool_206;
 			this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton5.Name = "toolStripButton5";
-			this.toolStripButton5.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton5.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton5.Text = "ペン";
 			this.toolStripButton5.ToolTipText = "マップチップをペンで描きます。複数選択している場合、このツールでしか描画できません。";
 			this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
@@ -545,7 +549,7 @@
 			this.toolStripButton6.Image = global::MapEditor.Properties.Resources.LineControl_10293;
 			this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton6.Name = "toolStripButton6";
-			this.toolStripButton6.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton6.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton6.Text = "線";
 			this.toolStripButton6.ToolTipText = "マップチップで線を描きます。";
 			this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
@@ -556,7 +560,7 @@
 			this.toolStripButton4.Image = global::MapEditor.Properties.Resources.RectangleSelectionTool_200;
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton4.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton4.Text = "選択";
 			this.toolStripButton4.ToolTipText = "マップの矩形範囲を選択します(未実装だけどね！！！)";
 			this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
@@ -567,7 +571,7 @@
 			this.toolStripButton7.Image = global::MapEditor.Properties.Resources.FilledRectangleTool_214;
 			this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton7.Name = "toolStripButton7";
-			this.toolStripButton7.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton7.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton7.Text = "塗りつぶし";
 			this.toolStripButton7.ToolTipText = "マップチップで塗りつぶし矩形を描画します。";
 			this.toolStripButton7.Click += new System.EventHandler(this.toolStripButton7_Click);
@@ -576,7 +580,7 @@
 			// 
 			this.toolStripLabel2.BackColor = System.Drawing.Color.Transparent;
 			this.toolStripLabel2.Name = "toolStripLabel2";
-			this.toolStripLabel2.Size = new System.Drawing.Size(29, 24);
+			this.toolStripLabel2.Size = new System.Drawing.Size(23, 22);
 			this.toolStripLabel2.Text = "Sp:";
 			// 
 			// toolStripButton13
@@ -585,7 +589,7 @@
 			this.toolStripButton13.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton13.Image")));
 			this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton13.Name = "toolStripButton13";
-			this.toolStripButton13.Size = new System.Drawing.Size(34, 24);
+			this.toolStripButton13.Size = new System.Drawing.Size(29, 22);
 			this.toolStripButton13.Text = "Put";
 			this.toolStripButton13.ToolTipText = "指定したスプライトを配置します。";
 			this.toolStripButton13.Click += new System.EventHandler(this.toolStripButton13_Click);
@@ -596,7 +600,7 @@
 			this.toolStripButton14.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton14.Image")));
 			this.toolStripButton14.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton14.Name = "toolStripButton14";
-			this.toolStripButton14.Size = new System.Drawing.Size(33, 24);
+			this.toolStripButton14.Size = new System.Drawing.Size(26, 22);
 			this.toolStripButton14.Text = "Sel";
 			this.toolStripButton14.ToolTipText = "スプライトを選択して移動します。また、プロパティを編集する対象を選択します。";
 			this.toolStripButton14.Click += new System.EventHandler(this.toolStripButton14_Click);
@@ -607,7 +611,7 @@
 			this.toolStripButton12.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton12.Image")));
 			this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton12.Name = "toolStripButton12";
-			this.toolStripButton12.Size = new System.Drawing.Size(36, 24);
+			this.toolStripButton12.Size = new System.Drawing.Size(28, 22);
 			this.toolStripButton12.Text = "Del";
 			this.toolStripButton12.ToolTipText = "スプライトを削除します。";
 			this.toolStripButton12.Click += new System.EventHandler(this.toolStripButton12_Click);
@@ -619,7 +623,7 @@
 			this.toolStripButton15.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton15.Image")));
 			this.toolStripButton15.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton15.Name = "toolStripButton15";
-			this.toolStripButton15.Size = new System.Drawing.Size(57, 24);
+			this.toolStripButton15.Size = new System.Drawing.Size(45, 22);
 			this.toolStripButton15.Text = "Visible";
 			this.toolStripButton15.ToolTipText = "スプライトの表示・非表示を切り替えます。";
 			this.toolStripButton15.Click += new System.EventHandler(this.toolStripButton15_Click);
@@ -627,7 +631,7 @@
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
 			// 
 			// toolStripButton10
 			// 
@@ -636,7 +640,7 @@
 			this.toolStripButton10.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton10.Image")));
 			this.toolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton10.Name = "toolStripButton10";
-			this.toolStripButton10.Size = new System.Drawing.Size(42, 24);
+			this.toolStripButton10.Size = new System.Drawing.Size(34, 22);
 			this.toolStripButton10.Text = "表示:";
 			// 
 			// toolStripButton9
@@ -648,7 +652,7 @@
 			this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
 			this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton9.Name = "toolStripButton9";
-			this.toolStripButton9.Size = new System.Drawing.Size(28, 24);
+			this.toolStripButton9.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton9.Text = "表";
 			this.toolStripButton9.ToolTipText = "マップチップの表面の表示・非表示を切り替えます。";
 			// 
@@ -661,7 +665,7 @@
 			this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
 			this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton8.Name = "toolStripButton8";
-			this.toolStripButton8.Size = new System.Drawing.Size(28, 24);
+			this.toolStripButton8.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton8.Text = "裏";
 			this.toolStripButton8.ToolTipText = "マップチップの裏面の表示・非表示を切り替えます";
 			// 
@@ -674,7 +678,7 @@
 			this.toolStripButton11.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton11.Image")));
 			this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton11.Name = "toolStripButton11";
-			this.toolStripButton11.Size = new System.Drawing.Size(28, 24);
+			this.toolStripButton11.Size = new System.Drawing.Size(23, 22);
 			this.toolStripButton11.Text = "枠";
 			this.toolStripButton11.ToolTipText = "マップエディタの枠の表示・非表示を切り替えます。";
 			this.toolStripButton11.Click += new System.EventHandler(this.toolStripButton11_Click);
