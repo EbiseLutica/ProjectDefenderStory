@@ -1,0 +1,500 @@
+[
+	{
+		"PosX": 32,
+		"PosY": 160,
+		"EntityID": 0,
+		"EntityData": {
+			"SpawnFromDoor": false,
+			"TargetDoorIndex": 0
+		}
+	},
+	{
+		"PosX": 1221,
+		"PosY": 24,
+		"EntityID": 12,
+		"EntityData": {
+			"TargetEntityTag": "0"
+		}
+	},
+	{
+		"PosX": 1221,
+		"PosY": 24,
+		"Tag": "0",
+		"EntityID": 11,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1286,
+		"PosY": 177,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1427,
+		"PosY": 176,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1508,
+		"PosY": 78,
+		"EntityID": 17,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1336,
+		"PosY": 114,
+		"EntityID": 17,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1670,
+		"PosY": 176,
+		"EntityID": 55,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1762,
+		"PosY": 176,
+		"EntityID": 55,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1863,
+		"PosY": 177,
+		"EntityID": 55,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1933,
+		"PosY": 72,
+		"EntityID": 8,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1776,
+		"PosY": 25,
+		"EntityID": 12,
+		"EntityData": {
+			"TargetEntityTag": "1"
+		}
+	},
+	{
+		"PosX": 1776,
+		"PosY": 25,
+		"Tag": "1",
+		"EntityID": 11,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1858,
+		"PosY": 160,
+		"EntityID": 13,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1970,
+		"PosY": 160,
+		"EntityID": 13,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2112,
+		"PosY": 27,
+		"EntityID": 12,
+		"EntityData": {
+			"TargetEntityTag": "2"
+		}
+	},
+	{
+		"PosX": 2112,
+		"PosY": 28,
+		"Tag": "2",
+		"EntityID": 11,
+		"EntityData": { }
+	},
+	{
+		"PosX": 3078,
+		"PosY": 179,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2911,
+		"PosY": 29,
+		"EntityID": 12,
+		"EntityData": {
+			"TargetEntityTag": "3"
+		}
+	},
+	{
+		"PosX": 2911,
+		"PosY": 26,
+		"Tag": "3",
+		"EntityID": 11,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2544,
+		"PosY": 65,
+		"EntityID": 10,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2556,
+		"PosY": 130,
+		"EntityID": 8,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2756,
+		"PosY": 141,
+		"EntityID": 8,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2388,
+		"PosY": 91,
+		"EntityID": 12,
+		"EntityData": {
+			"TargetEntityTag": "4"
+		}
+	},
+	{
+		"PosX": 2389,
+		"PosY": 91,
+		"Tag": "4",
+		"EntityID": 11,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2850,
+		"PosY": 112,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2915,
+		"PosY": 113,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2977,
+		"PosY": 113,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2259,
+		"PosY": 174,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2308,
+		"PosY": 146,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2357,
+		"PosY": 176,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2402,
+		"PosY": 147,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2450,
+		"PosY": 178,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2831,
+		"PosY": 64,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2885,
+		"PosY": 98,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2942,
+		"PosY": 97,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2979,
+		"PosY": 62,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 3172,
+		"PosY": 78,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 3193,
+		"PosY": 118,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 3234,
+		"PosY": 169,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2050,
+		"PosY": 116,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2067,
+		"PosY": 98,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2096,
+		"PosY": 86,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2127,
+		"PosY": 88,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 2156,
+		"PosY": 109,
+		"EntityID": 28,
+		"EntityData": {
+			"WorkingType": 0
+		}
+	},
+	{
+		"PosX": 1455,
+		"PosY": 28,
+		"Tag": "5",
+		"EntityID": 11,
+		"EntityData": { }
+	},
+	{
+		"PosX": 1456,
+		"PosY": 27,
+		"EntityID": 12,
+		"EntityData": {
+			"TargetEntityTag": "5"
+		}
+	},
+	{
+		"PosX": 640,
+		"PosY": 176,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 672,
+		"PosY": 177,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 704,
+		"PosY": 175,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 611,
+		"PosY": 178,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 576,
+		"PosY": 177,
+		"EntityID": 9,
+		"EntityData": { }
+	},
+	{
+		"PosX": 82,
+		"PosY": 46,
+		"EntityID": 8,
+		"EntityData": { }
+	},
+	{
+		"PosX": 291,
+		"PosY": 99,
+		"EntityID": 8,
+		"EntityData": { }
+	},
+	{
+		"PosX": 256,
+		"PosY": 177,
+		"EntityID": 10,
+		"EntityData": { }
+	},
+	{
+		"PosX": 539,
+		"PosY": 28,
+		"EntityID": 12,
+		"EntityData": {
+			"TargetEntityTag": "6"
+		}
+	},
+	{
+		"PosX": 540,
+		"PosY": 26,
+		"Tag": "6",
+		"EntityID": 11,
+		"EntityData": { }
+	},
+	{
+		"PosX": 144,
+		"PosY": 128,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 10
+		}
+	},
+	{
+		"PosX": 176,
+		"PosY": 128,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 10
+		}
+	},
+	{
+		"PosX": 160,
+		"PosY": 64,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 6
+		}
+	},
+	{
+		"PosX": 416,
+		"PosY": 96,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 5
+		}
+	},
+	{
+		"PosX": 784,
+		"PosY": 112,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 6
+		}
+	},
+	{
+		"PosX": 1056,
+		"PosY": 112,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 10
+		}
+	},
+	{
+		"PosX": 1440,
+		"PosY": 96,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 10
+		}
+	},
+	{
+		"PosX": 1456,
+		"PosY": 96,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 10
+		}
+	},
+	{
+		"PosX": 3072,
+		"PosY": 128,
+		"EntityID": 22,
+		"EntityData": {
+			"EntityType": 4
+		}
+	},
+	{
+		"PosX": 3341,
+		"PosY": 176,
+		"EntityID": 18,
+		"EntityData": {
+			"NextStage": 3
+		}
+	},
+	{
+		"PosX": 1040,
+		"PosY": 176,
+		"EntityID": 83,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2160,
+		"PosY": 176,
+		"EntityID": 83,
+		"EntityData": { }
+	},
+	{
+		"PosX": 2160,
+		"PosY": 176,
+		"EntityID": 83,
+		"EntityData": { }
+	}
+]

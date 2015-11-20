@@ -1,0 +1,10 @@
+[
+	{
+		"PosX": 3341,
+		"PosY": 176,
+		"SpriteID": 18,
+		"SpriteData": {
+			"NextStage": 1
+		}
+	}
+]

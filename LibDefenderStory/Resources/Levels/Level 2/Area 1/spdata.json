@@ -1,0 +1,11 @@
+[
+	{
+		"PosX": 32,
+		"PosY": 160,
+		"EntityID": 0,
+		"EntityData": {
+			"SpawnFromDoor": false,
+			"TargetDoorIndex": 0
+		}
+	}
+]
