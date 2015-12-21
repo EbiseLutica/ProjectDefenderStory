@@ -518,7 +518,7 @@ namespace DefenderStory
 		static Dictionary<string, string> facealias = new Dictionary<string, string>();
 		static Regex regpreprc = new Regex(@"\[(.+)?\:(.+)\]");
 		public static string GameVersion
-		{ get; set; } = "1.1.0-a";
+		{ get; set; } = "1.1.0-hackable";
 		public static string Copyright
 		{ get; set; } = "(C)2014-2015 ＣCitringo";
 		static int helppage = 0;

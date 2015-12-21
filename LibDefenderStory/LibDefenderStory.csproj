@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DxLibDotNet">
-      <HintPath>..\ActionGameProj\lib\DxLibDotNet.dll</HintPath>
+    <Reference Include="DxLibDotNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\DxLibDotNet.dll</HintPath>
     </Reference>
     <Reference Include="DynamicJson">
       <HintPath>..\..\..\..\lib\DynamicJson.dll</HintPath>

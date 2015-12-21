@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSheetSoundEditor", "ActionGameProj\MusicSheetSoundEditor.csproj", "{0B778EB9-36F3-40A3-97ED-468308700D33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefenderStory", "DefenderStory\DefenderStory.csproj", "{41F08C51-7455-4179-B2D9-E4864FA478F3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D6EFB1E3-0CD0-47C4-8504-F5172CC18EDB} = {D6EFB1E3-0CD0-47C4-8504-F5172CC18EDB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSheetMidiSequencer", "MusicSheetMidiSequencer\MusicSheetMidiSequencer.csproj", "{983C7C11-A561-48F8-A2F3-3F2B21CA6B97}"
 EndProject
