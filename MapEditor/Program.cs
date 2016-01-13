@@ -755,7 +755,7 @@ namespace MapEditor
 				for (int iy = y; iy < y + height; iy++)
 				{
 					if (iy >= array.GetLength(1))
-						break					;
+						break;
 					array[ix, iy, (int)dimension] = chips[(iy - y) * width + (ix - x)];
 				}
 			}

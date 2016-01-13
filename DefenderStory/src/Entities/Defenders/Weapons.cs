@@ -190,7 +190,7 @@ namespace DefenderStory.Entities
 				Kill(true, false);
 			}
 
-			foreach (EntityLiving e in Parent.FindEntitiesByType<EntityLiving>())
+			foreach (EntityLiving e in new List<Entity>(Parent.FindEntitiesByType<EntityLiving>()))
 			{
 				if (!e.IsDying && e.MyGroup == EntityGroup.Monster && new RectangleF(Location, Size).CheckCollision(new RectangleF(e.Location, e.Size)))
 				{

@@ -169,7 +169,7 @@ namespace DefenderStory
 		/// <summary>
 		/// 開始レベルを定義します。
 		/// </summary>
-		public const int START_LEVEL = 1;
+		public const int START_LEVEL = 4;
 
 		public const string HELP_TYPE = "kb";
 		/// <summary>
@@ -248,6 +248,8 @@ namespace DefenderStory
 
 			Load(level);
 		}
+
+		
 
 		/// <summary>
 		/// レベル番号とエリア番号を指定して、マップを読み込みます。
@@ -1001,7 +1003,7 @@ namespace DefenderStory
 						storyflag = true;
 						storyline = 0;
 						serif = "";
-						storylines = storytext.Split('\n');
+						storylines = storytext.Split('\r', '\n');
 						facealias.Clear();
 					}
 
@@ -1117,10 +1119,10 @@ namespace DefenderStory
 						{
 							DX.DrawBox(0, scrSize.Height - 64, 8 + FontUtility.GetDrawingSize(serifs[0]).Width, scrSize.Height - 64 - 16, DX.GetColor(64, 64, 64), 1);
 							FontUtility.DrawString(4, scrSize.Height - 64 - 13, serifs[0], Color.White);
+							DX.DrawBox(0, scrSize.Height - 64, scrSize.Width, scrSize.Height, DX.GetColor(64, 64, 64), 1);
+							FontUtility.DrawString(8, scrSize.Height - 56, scrSize.Width - 8, scrSize.Height - 8, serif, Color.White);
 						}
 
-						DX.DrawBox(0, scrSize.Height - 64, scrSize.Width, scrSize.Height, DX.GetColor(64, 64, 64), 1);
-						FontUtility.DrawString(8, scrSize.Height - 56, scrSize.Width - 8, scrSize.Height - 8, serif, Color.White);
 						if (storywaiting)
 						{
 							FontUtility.DrawMiniString(scrSize.Width - 12, scrSize.Height - 12, (tick % 16 < 8 ? "▼" : "▽"), Color.White);
@@ -1140,7 +1142,12 @@ namespace DefenderStory
 					}
 
 					if (!nowserif && !storywaiting && !(timer > 0))
+					{
+						serifs = null;
+						serif = "";
+						graphhandle2 = 0;
 						storyline++;
+					}
 					if (storylines.Length <= storyline)
 					{
 						storyflag = false;

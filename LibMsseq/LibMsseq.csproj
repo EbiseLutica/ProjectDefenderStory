@@ -33,29 +33,29 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="avenue.core">
-      <HintPath>..\..\..\..\Lib\avenue.core.dll</HintPath>
+      <HintPath>..\..\lib\avenue.core.dll</HintPath>
     </Reference>
     <Reference Include="avenue.filing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\avenue.filing.dll</HintPath>
+      <HintPath>..\..\lib\avenue.filing.dll</HintPath>
     </Reference>
     <Reference Include="DxLibDotNet">
-      <HintPath>..\..\..\..\Lib\DxLibDotNet.dll</HintPath>
+      <HintPath>..\..\lib\DxLibDotNet.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.data">
-      <HintPath>..\ActionGameProj\lib\nextmidi.data.dll</HintPath>
+      <HintPath>..\..\lib\nextmidi.data.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.dataelement">
-      <HintPath>..\ActionGameProj\lib\nextmidi.dataelement.dll</HintPath>
+      <HintPath>..\..\lib\nextmidi.dataelement.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.filing.midi">
-      <HintPath>..\ActionGameProj\lib\nextmidi.filing.midi.dll</HintPath>
+      <HintPath>..\..\lib\nextmidi.filing.midi.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.midiport.core">
-      <HintPath>..\ActionGameProj\lib\nextmidi.midiport.core.dll</HintPath>
+      <HintPath>..\..\lib\nextmidi.midiport.core.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.time">
-      <HintPath>..\lib\nextmidi.time.dll</HintPath>
+      <HintPath>..\..\lib\nextmidi.time.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

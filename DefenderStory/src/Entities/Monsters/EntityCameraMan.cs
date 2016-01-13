@@ -61,7 +61,7 @@ namespace DefenderStory.Entities
 
 		public void Jump()
 		{
-			if (!IsJumping)
+			/*if (!IsJumping)
 			{
 				if (timer > 8)
 				{
@@ -83,6 +83,10 @@ namespace DefenderStory.Entities
 					ptranime = 0;
 					timer = 0;
 				}
+			}*/
+			if (CollisionBottom() == Data.ObjectHitFlag.Hit)
+			{
+
 			}
 		}
 
@@ -98,10 +102,6 @@ namespace DefenderStory.Entities
 						isTension = true;
 						tick = 0;
 						Velocity.Y = 0.2f;
-					}
-					if (CollisionBottom() == Data.ObjectHitFlag.Hit)
-					{
-						Velocity.Y = -3.4f;
 					}
 				}
 				else
@@ -119,7 +119,6 @@ namespace DefenderStory.Entities
 
 							isTension = false;
 							tick = 0;
-							Jump();
 							goto nuke;
 						}
 						//SoundUtility.PlaySound(Sounds.Focus);
@@ -139,28 +138,18 @@ namespace DefenderStory.Entities
 
 							isTension = false;
 							tick = 0;
-							Jump();
 							goto nuke;
 						}
-						else
-						{
-							Jump();
-						}
 					}
-
-					if (tick > 60)
-					{
-						if (CollisionBottom() == Data.ObjectHitFlag.Hit)
-						{
-							Velocity.Y = -3.4f;
-						}
-					}
+					
 
 					SetGraphic(0);
 
 				}
 			}
 			nuke:
+			if (!isTension)
+				Jump();
 			base.onUpdate(ks);
 		}
 

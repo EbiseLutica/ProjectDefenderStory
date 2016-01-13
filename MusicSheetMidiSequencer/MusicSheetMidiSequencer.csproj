@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MusicSheetMidiSequencer</RootNamespace>
     <AssemblyName>MusicSheetMidiSequencer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,22 +44,22 @@
   <ItemGroup>
     <Reference Include="avenue.core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\avenue.core.dll</HintPath>
+      <HintPath>..\..\lib\avenue.core.dll</HintPath>
     </Reference>
     <Reference Include="DxLibDotNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\DxLibDotNet.dll</HintPath>
+      <HintPath>..\..\lib\DxLibDotNet.dll</HintPath>
     </Reference>
     <Reference Include="MIDIClock.CSharp">
-      <HintPath>.\MIDIClock.CSharp.dll</HintPath>
+      <HintPath>..\..\lib\MIDIClock.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\nextmidi.data.dll</HintPath>
+      <HintPath>..\..\lib\nextmidi.data.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.midiport.core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\nextmidi.midiport.core.dll</HintPath>
+      <HintPath>..\..\lib\nextmidi.midiport.core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -116,54 +117,6 @@
     <None Include="Resources\StatusAnnotations_Complete_and_ok_32xLG_color.png" />
     <None Include="Resources\StatusAnnotations_Critical_32xLG_color.png" />
     <Content Include="Resource\citringo_white.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\comespring.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\gekiokov2.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\nahha.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\nothing.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\nyudou.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\trainnow.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\trainstart.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\trainstation.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\おもちゃエレクトロニクス_ms.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\アキラメナイ.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\スケアリー・ロード.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\戦闘！.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\散歩.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\流れる水の働き.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\野生の心.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\雨の日の散歩.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

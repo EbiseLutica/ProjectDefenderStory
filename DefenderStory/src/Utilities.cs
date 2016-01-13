@@ -469,13 +469,15 @@ namespace DefenderStory.Util
 				int target;
 				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
 					target = dicFont[txt[i]];
-				else if (txt[i] == '\n')
+				else if (txt[i] == '\r' || txt[i] == '\n')
 				{
+					if (i + 1 < txt.Length && txt[i] == '\r' && txt[i + 1] == '\n')
+						i++;
 					_x = x;
 					_y += 10;
 					continue;
 				}
-				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				else if (txt[i] == ' ' || txt[i] == '　')             //空白文字はないので飛ばす(空白は開く)
 				{
 					_x += 8;
 					continue;
@@ -507,13 +509,15 @@ namespace DefenderStory.Util
 				int target;
 				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
 					target = dicFont[txt[i]];
-				else if (txt[i] == '\n')
+				else if (txt[i] == '\r' || txt[i] == '\n')
 				{
+					if (i + 1 < txt.Length && txt[i] == '\r' && txt[i + 1] == '\n')
+						i++;
 					_x = x;
 					_y += 10;
 					continue;
 				}
-				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				else if (txt[i] == ' ' || txt[i] == '　')             //空白文字はないので飛ばす(空白は開く)
 				{
 					_x += 8;
 					continue;
@@ -565,13 +569,15 @@ namespace DefenderStory.Util
 				int target;
 				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
 					target = dicFont[txt[i]];
-				else if (txt[i] == '\n')
+				else if (txt[i] == '\r' || txt[i] == '\n')
 				{
+					if (i + 1 < txt.Length && txt[i] == '\r' && txt[i + 1] == '\n')
+						i++;
 					_x = x;
 					_y += 8;
 					continue;
 				}
-				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				else if (txt[i] == ' ' || txt[i] == '　')             //空白文字はないので飛ばす(空白は開く)
 				{
 					_x += 6;
 					continue;
@@ -629,15 +635,17 @@ namespace DefenderStory.Util
 				int target;
 				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
 					target = dicFont[txt[i]];
-				else if (txt[i] == '\n')
+				else if (txt[i] == '\r' || txt[i] == '\n')
 				{
 					if (bw < w)
 						bw = w;
+					if (i + 1 < txt.Length && txt[i] == '\r' && txt[i + 1] == '\n')
+						i++;
 					w = 0;
 					h += 10;
 					continue;
 				}
-				else if (txt[i] == ' ')             //空白文字はないので開ける
+				else if (txt[i] == ' ' || txt[i] == '　')             //空白文字はないので開ける
 				{
 					w += 8;
 					continue;
@@ -662,15 +670,17 @@ namespace DefenderStory.Util
 				int target;
 				if (dicFont.ContainsKey(txt[i]))    //ある文字ならそれを指定
 					target = dicFont[txt[i]];
-				else if (txt[i] == '\n')
+				else if (txt[i] == '\r' || txt[i] == '\n')
 				{
 					if (bw < w)
 						bw = w;
+					if (i + 1 < txt.Length && txt[i] == '\r' && txt[i + 1] == '\n')
+						i++;
 					w = 0;
 					h += 8;
 					continue;
 				}
-				else if (txt[i] == ' ')             //空白文字はないので飛ばす(空白は開く)
+				else if (txt[i] == ' ' || txt[i] == '　')             //空白文字はないので飛ばす(空白は開く)
 				{
 					w += 6;
 					continue;
