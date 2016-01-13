@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DefenderStory.Entities;
 
 namespace MapEditor
 {
@@ -17,6 +18,11 @@ namespace MapEditor
 		{
 			InitializeComponent();
 			listBox1.SelectedIndex = 0;
+			foreach (string s in Enum.GetNames(typeof(PlayerForm)))
+			{
+				PlayerFormSelector.Items.Add(s);
+			}
+			PlayerFormSelector.SelectedIndex = 0;
 		}
 
 		public RequestFlag request = RequestFlag.None;
@@ -414,6 +420,16 @@ namespace MapEditor
 			request = RequestFlag.SwapR;
 		}
 
+		private void 実行ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			request = RequestFlag.TestPlay;
+		}
+
+		private void チートプレイToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			request = RequestFlag.CheatPlay;
+		}
+
 		private void toolStripButton16_Click(object sender, EventArgs e)
 		{
 			ColorDialog cd = new ColorDialog();
@@ -427,7 +443,7 @@ namespace MapEditor
 
 	public enum RequestFlag
 	{
-		None, Resize, ChangeMpt, CreateNew, OpenFile, SaveCitMap, SaveSpdata, ChangeColor, SwapL, SwapR, SwapT, SwapB
+		None, Resize, ChangeMpt, CreateNew, OpenFile, SaveCitMap, SaveSpdata, ChangeColor, SwapL, SwapR, SwapT, SwapB, TestPlay, CheatPlay
 	}
 
 

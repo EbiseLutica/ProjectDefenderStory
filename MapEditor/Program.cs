@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DefenderStory.GUI;
 using DefenderStory.Map;
+using DefenderStory.Util;
+using DefenderStory;
+using DefenderStory.Entities;
 
 namespace MapEditor
 {
@@ -33,6 +36,7 @@ namespace MapEditor
 			Size scrSize = new Size(320, 240);
 			DX.SetWindowVisibleFlag(0);
 			DX.SetWaitVSyncFlag(1);
+
 			//--------------------------------------------------------
 
 			if (DX.DxLib_Init() == -1)			//初期化、失敗したら落ちる
@@ -54,6 +58,11 @@ namespace MapEditor
 				ShowError("裏画面の指定に失敗しました。");
 				return;
 			}
+
+			FontUtility.Init();
+			SoundUtility.Init();
+			ResourceUtility.Init();
+
 			//--------------------------------------------------------
 			//DX.SetMouseDispFlag(0);
 
@@ -281,6 +290,23 @@ namespace MapEditor
 					else if (osf.request == RequestFlag.SwapR)
 					{
 						MapSwap(chips, map, 1, 0);
+					}
+					else if (osf.request == RequestFlag.TestPlay || osf.request == RequestFlag.CheatPlay)
+					{
+						if (!Directory.Exists("temp"))
+							Directory.CreateDirectory("temp");
+						MapUtility.SaveMap(chips, "temp\\map.citmap");
+						SpdataUtility.Save(splist, "temp\\spdata.json");
+						foreach (int handle in GameEngine.TestPlay("temp", (osf.request == RequestFlag.TestPlay ? false : true), mptname, (PlayerForm)Enum.Parse(typeof(PlayerForm), osf.PlayerFormSelector.SelectedText), scrSize))
+						{
+							DX.DrawGraph(0, 0, handle, 0);
+							if (DX.ScreenFlip() == -1)
+							{
+								DX.DxLib_End();
+								return;
+							}
+
+						}
 					}
 
 					editing = false;

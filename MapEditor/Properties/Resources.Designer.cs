@@ -63,6 +63,16 @@ namespace MapEditor.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap arrow_run_16xLG {
+            get {
+                object obj = ResourceManager.GetObject("arrow_run_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap FilledRectangleTool_214 {
             get {
                 object obj = ResourceManager.GetObject("FilledRectangleTool_214", resourceCulture);

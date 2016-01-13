@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMsseq", "LibMsseq\LibMss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMap", "LibMap\LibMap.csproj", "{16F4CD04-98B2-4B8E-B52F-07D507899B0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibDefenderStory", "LibDefenderStory\LibDefenderStory.csproj", "{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,18 @@ Global
 		{16F4CD04-98B2-4B8E-B52F-07D507899B0B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{16F4CD04-98B2-4B8E-B52F-07D507899B0B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{16F4CD04-98B2-4B8E-B52F-07D507899B0B}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Win32.Build.0 = Debug|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

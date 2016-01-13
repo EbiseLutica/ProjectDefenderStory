@@ -1,0 +1,152 @@
+{
+	"PosX": double,
+	"PosY": double,
+	"EntityID": double,
+	"EntityData": object
+}
+
+0000 Player
+{
+	"SpawnFromDoor": bool
+	"TargetDoorIndex": string
+}
+0001 Bunyo
+0002 Modokee_Ground
+0003 Daemon
+0004 Archer
+0005 InfinitySpawner
+{
+	"TargetEntity": object
+		{
+			"EntityID": double,
+			"EntityData": object
+		}
+}
+0006 Solider
+0007 Woody
+{
+	"StartX": double
+}
+0008 Modokee_Cave
+0009 Turcos_Green
+0010 Turcos_Red
+0011 Spider
+0012 SpiderString
+{
+	"TargetEntityIndex": double
+}
+0013 StrangeFlower
+0014 Fighter
+0015 RollingRock
+0016 Boxer
+0017 Turbo
+0018 Goal
+{
+	"NextStage"	
+}
+0019 Robot1
+0020 Robot2
+0021 Robot3
+0022 ItemSpawner
+{
+	"EntityType": double
+	0...枕
+	1...唐辛子
+	2...アイス
+	3...リーフ
+	4...毒キノコ
+	5...羽
+	6...唐辛子(ミニなら枕)
+	7...アイス(ミニなら枕)
+	8...リーフ(ミニなら枕)
+	9...羽(ミニならコイン)
+	10..コイン
+}
+0023 Door_Digital
+0024 NumbJellyfish
+0025 ManyItems
+0026 Pearl
+0027 StarFish
+0028 Coin
+{
+	"WorkingType": double
+	0...Normal
+	1...FromBlock
+}
+0029 Bubble
+0030 Jaws
+0031 BreakableFloor
+0032 Pillow
+0033 Pepper
+0034 Leaf
+0035 Ice
+0036 PoisonMushroom
+0037 Feather
+0039 Witch
+0040 Sadako
+0041 Hobgoblin
+0042 MovableTeddyBear
+0043 Door_HountedHouse
+0044 Boss_GoblinGirl
+{
+	"StartX": double
+}
+0045 Strap
+0046 Staff
+0047 Train
+0048 Fox
+0049 FireBall
+0050 Ninja
+0051 UmbrellaBoy
+0052 Rokurokkubi
+0053 Kappa
+0054 CatMonster
+0055 Gargoyle
+0056 PacmanFlower
+0057 Bomb
+0058 Dwarf
+0059 DestructibleBlock
+0060 HalfGoal
+{
+	NextArea: double
+}
+0061 Boss_DevilTsubasa
+{
+	"StartX": double
+}
+0062 NormalTsubasa
+{
+	"StartX": double
+}
+0063 Yuan
+{
+	"StartX": double
+}
+0064 Elise
+0065 Boss_MagicCore
+0066 ThunderCloud
+0067 Arrow
+{
+	"Speed": double
+}
+0068 Spanner
+0069 Electricity
+0070 Rock
+0071 LeafGun
+0072 LazerBeam
+0073 Knife
+0074 Blast
+0075 Magic_Fire
+0076 Magic_Water
+0077 Magic_Poison
+0078 Fire_PlayerWeapon
+0079 Leaf_PlayerWeapon
+0080 Ice_PlayerWeapon
+0081 Fish
+0082 SafeBlast
+0083 MiddleFlag
+0084 Sign
+{
+	"MessageText" : string
+}
+0085
