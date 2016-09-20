@@ -13,12 +13,12 @@ namespace MusicSheetMidiSequencer
 {
 	public partial class WaveList : Form
 	{
-		Bitmap bitmap = new Bitmap(512, 512);
+		Bitmap _bitmap = new Bitmap(512, 512);
 		public WaveList()
 		{
 			InitializeComponent();
-			Graphics g = Graphics.FromImage(bitmap);
-			for (int i = 0; i < 128; i++)
+			var g = Graphics.FromImage(_bitmap);
+			for (var i = 0; i < 128; i++)
 			{
 				short[] wave = null;
 				int a, d, r, pan;
@@ -41,7 +41,7 @@ namespace MusicSheetMidiSequencer
 			}
 
 			g.Dispose();
-			pictureBox1.Image = bitmap;
+			pictureBox1.Image = _bitmap;
 
 		}
 
@@ -55,7 +55,7 @@ namespace MusicSheetMidiSequencer
 		public static void DrawWave(int x, int y, Graphics g, short[] wave)
 		{
 
-			for (int j = 0; j < 32; j++)
+			for (var j = 0; j < 32; j++)
 			{
 				g.DrawLine(Pens.Black, x + j, y, x + j, y + (wave[j] / 4096));
 			}

@@ -1,21 +1,21 @@
-﻿using DxLibDLL;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using DefenderStory.Util;
-using System;
+using DxLibDLL;
+using TakeUpJewel.Util;
 
-namespace DefenderStory
+namespace TakeUpJewel
 {
 	static class Program
 	{
-		static Size scrSize;
+		static Size _scrSize;
 		[STAThread]
         static void Main(string[] args)
 		{
 			bool inf11 = false, binf11 = false, isfullscreen = false;
 			DX.SetUseGraphAlphaChannel(1);
 			DX.ChangeWindowMode(1);
-			scrSize = new Size(640, 480);
+			_scrSize = new Size(640, 480);
 			
 			DX.SetWindowText("Defender Story");
 			
@@ -28,7 +28,7 @@ namespace DefenderStory
 				return;
 			}
 
-			if (DX.SetGraphMode(scrSize.Width, scrSize.Height, 32, 60) == -1)
+			if (DX.SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60) == -1)
 			{
 				ShowError("サイズの変更に失敗しました。");
 				return;
@@ -42,9 +42,9 @@ namespace DefenderStory
 				return;
 			}
 
-			int logo = DX.LoadGraph("Resources\\Graphics\\citringo.png");
-
-			DX.DrawGraph(scrSize.Width / 2 - 246 / 2 , scrSize.Height / 2 - 64 / 2, logo, 1);
+			var logo = DX.LoadGraph("Resources\\Graphics\\citringo.png");
+			DX.ClearDrawScreen();
+			DX.DrawGraph(_scrSize.Width / 2 - 246 / 2 , _scrSize.Height / 2 - 64 / 2, logo, 1);
 			DX.ScreenFlip();
 
 			//----モジュールの初期化
@@ -63,22 +63,22 @@ namespace DefenderStory
 					if (isfullscreen)
 					{
 						isfullscreen = false;
-						scrSize = new Size(640, 480);
-						DX.SetGraphMode(scrSize.Width, scrSize.Height, 32, 60);
+						_scrSize = new Size(640, 480);
+						DX.SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60);
 						DX.ChangeWindowMode(1);
 						GameEngine.Reload();
 					}
 					else
 					{
 						isfullscreen = true;
-						scrSize = Screen.PrimaryScreen.Bounds.Size;
+						_scrSize = Screen.PrimaryScreen.Bounds.Size;
 						DX.ChangeWindowMode(0);
-						DX.SetGraphMode(scrSize.Width, scrSize.Height, 32, 60);
+						DX.SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60);
 						GameEngine.Reload();
 					}
 					DX.ScreenFlip();
 				}
-				CopyToDXScreen(GameEngine.DoGameLoop());
+				CopyToDxScreen(GameEngine.DoGameLoop());
 				if (DX.ScreenFlip() == -1)
 				{
 					//StopSoundMem(nowHandle);
@@ -113,19 +113,19 @@ namespace DefenderStory
 		/// <summary>
 		/// 画面バッファを拡大して DxLib のスクリーンにコピーします。
 		/// </summary>
-		internal static void CopyToDXScreen(int handle)
+		internal static void CopyToDxScreen(int handle)
 		{
 			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 			DX.ClearDrawScreen();
-			if ((float)scrSize.Width / scrSize.Height != 320f / 240)
+			if ((float)_scrSize.Width / _scrSize.Height != 320f / 240)
 			{
-				int a = scrSize.Height / 240;
-				int width = (int)(320 * a);
-				DX.DrawExtendGraph((scrSize.Width - width) / 2, (scrSize.Height - 240 * a) / 2, scrSize.Width - (scrSize.Width - width) / 2, scrSize.Height - (scrSize.Height - 240 * a) / 2, handle, 0);
+				var a = _scrSize.Height / 240;
+				var width = 320 * a;
+				DX.DrawExtendGraph((_scrSize.Width - width) / 2, (_scrSize.Height - 240 * a) / 2, _scrSize.Width - (_scrSize.Width - width) / 2, _scrSize.Height - (_scrSize.Height - 240 * a) / 2, handle, 0);
 			}
 			else
 			{
-				DX.DrawExtendGraph(0, 0, scrSize.Width, scrSize.Height, handle, 0);
+				DX.DrawExtendGraph(0, 0, _scrSize.Width, _scrSize.Height, handle, 0);
 			}
 //			DX.SetDrawScreen(handle);
 		}

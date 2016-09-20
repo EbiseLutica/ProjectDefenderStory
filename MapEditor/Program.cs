@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using DefenderStory.GUI;
-using DefenderStory.Map;
-using DefenderStory.Util;
-using DefenderStory;
-using DefenderStory.Entities;
+using TakeUpJewel.GUI;
+using TakeUpJewel.Map;
+using TakeUpJewel.Util;
+using TakeUpJewel;
+using TakeUpJewel.Entities;
+using Codeplex.Data;
 
 namespace MapEditor
 {
@@ -20,22 +19,25 @@ namespace MapEditor
 
 
 		[STAThread]
-		static void Main(string[] args)
+		static void Main()
 		{
 			//---------------------------------------------------------
 
 			Application.EnableVisualStyles();	//Visual Style を適用
 			DX.SetUseGraphAlphaChannel(1);
 			DX.ChangeWindowMode(1);
-			string mptname = "mpt1";
+			var mptname = "mpt1";
 			DX.SetFontSize(14);
 			DX.SetFontThickness(1);
 			DX.SetWindowText("Defender's Editor");
 			byte[, ,] chips = null;
 			DX.SetAlwaysRunFlag(1);
-			Size scrSize = new Size(320, 240);
+			var scrSize = new Size(320, 240);
 			DX.SetWindowVisibleFlag(0);
 			DX.SetWaitVSyncFlag(1);
+
+			var osf = new ObjectSelectForm("Resources\\Graphics\\" + mptname + ".png");
+			osf.Show();
 
 			//--------------------------------------------------------
 
@@ -63,77 +65,84 @@ namespace MapEditor
 			SoundUtility.Init();
 			ResourceUtility.Init();
 
+			var splist = new List<Entity>();
+			splist.Add(new Entity
+			{
+				PosX = 0,
+				PosY = 0,
+				EntityId = 0,
+				EntityData = SpdataUtility.GetPropertyObject(0)
+			});
 			//--------------------------------------------------------
 			//DX.SetMouseDispFlag(0);
 
-			int bsec = DateTime.Now.Second;
-			int bmsec = DateTime.Now.Millisecond;
+			var bsec = DateTime.Now.Second;
+			var bmsec = DateTime.Now.Millisecond;
 
-			ObjectSelectForm osf = new ObjectSelectForm("Resources\\Graphics\\" + mptname + ".png");
-			osf.Show();
+			
 
 			//int hndl_bigplayer_walkleft = DX.CreateGraphFromRectSoftImage(hndl_playerchip, 0, 0, 16, 32);
 
-			int[] hndl_bigplayer_datas = new int[72];
+			var hndlBigplayerDatas = new int[72];
 
 		init:
 
 			
 
-			osf.request = RequestFlag.None;
-			int[] hndl_mpt = new int[64];
-			DX.LoadDivGraph("Resources\\Graphics\\" + mptname + ".png", 64, 16, 4, 16, 16, out hndl_mpt[0]);
+			osf.Request = RequestFlag.None;
+			var hndlMpt = new int[64];
+			DX.LoadDivGraph("Resources\\Graphics\\" + mptname + ".png", 64, 16, 4, 16, 16, out hndlMpt[0]);
 
 			osf.StatusMessage = "マップチップを読み込みました。";
 
-			int hndl_mptsoft = DX.LoadSoftImage("Resources\\Graphics\\" + mptname + "_hj.png");
+			var hndlMptsoft = DX.LoadSoftImage("Resources\\Graphics\\" + mptname + "_hj.png");
 
 
 
-			Object[] mptobjects = new Object[64];
+			var mptobjects = new Object[64];
 
 			int r, g, b, a;
-			Color[] hits = new Color[5];
-			for (int i = 0; i < 5; i++)
+			var hits = new Color[5];
+			for (var i = 0; i < 5; i++)
 			{
-				DX.GetPixelSoftImage(hndl_mptsoft, i, 64, out r, out g, out b, out a);
+				DX.GetPixelSoftImage(hndlMptsoft, i, 64, out r, out g, out b, out a);
 				hits[i] = Color.FromArgb(r, g, b, a);
 			}
 
-			List<Color> hitlist = hits.ToList();
+			var hitlist = hits.ToList();
 
-			for (int iy = 0; iy < 4; iy++)
+			for (var iy = 0; iy < 4; iy++)
 			{
-				for (int ix = 0; ix < 16; ix++)
+				for (var ix = 0; ix < 16; ix++)
 				{
-					byte[,] mask = new byte[16, 16];
-					for (int y = 0; y < 16; y++)
-						for (int x = 0; x < 16; x++)
+					var mask = new byte[16, 16];
+					for (var y = 0; y < 16; y++)
+						for (var x = 0; x < 16; x++)
 						{
-							DX.GetPixelSoftImage(hndl_mptsoft, x + ix * 16, y + iy * 16, out r, out g, out b, out a);
+							DX.GetPixelSoftImage(hndlMptsoft, x + ix * 16, y + iy * 16, out r, out g, out b, out a);
 							mask[x, y] = (byte)hitlist.IndexOf(Color.FromArgb(r, g, b, a));
 						}
-					mptobjects[iy * 16 + ix] = new Object(hndl_mpt[iy * 16 + ix], mask);
+					mptobjects[iy * 16 + ix] = new Object(hndlMpt[iy * 16 + ix], mask);
 				}
 			}
 
 			osf.StatusMessage = "当たり判定データを設定しました。";
 
-			DX.DeleteSoftImage(hndl_mptsoft);
+			DX.DeleteSoftImage(hndlMptsoft);
 
-			Size map = osf.MapSize;
+			var map = osf.MapSize;
 
 			if (chips != null)
 			{
-				byte[, ,] tmp = (byte[, ,])(chips.Clone());
+				var tmp = (byte[, ,])(chips.Clone());
 				chips = new byte[osf.MapSize.Width, osf.MapSize.Height, 2];
-				for (int z = 0; z < tmp.GetLength(2); z++)
+				for (var z = 0; z < tmp.GetLength(2); z++)
 				{
-					for (int y = 0; y < tmp.GetLength(1); y++)
+					for (var y = 0; y < tmp.GetLength(1); y++)
 					{
 						if (y >= osf.MapSize.Height)
 							break;
-						for (int x = 0; x < tmp.GetLength(0); x++)
+						for (var x = 0; x < tmp.GetLength(0); x++)
 						{
 							if (x >= osf.MapSize.Width)
 								break;
@@ -151,42 +160,44 @@ namespace MapEditor
 
 
 			int f = 0, fps = 0;
-			int binz = 0;
-			Point camera = new Point(0, 0);
-			int btime = DX.GetNowCount();
+			var binz = 0;
+			var camera = new Point(0, 0);
+			var btime = DX.GetNowCount();
 
 			int thx = 0, thy = 0, bmf = 0;
 
 			int bmousex = 0, bmousey = 0;
 
-			bool editing = false;
-			int spselidx = 0;
-			Point relativepoint = Point.Empty;
-			List<Entity> splist = new List<Entity>();
+			var editing = false;
+			var spselidx = 0;
+			var relativepoint = Point.Empty;
 
 			osf.StatusMessage = "準備が出来ました。";
 			DX.SetWindowVisibleFlag(1);
 			
 			while (true)
 			{
-				//DX.ProcessMessage();
-				Color c = osf.RequestedColor;
+				DX.ProcessMessage();
+				Application.DoEvents();
+				var c = osf.RequestedColor;
 				DX.DrawBox(0, 0, 320, 240, DX.GetColor(c.R, c.G, c.B), 1);
 				DX.DrawString(0, 0, fps.ToString(), DX.GetColor(255, 255, 255));
-				ChipPack pack = osf.chippack;
-				int zoom = osf.Zoom;
+				var pack = osf.Chippack;
+				var zoom = osf.Zoom;
 
-				int wari = (int)(16 * (zoom / 100.0));
+				var wari = (int)(16 * (zoom / 100.0));
 
-				if (osf.request != RequestFlag.None)
+				if (osf.Request != RequestFlag.None)
 				{
-					if (osf.request != RequestFlag.SaveCitMap && osf.request != RequestFlag.SaveSpdata)
+					if (osf.Request == RequestFlag.CreateNew ||
+						osf.Request == RequestFlag.OpenCitMap
+						)
 					{
 						if (editing)
 							switch (MessageBox.Show("ファイルが変更されています。保存しますか？", "確認", MessageBoxButtons.YesNoCancel))
 							{
 								case DialogResult.Yes:
-									SaveFileDialog sfd = new SaveFileDialog();
+									var sfd = new SaveFileDialog();
 									sfd.Filter = "Defender Story マップファイル (*.citmap) | *.citmap";
 									sfd.DefaultExt = "citmap";
 									if (sfd.ShowDialog() == DialogResult.Cancel)
@@ -194,16 +205,19 @@ namespace MapEditor
 									MapUtility.SaveMap(chips, sfd.FileName);
 									break;
 								case DialogResult.Cancel:
-									osf.request = RequestFlag.None;
+									osf.Request = RequestFlag.None;
 									osf.StatusMessage = "キャンセルしました。";
 									goto nuke;
 							}
 					}
-					if (osf.request == RequestFlag.ChangeMpt || osf.request == RequestFlag.Resize)
+
+					
+
+					if (osf.Request == RequestFlag.ChangeMpt || osf.Request == RequestFlag.Resize)
 					{
-						if (!System.IO.File.Exists("Resources\\Graphics\\" + osf.Path + ".png"))
+						if (!File.Exists("Resources\\Graphics\\" + osf.Path + ".png"))
 						{
-							if (osf.request == RequestFlag.ChangeMpt)
+							if (osf.Request == RequestFlag.ChangeMpt)
 								MessageBox.Show("指定したマップチップが見つかりません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 						}
 						else
@@ -214,24 +228,33 @@ namespace MapEditor
 							goto init;
 						}
 					}
-					else if (osf.request == RequestFlag.CreateNew)
+					else if (osf.Request == RequestFlag.CreateNew)
 					{
 						chips = null;
+						splist.Clear();
+						splist.Add(new Entity
+						{
+							PosX = 0,
+							PosY = 0,
+							EntityId = 0,
+							EntityData = SpdataUtility.GetPropertyObject(0)
+						});
+
 						goto init;
 					}
-					else if (osf.request == RequestFlag.ChangeColor)
+					else if (osf.Request == RequestFlag.ChangeColor)
 					{
 						goto nuke;
 					}
-					else if (osf.request == RequestFlag.OpenFile)
+					else if (osf.Request == RequestFlag.OpenCitMap)
 					{
-						OpenFileDialog ofd = new OpenFileDialog();
+						var ofd = new OpenFileDialog();
 						ofd.Filter = "Defender Story マップファイル (*.citmap) | *.citmap";
 						ofd.DefaultExt = "citmap";
 						if (ofd.ShowDialog() == DialogResult.Cancel)
 						{
 							osf.StatusMessage = "キャンセルしました。";
-							osf.request = RequestFlag.None;
+							osf.Request = RequestFlag.None;
 							goto nuke;
 						}
 						try
@@ -247,59 +270,84 @@ namespace MapEditor
 						osf.StatusMessage = "マップデータを読み込みました。";
 
 					}
-					else if (osf.request == RequestFlag.SaveCitMap)
+					else if (osf.Request == RequestFlag.OpenSpdata)
 					{
-						SaveFileDialog sfd = new SaveFileDialog();
+						var ofd = new OpenFileDialog();
+						ofd.Filter = "json ドキュメント (*.json) | *.json";
+						ofd.DefaultExt = "json";
+						if (ofd.ShowDialog() == DialogResult.Cancel)
+						{
+							osf.StatusMessage = "キャンセルしました。";
+							osf.Request = RequestFlag.None;
+							goto nuke;
+						}
+						//try
+						//{
+							SpdataUtility.Load(out splist, ofd.FileName);
+						//}
+						//catch (Exception ex)
+						//{
+						//	MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+						//}
+						osf.MapSize = new Size(chips.GetLength(0), chips.GetLength(1));
+						map = osf.MapSize;
+						osf.StatusMessage = "エンティティデータを読み込みました。";
+
+					}
+					else if (osf.Request == RequestFlag.SaveCitMap)
+					{
+						var sfd = new SaveFileDialog();
 						sfd.Filter = "Defender Story マップファイル (*.citmap) | *.citmap";
 						sfd.DefaultExt = "citmap";
 						if (sfd.ShowDialog() == DialogResult.Cancel)
 						{
 							osf.StatusMessage = "キャンセルしました。";
-							osf.request = RequestFlag.None;
+							osf.Request = RequestFlag.None;
 							goto nuke;
 						}
 						MapUtility.SaveMap(chips, sfd.FileName);
 						osf.StatusMessage = "マップデータを保存しました。";
 					}
-					else if (osf.request == RequestFlag.SaveSpdata)
+					else if (osf.Request == RequestFlag.SaveSpdata)
 					{
-						SaveFileDialog sfd = new SaveFileDialog();
+						var sfd = new SaveFileDialog();
 						sfd.Filter = "json ドキュメント (*.json) | *.json";
 						sfd.DefaultExt = "json";
 						if (sfd.ShowDialog() == DialogResult.Cancel)
 						{
 							osf.StatusMessage = "キャンセルしました。";
-							osf.request = RequestFlag.None;
+							osf.Request = RequestFlag.None;
 							goto nuke;
 						}
 						SpdataUtility.Save(splist, sfd.FileName);
-						osf.StatusMessage = "スプライトデータを保存しました。";
+						osf.StatusMessage = "エンティティデータを保存しました。";
 					}
-					else if (osf.request == RequestFlag.SwapT)
+					else if (osf.Request == RequestFlag.SwapT)
 					{
 						MapSwap(chips, map, 0, -1);
 					}
-					else if (osf.request == RequestFlag.SwapB)
+					else if (osf.Request == RequestFlag.SwapB)
 					{
 						MapSwap(chips, map, 0, 1);
 					}
-					else if (osf.request == RequestFlag.SwapL)
+					else if (osf.Request == RequestFlag.SwapL)
 					{
 						MapSwap(chips, map, -1, 0);
 					}
-					else if (osf.request == RequestFlag.SwapR)
+					else if (osf.Request == RequestFlag.SwapR)
 					{
 						MapSwap(chips, map, 1, 0);
 					}
-					else if (osf.request == RequestFlag.TestPlay || osf.request == RequestFlag.CheatPlay)
+					else if (osf.Request == RequestFlag.TestPlay || osf.Request == RequestFlag.CheatPlay)
 					{
 						if (!Directory.Exists("temp"))
 							Directory.CreateDirectory("temp");
 						MapUtility.SaveMap(chips, "temp\\map.citmap");
 						SpdataUtility.Save(splist, "temp\\spdata.json");
-						foreach (int handle in GameEngine.TestPlay("temp", (osf.request == RequestFlag.TestPlay ? false : true), mptname, (PlayerForm)Enum.Parse(typeof(PlayerForm), osf.PlayerFormSelector.SelectedText), scrSize))
+						foreach (var handle in GameEngine.TestPlay("temp", osf.Request != RequestFlag.TestPlay, mptname, (PlayerForm)Enum.Parse(typeof(PlayerForm), (string)osf.PlayerFormSelector.SelectedItem), scrSize, DX.GetColor(c.R, c.G, c.B)))
 						{
 							DX.DrawGraph(0, 0, handle, 0);
+							DX.ProcessMessage();
 							if (DX.ScreenFlip() == -1)
 							{
 								DX.DxLib_End();
@@ -314,17 +362,18 @@ namespace MapEditor
 				}
 
 			nuke:
-				osf.request = RequestFlag.None;
-				States ks = new States(binz, camera, map);
+				osf.Request = RequestFlag.None;
+				var ks = new States(binz, camera, map);
 				int mousex = -1, mousey = -1;
-				int mouseflag = DX.GetMouseInput();
+				var mouseflag = DX.GetMouseInput();
 				DX.GetMousePoint(out mousex, out mousey);
 
+				
 
-				if (ks.inz == 1 && binz == 1)
-					ks.inz1 = 0;
+				if (ks.Inz == 1 && binz == 1)
+					ks.Inz1 = 0;
 
-				int inesc = DX.CheckHitKey(DX.KEY_INPUT_ESCAPE);
+				var inesc = DX.CheckHitKey(DX.KEY_INPUT_ESCAPE);
 
 				if (DX.CheckHitKey(DX.KEY_INPUT_T) == 1)
 					osf.Activate();
@@ -338,7 +387,7 @@ namespace MapEditor
 							switch (osf.Tool)
 							{
 								case ToolFlag.Pen:
-									pack.PutChipPackToArray(ref chips, (mousex - camera.X) / wari, (mousey - camera.Y) / wari, osf.sf);
+									pack.PutChipPackToArray(ref chips, (mousex - camera.X) / wari, (mousey - camera.Y) / wari, osf.Sf);
 									break;
 								case ToolFlag.Line:
 									if (bmf == 0)
@@ -367,11 +416,11 @@ namespace MapEditor
 									DX.DrawBox(thx * wari + camera.X + wari / 2, thy * wari + wari / 2 + camera.Y, (mousex - camera.X) / wari * wari + camera.X + wari / 2, (mousey - camera.Y) / wari * wari + camera.Y + wari / 2, DX.GetColor(DX.GetRand(256), DX.GetRand(256), DX.GetRand(256)), 0);
 
 									break;
-								
+
 								case ToolFlag.SpSel:
 									if (bmf == 0)
 									{
-										spselidx = splist.FindIndex(new Predicate<Entity>((sp) => new Rectangle((int)(sp.PosX * (1 + (100 - zoom) / 100.0)), (int)(sp.PosY * (1 + (100 - zoom) / 100.0)), wari, wari).Contains((int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0)))));
+										spselidx = splist.FindIndex(sp => new Rectangle((int)(sp.PosX * (1 + (100 - zoom) / 100.0)), (int)(sp.PosY * (1 + (100 - zoom) / 100.0)), wari, wari).Contains((int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0))));
 										if (spselidx == -1)
 											break;
 										relativepoint = new Point((int)((mousex - camera.X - splist[spselidx].PosX) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y - splist[spselidx].PosY) * (1 + (100 - zoom) / 100.0)));
@@ -380,73 +429,77 @@ namespace MapEditor
 										break;
 									splist[spselidx].PosX = (int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0) - relativepoint.X);
 									splist[spselidx].PosY = (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0) - relativepoint.Y);
-									if (ks.inlshift == 1)
+									if (ks.Inlshift == 1)
 									{
 										splist[spselidx].PosX = (int)Math.Round(splist[spselidx].PosX / 16.0) * 16;
 										splist[spselidx].PosY = (int)Math.Round(splist[spselidx].PosY / 16.0) * 16;
 									}
+									
 									break;
 							}
 							editing = true;
 						}
 						else
-							osf.chipno = chips[(mousex - camera.X) / wari, (mousey - camera.Y) / wari, (int)osf.sf];
+							osf.Chipno = chips[(mousex - camera.X) / wari, (mousey - camera.Y) / wari, (int)osf.Sf];
 
 					}
 					if (mouseflag == 0 && bmf != 0 && bmousex != -1 && bmousey != -1 && DX.GetWindowActiveFlag() == 1)
 						switch (osf.Tool)
 						{
 							case ToolFlag.Line:
-								DrawLineToArray(thx, thy, (bmousex - camera.X) / wari, (bmousey - camera.Y) / wari, ref chips, osf.sf, (byte)osf.chipno);
+								DrawLineToArray(thx, thy, (bmousex - camera.X) / wari, (bmousey - camera.Y) / wari, ref chips, osf.Sf, (byte)osf.Chipno);
 								break;
 							case ToolFlag.Select:
 								if (bmf == 0)
 								{
 									thx = (mousex - camera.X) / wari;
 									thy = (mousey - camera.Y) / wari;
+									
 								}
 								DX.DrawBox(thx * wari + wari / 2, thy * wari + wari / 2, (mousex - camera.X) / wari * wari + wari / 2, (mousey - camera.Y) / wari * wari + wari / 2, DX.GetColor(DX.GetRand(256), DX.GetRand(256), DX.GetRand(256)), 0);
 
 								break;
 							case ToolFlag.Fill:
-								FillBoxToArray(thx, thy, (bmousex - camera.X) / wari, (bmousey - camera.Y) / wari, ref chips, osf.sf, pack);
+								FillBoxToArray(thx, thy, (bmousex - camera.X) / wari, (bmousey - camera.Y) / wari, ref chips, osf.Sf, pack);
 								break;
 							case ToolFlag.SpPut:
-								Entity sp = new Entity();
+								var sp = new Entity();
 								sp.PosX = (int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0));
 								sp.PosY = (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0));
-								if (ks.inlshift == 1)
+								if (ks.Inlshift == 1)
 								{
 									sp.PosX = (int)Math.Round(sp.PosX / 16.0) * 16;
 									sp.PosY = (int)Math.Round(sp.PosY / 16.0) * 16;
 								}
-								sp.EntityID = osf.EntityID;
-								sp.Visible = true;
+								sp.EntityId = osf.EntityId;
+								sp.EntityData = SpdataUtility.GetPropertyObject(sp.EntityId);
 								splist.Add(sp);
 								break;
 							case ToolFlag.SpSel:
-								osf.StatusMessage = (string)(osf.listBox1.Items[splist[spselidx].EntityID]);
-								break;
-							case ToolFlag.SpVisible:
-								spselidx = splist.FindIndex(new Predicate<Entity>((spr) => new Rectangle((int)(spr.PosX * (1 + (100 - zoom) / 100.0)), (int)(spr.PosY * (1 + (100 - zoom) / 100.0)), wari, wari).Contains((int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), (int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0)))));
-								if (spselidx == -1)
-									break;
-								splist[spselidx].Visible = !splist[spselidx].Visible;
+								osf.StatusMessage = (string)(osf.Items[splist[spselidx].EntityId]);
+								osf.propertyGrid1.SelectedObject = splist[spselidx];
 								break;
 							case ToolFlag.SpDel:
-									spselidx = splist.FindIndex(
-										new Predicate<Entity>((spr) => 
-											new Rectangle(
-												(int)(spr.PosX * (1 + (100 - zoom) / 100.0)), 
-												(int)(spr.PosY * (1 + (100 - zoom) / 100.0)), 
-												wari, 
-												wari).Contains(
-												(int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)), 
-												(int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0)))));
-									if (spselidx == -1)
-										break;
-	
-		
+								spselidx = splist.FindIndex(
+									spr =>
+										new Rectangle(
+											(int)(spr.PosX * (1 + (100 - zoom) / 100.0)),
+											(int)(spr.PosY * (1 + (100 - zoom) / 100.0)),
+											wari,
+											wari).Contains(
+											(int)((mousex - camera.X) * (1 + (100 - zoom) / 100.0)),
+											(int)((mousey - camera.Y) * (1 + (100 - zoom) / 100.0))));
+								if (spselidx == -1)
+									break;
+
+								//自らがPlayerかつリスト上にPlayerが一人しかいない(自分が唯一のPlayer)
+								if (splist[spselidx].EntityId == 0 && splist.Count(s => s.EntityId == 0) == 1)
+								{
+									MessageBox.Show("Player は最低１人必要です．", "Defender's Editor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+									break;
+								}
+								if (splist[spselidx] == osf.propertyGrid1.SelectedObject)
+									osf.propertyGrid1.SelectedObject = null;
 								splist.RemoveAt(spselidx);
 								spselidx = 0;
 								break;
@@ -457,69 +510,67 @@ namespace MapEditor
 					osf.StatusMessage = string.Format("例外 {0} : {1} : {2}", ex.GetType().Name, ex.Message, ex.TargetSite);
 				}
 
-				if (inesc == 1)
-				{
-					DX.DxLib_End();
-					return;
-				}
+				//if (inesc == 1)
+				//{
+				//	DX.DxLib_End();
+				//	return;
+				//}
 
-				if (ks.camera.X > 0)
-					ks.camera = new Point(0, ks.camera.Y);
+				if (ks.Camera.X > 0)
+					ks.Camera = new Point(0, ks.Camera.Y);
 
-				if (ks.camera.Y > 0)
-					ks.camera = new Point(ks.camera.X, 0);
+				if (ks.Camera.Y > 0)
+					ks.Camera = new Point(ks.Camera.X, 0);
 
-				if (ks.camera.X < -ks.map.Width * wari + scrSize.Width)
-					ks.camera = new Point(-ks.map.Width * wari + scrSize.Width, ks.camera.Y);
+				if (ks.Camera.X < -ks.Map.Width * wari + scrSize.Width)
+					ks.Camera = new Point(-ks.Map.Width * wari + scrSize.Width, ks.Camera.Y);
 
-				if (ks.camera.Y < -ks.map.Height * wari + scrSize.Height)
-					ks.camera = new Point(ks.camera.X, -ks.map.Height * wari + scrSize.Height);
+				if (ks.Camera.Y < -ks.Map.Height * wari + scrSize.Height)
+					ks.Camera = new Point(ks.Camera.X, -ks.Map.Height * wari + scrSize.Height);
 
-				ks.camera.Offset(DX.GetMouseHWheelRotVol() * 4, DX.GetMouseWheelRotVol() * 4);
+				ks.Camera.Offset(DX.GetMouseHWheelRotVol() * 4, DX.GetMouseWheelRotVol() * 4);
 
-				if (ks.inup == 1)
-					ks.camera.Offset(0, 4);
+				if (ks.Inup == 1)
+					ks.Camera.Offset(0, 4);
 
-				if (ks.indown == 1)
-					ks.camera.Offset(0, -4);
+				if (ks.Indown == 1)
+					ks.Camera.Offset(0, -4);
 
-				if (ks.inleft == 1)
-					ks.camera.Offset(4, 0);
+				if (ks.Inleft == 1)
+					ks.Camera.Offset(4, 0);
 
-				if (ks.inright == 1)
-					ks.camera.Offset(-4, 0);
+				if (ks.Inright == 1)
+					ks.Camera.Offset(-4, 0);
 
 				if (osf.GridVisible)
 				{
-					for (int y = 0; y < map.Height * wari; y += wari)
+					for (var y = 0; y < map.Height * wari; y += wari)
 						if (y > -camera.Y - 16 && y < -camera.Y + scrSize.Height)
-							for (int x = 0; x < map.Width * wari; x += wari)
+							for (var x = 0; x < map.Width * wari; x += wari)
 								if (x > -camera.X - 16 && x < -camera.X + scrSize.Width)
 									DX.DrawBox(x + camera.X, y + camera.Y, x + camera.X + wari + 1, y + camera.Y + wari + 1, DX.GetColor(127, 127, 127), 0);
 				}
 
-				DX.DrawString(mousex + 16, mousey, string.Format("{0}, {1}", ((ks.inlshift == 1) ? ((mousex - camera.X) / wari * wari) : mousex - camera.X), ((ks.inlshift == 1) ? ((mousey - camera.Y) / wari * wari) : mousey - camera.Y)), DX.GetColor(255, 255, 255));
+				DX.DrawString(mousex + 16, mousey, string.Format("{0}, {1}", ((ks.Inlshift == 1) ? ((mousex - camera.X) / wari * wari) : mousex - camera.X), ((ks.Inlshift == 1) ? ((mousey - camera.Y) / wari * wari) : mousey - camera.Y)), DX.GetColor(255, 255, 255));
 
 				if (osf.BackVisible)
-					for (int y = 0; y < map.Height * wari; y += wari)
+					for (var y = 0; y < map.Height * wari; y += wari)
 						if (y > -camera.Y - 16 && y < -camera.Y + scrSize.Height)
-							for (int x = 0; x < map.Width * wari; x += wari)
+							for (var x = 0; x < map.Width * wari; x += wari)
 								if (x > -camera.X - 16 && x < -camera.X + scrSize.Width)
-									DX.DrawGraph(x + camera.X, y + camera.Y, hndl_mpt[chips[x / wari, y / wari, 1]], 1);
+									DX.DrawGraph(x + camera.X, y + camera.Y, hndlMpt[chips[x / wari, y / wari, 1]], 1);
 
 				if (osf.ForeVisible)
-					for (int y = 0; y < map.Height * wari; y += wari)
+					for (var y = 0; y < map.Height * wari; y += wari)
 						if (y > -camera.Y - 16 && y < -camera.Y + scrSize.Height)
-							for (int x = 0; x < map.Width * wari; x += wari)
+							for (var x = 0; x < map.Width * wari; x += wari)
 								if (x > -camera.X - 16 && x < -camera.X + scrSize.Width)
-									DX.DrawGraph(x + camera.X, y + camera.Y, hndl_mpt[chips[x / wari, y / wari, 0]], 1);
+									DX.DrawGraph(x + camera.X, y + camera.Y, hndlMpt[chips[x / wari, y / wari, 0]], 1);
 
-				foreach (Entity sp in splist)
+				foreach (var sp in splist)
 				{
 					DX.DrawBox((int)(sp.PosX * (zoom / 100.0) + camera.X), (int)(sp.PosY * (zoom / 100.0) + camera.Y), (int)(sp.PosX * (zoom / 100.0) + camera.X) + wari, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + wari, (spselidx != -1 && sp == splist[spselidx]) ? DX.GetColor(255, 0, 0) : DX.GetColor(255, 255, 255), 0);
-					if (!sp.Visible)
-						DX.DrawBox((int)(sp.PosX * (zoom / 100.0) + camera.X), (int)(sp.PosY * (zoom / 100.0) + camera.Y), (int)(sp.PosX * (zoom / 100.0) + camera.X) + wari, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + wari, DX.GetColor(79, 79, 79), 0);
-					 NumFont.DrawNumFontString((int)(sp.PosX * (zoom / 100.0) + camera.X) + 2, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + 2, sp.Visible ? DX.GetColor(255, 255, 255) : DX.GetColor(79, 79, 79), sp.EntityID.ToString());
+					NumFont.DrawNumFontString((int)(sp.PosX * (zoom / 100.0) + camera.X) + 2, (int)(sp.PosY * (zoom / 100.0) + camera.Y) + 2, DX.GetColor(255, 255, 255), sp.EntityId.ToString());
 				}
 
 				f++;
@@ -538,10 +589,10 @@ namespace MapEditor
 				}
 
 				bmf = mouseflag;
-				binz = ks.inz;
+				binz = ks.Inz;
 				bmousex = mousex; bmousey = mousey;
-				camera = ks.camera;
-				map = ks.map;
+				camera = ks.Camera;
+				map = ks.Map;
 
 			}
 
@@ -550,9 +601,9 @@ namespace MapEditor
 
 		private static void MapSwap(byte[,,] chips, Size size, int v1, int v2)
 		{
-			for (int y = 0; y < size.Height; y++)
+			for (var y = 0; y < size.Height; y++)
 			{
-				for (int x = 0; x < size.Width; x++)
+				for (var x = 0; x < size.Width; x++)
 				{
 					chips[x, y, 0] = (byte)((Math.Min(3, Math.Max(0, chips[x, y, 0] / 16 + v2)) * 16) + (Math.Max(0, Math.Min(chips[x, y, 0] % 16 + v1, 15)) % 16));
 					chips[x, y, 1] = (byte)((Math.Min(3, Math.Max(0, chips[x, y, 1] / 16 + v2)) * 16) + (Math.Max(0, Math.Min(chips[x, y, 1] % 16 + v1, 15)) % 16));
@@ -574,7 +625,7 @@ namespace MapEditor
 
 		public static void DrawLineToArray(int x1, int y1, int x2, int y2, ref byte[, ,] array, ScreenFlag dimension, byte value)
 		{
-			bool steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
+			var steep = Math.Abs(y2 - y1) > Math.Abs(x2 - x1);
 			if (steep)
 			{
 				Swap(ref x1, ref y1);
@@ -585,16 +636,16 @@ namespace MapEditor
 				Swap(ref x1, ref x2);
 				Swap(ref y1, ref y2);
 			}
-			int deltax = x2 - x1;
-			int deltay = Math.Abs(y2 - y1);
-			int error = deltax / 2;
+			var deltax = x2 - x1;
+			var deltay = Math.Abs(y2 - y1);
+			var error = deltax / 2;
 			int ystep;
-			int y = y1;
+			var y = y1;
 			if (y1 < y2)
 				ystep = 1;
 			else
 				ystep = -1;
-			for (int x = x1; x <= x2; x++)
+			for (var x = x1; x <= x2; x++)
 			{
 				if (steep)
 					array[y, x, (int)dimension] = value;
@@ -621,20 +672,20 @@ namespace MapEditor
 				Swap(ref x1, ref x2);
 
 
-			for (int y = y1; y <= y2; y += value.height)
-				for (int x = x1; x <= x2; x += value.width)
+			for (var y = y1; y <= y2; y += value.Height)
+				for (var x = x1; x <= x2; x += value.Width)
 				{
-					for (int px = 0; px < value.width; px++)
+					for (var px = 0; px < value.Width; px++)
 					{
-						int nx = x + px;
+						var nx = x + px;
 						if (nx > x2)
 							continue;
-                        for (int py = 0; py < value.height; py++)
+                        for (var py = 0; py < value.Height; py++)
 						{
-							int ny = y + py;
+							var ny = y + py;
 							if (ny > y2)
 								continue;
-							array[nx, ny, (int)dimension] = value.chips[py * value.width + px];
+							array[nx, ny, (int)dimension] = value.Chips[py * value.Width + px];
 						}
 					}
 				}
@@ -642,7 +693,7 @@ namespace MapEditor
 
 		static void Swap<T>(ref T var1, ref T var2)
 		{
-			T tmp = var2;
+			var tmp = var2;
 			var2 = var1;
 			var1 = tmp;
 		}
@@ -650,32 +701,35 @@ namespace MapEditor
 
 	}
 
-	//スプライトのスペル間違えてたので修正
+
+
+
+	//エンティティのスペル間違えてたので修正
 
 	public struct States
 	{
-		public int inup, indown, inleft, inright, inlshift, inw, ina, ins, ind, inz, inz1;
-		public Point camera;
-		public Size map;
+		public int Inup, Indown, Inleft, Inright, Inlshift, Inw, Ina, Ins, Ind, Inz, Inz1;
+		public Point Camera;
+		public Size Map;
 		public States(int binz, Point c, Size m)
 		{
-			inup = DX.CheckHitKey(DX.KEY_INPUT_UP);
-			indown = DX.CheckHitKey(DX.KEY_INPUT_DOWN);
-			inleft = DX.CheckHitKey(DX.KEY_INPUT_LEFT);
-			inright = DX.CheckHitKey(DX.KEY_INPUT_RIGHT);
-			inlshift = DX.CheckHitKey(DX.KEY_INPUT_LSHIFT);
-			inw = DX.CheckHitKey(DX.KEY_INPUT_W);
-			ina = DX.CheckHitKey(DX.KEY_INPUT_A);
-			ins = DX.CheckHitKey(DX.KEY_INPUT_S);
-			ind = DX.CheckHitKey(DX.KEY_INPUT_D);
+			Inup = DX.CheckHitKey(DX.KEY_INPUT_UP);
+			Indown = DX.CheckHitKey(DX.KEY_INPUT_DOWN);
+			Inleft = DX.CheckHitKey(DX.KEY_INPUT_LEFT);
+			Inright = DX.CheckHitKey(DX.KEY_INPUT_RIGHT);
+			Inlshift = DX.CheckHitKey(DX.KEY_INPUT_LSHIFT);
+			Inw = DX.CheckHitKey(DX.KEY_INPUT_W);
+			Ina = DX.CheckHitKey(DX.KEY_INPUT_A);
+			Ins = DX.CheckHitKey(DX.KEY_INPUT_S);
+			Ind = DX.CheckHitKey(DX.KEY_INPUT_D);
 
-			inz = DX.CheckHitKey(DX.KEY_INPUT_Z);
-			inz1 = inz;
+			Inz = DX.CheckHitKey(DX.KEY_INPUT_Z);
+			Inz1 = Inz;
 
-			if (inz == 1 && binz == 1)
-				inz1 = 0;
-			camera = c;
-			map = m;
+			if (Inz == 1 && binz == 1)
+				Inz1 = 0;
+			Camera = c;
+			Map = m;
 		}
 
 
@@ -705,12 +759,12 @@ namespace MapEditor
 
 	}
 
-	
+
 	public static class SpdataUtility
 	{
 		public static void Save(List<Entity> array, string path)
 		{
-			StringBuilder sb = new StringBuilder();	//Json を書き込む StringBuilder
+			/*StringBuilder sb = new StringBuilder();	//Json を書き込む StringBuilder
 			sb.Append("[");
 			foreach(Entity sp in array)
 			{
@@ -718,43 +772,111 @@ namespace MapEditor
 			}
 			sb.Remove(sb.Length - 2, 2);	//最後の, を消去
 			sb.Append("]");
-			File.WriteAllText(path, sb.ToString());
-			
+			File.WriteAllText(path, sb.ToString());*/
+
+			var savedata = new object[array.Count];
+
+			for (var i = 0; i < savedata.Length; i++)
+			{
+				var e = array[i];
+				savedata[i] = new
+				{
+					e.PosX,
+					e.PosY,
+					EntityID = e.EntityId,
+					EntityData = e.EntityData ?? GetPropertyObject(e.EntityId)
+                };
+			}
+			File.WriteAllText(path, DynamicJson.Serialize(savedata));
 		}
 
+		public static void Load(out List<Entity> array, string path)
+		{
+			array = new List<Entity>();
+			dynamic loaddata = DynamicJson.Parse(File.ReadAllText(path));
 
-		static string GetPropertyJson(int spriteid)
+			foreach (var data in loaddata)
+			{
+				var e = new Entity
+				{
+					PosX = (int)data.PosX,
+					PosY = (int)data.PosY,
+					EntityId = (int)data.EntityID,
+					EntityData = LoadPropertyObject((int)data.EntityID, data.EntityData)
+				};
+				array.Add(e);
+			}
+		}
+
+		public static IEntityData LoadPropertyObject(int spriteid, dynamic dydat)
 		{
 			switch (spriteid)
 			{
 				case 0:
-					return "{\"SpawnFromDoor\": false, \"TargetDoorIndex\": 0}";
+					return dydat.Deserialize<Player>();
 				case 5:
-					return "{\"TargetEntity\": null}";
-				case 7:	
-					return "{\"StartX\": 0}";
+					return dydat.Deserialize<InfinitySpawner>();
+				case 7:
+					return dydat.Deserialize<Woody>();
 				case 12:
-					return "{\"TargetEntityIndex\": 0}";
+					return dydat.Deserialize<SpiderString>();
 				case 18:
-					return "{\"NextStage\": 0}";
+					return dydat.Deserialize<Goal>();
 				case 22:
-					return "{\"EntityType\": 0}";
+					return dydat.Deserialize<ItemSpawner>();
 				case 28:
-					return "{\"WorkingType\": 0}";
+					return dydat.Deserialize<Coin>();
 				case 44:
-					return "{\"StartX\": 0}";
+					return dydat.Deserialize<GoblinGirl>();
 				case 60:
-					return "{\"NextArea\": 0}";
+					return dydat.Deserialize<HalfGoal>();
 				case 61:
-					return "{\"StartX\": 0}";
+					return dydat.Deserialize<DevilTsubasa>();
 				case 62:
-					return "{\"StartX\": 0}";
+					return dydat.Deserialize<NormalTsubasa>();
 				case 63:
-					return "{\"StartX\": 0}";
-				case 83:
-					return "{\"MessageText\": \"\"}";
+					return dydat.Deserialize<Yuan>();
+				case 84:
+					return dydat.Deserialize<Sign>();
 				default:
-					return "null";
+					return null;
+			}
+		}
+
+		public static dynamic GetPropertyJson(int spriteid) => DynamicJson.Parse(DynamicJson.Serialize(GetPropertyObject(spriteid)));
+
+		public static IEntityData GetPropertyObject(int spriteid)
+		{
+			switch (spriteid)
+			{
+				case 0:
+					return new Player{ SpawnFromDoor = false, TargetDoorTag = "" };
+				case 5:
+					return new InfinitySpawner{ TargetEntity = (Entity)null };
+				case 7:
+					return new Woody{ StartX = 0 };
+				case 12:
+					return new SpiderString{ TargetEntityTag = "" };
+				case 18:
+					return new Goal{ NextStage = 0 };
+				case 22:
+					return new ItemSpawner{ EntityType = 0 };
+				case 28:
+					return new Coin{ WorkingType = 0 };
+				case 44:
+					return new GoblinGirl{ StartX = 0 };
+				case 60:
+					return new HalfGoal{ NextArea = 0 };
+				case 61:
+					return new DevilTsubasa{ StartX = 0 };
+				case 62:
+					return new NormalTsubasa{ StartX = 0 };
+				case 63:
+					return new Yuan{ StartX = 0 };
+				case 84:
+					return new Sign{ MessageText = "" };
+				default:
+					return null;
 			}
 		}
 
@@ -762,27 +884,27 @@ namespace MapEditor
 
 	public struct ChipPack
 	{
-		public int width, height;
-		public byte[] chips;
+		public int Width, Height;
+		public byte[] Chips;
 
 		public ChipPack(int w, int h, params byte[] c)
 		{
-			width = w;
-			height = h;
-			chips = c;
+			Width = w;
+			Height = h;
+			Chips = c;
 		}
 
 		public void PutChipPackToArray(ref byte[, ,] array, int x, int y, ScreenFlag dimension)
 		{
-			for (int ix = x; ix < x + width; ix++)
+			for (var ix = x; ix < x + Width; ix++)
 			{
 				if (ix >= array.GetLength(0))
 					break;
-				for (int iy = y; iy < y + height; iy++)
+				for (var iy = y; iy < y + Height; iy++)
 				{
 					if (iy >= array.GetLength(1))
 						break;
-					array[ix, iy, (int)dimension] = chips[(iy - y) * width + (ix - x)];
+					array[ix, iy, (int)dimension] = Chips[(iy - y) * Width + (ix - x)];
 				}
 			}
 		}

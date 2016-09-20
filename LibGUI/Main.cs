@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using DxLibDLL;
 
-namespace DefenderStory.GUI
+namespace TakeUpJewel.GUI
 {
 
 	public static class ColorPallete
@@ -23,6 +23,7 @@ namespace DefenderStory.GUI
 		public static Color DarkRed = Color.FromArgb(164, 32, 0);
 		public static Color White = Color.FromArgb(255, 255, 255);
 		public static Color CreamSoda = Color.FromArgb(192, 255, 144);
+		
 		public static Color SkyBlue = Color.FromArgb(64, 172, 255);
 		public static Color Windows98 = Color.FromArgb(0, 128, 128);
 		public static Color LightPink = Color.FromArgb(255, 142, 142);
@@ -74,7 +75,7 @@ namespace DefenderStory.GUI
 
 	}
 
-	public class DXButton
+	public class DxButton
 	{
 		/// <summary>
 		/// 位置と大きさです。
@@ -92,31 +93,31 @@ namespace DefenderStory.GUI
 		/// <summary>
 		/// クリックされた時に実行するメソッドです。
 		/// </summary>
-		public Action<int, DXButton> ClickedAction { get; set; }
+		public Action<int, DxButton> ClickedAction { get; set; }
 
 		/// <summary>
 		/// マウスが押された時に実行するメソッドです。
 		/// </summary>
-		public Action<int, DXButton> MouseDownAction { get; set; }
+		public Action<int, DxButton> MouseDownAction { get; set; }
 
 		/// <summary>
 		/// マウスが押されている間ずっと実行されるメソッドです。
 		/// </summary>
-		public Action<int, DXButton> MouseDownAction2 { get; set; }
+		public Action<int, DxButton> MouseDownAction2 { get; set; }
 
 		/// <summary>
 		/// マウスが離された時に実行するメソッドです。
 		/// </summary>
-		public Action<int, DXButton> MouseUpAction { get; set; }
+		public Action<int, DxButton> MouseUpAction { get; set; }
 
-		Queue<Tuple<Action<int, DXButton>, int>> taskqueue = new Queue<Tuple<Action<int, DXButton>, int>>();
+		Queue<Tuple<Action<int, DxButton>, int>> _taskqueue = new Queue<Tuple<Action<int, DxButton>, int>>();
 
 		/// <summary>
 		/// 四角形領域およびテキストを指定し、 DXButton の新しいインスタンスを初期化します。
 		/// </summary>
 		/// <param name="pointsize">位置と大きさ。</param>
 		/// <param name="text">表示するテキスト。</param>
-		public DXButton(Rectangle pointsize, string text, Color bc, Color fc)
+		public DxButton(Rectangle pointsize, string text, Color bc, Color fc)
 		{
 			PointAndSize = pointsize;
 			Text = text;
@@ -125,9 +126,9 @@ namespace DefenderStory.GUI
 
 		}
 
-		int bmbtn = 0;
+		int _bmbtn;
 
-		bool isMouseDown = false;
+		bool _isMouseDown;
 
 
 
@@ -142,61 +143,61 @@ namespace DefenderStory.GUI
 			}
 
 
-			DX.DrawBox(PointAndSize.X + Convert.ToByte(isMouseDown), PointAndSize.Y + Convert.ToByte(isMouseDown), PointAndSize.X + PointAndSize.Width - Convert.ToByte(isMouseDown), PointAndSize.Y + PointAndSize.Height - Convert.ToByte(isMouseDown), DX.GetColor(Math.Abs(BackColor.R - 255 * Convert.ToByte(isMouseDown)), Math.Abs(BackColor.G - 255 * Convert.ToByte(isMouseDown)), Math.Abs(BackColor.B - 255 * Convert.ToByte(isMouseDown))), 1);
-			DX.DrawBox(PointAndSize.X + Convert.ToByte(isMouseDown), PointAndSize.Y + Convert.ToByte(isMouseDown), PointAndSize.X + PointAndSize.Width - Convert.ToByte(isMouseDown), PointAndSize.Y + PointAndSize.Height - Convert.ToByte(isMouseDown), DX.GetColor(Math.Abs(ForeColor.R - 255 * Convert.ToByte(isMouseDown)), Math.Abs(ForeColor.G - 255 * Convert.ToByte(isMouseDown)), Math.Abs(ForeColor.B - 255 * Convert.ToByte(isMouseDown))), 0);
-			DX.DrawString(PointAndSize.X + PointAndSize.Width / 2 - DX.GetDrawStringWidth(this.Text, this.Text.Length) / 2, PointAndSize.Y + PointAndSize.Height / 2 - DX.GetFontSize() / 2, this.Text, DX.GetColor(Math.Abs(ForeColor.R - 255 * Convert.ToByte(isMouseDown)), Math.Abs(ForeColor.G - 255 * Convert.ToByte(isMouseDown)), Math.Abs(ForeColor.B - 255 * Convert.ToByte(isMouseDown))));
+			DX.DrawBox(PointAndSize.X + Convert.ToByte(_isMouseDown), PointAndSize.Y + Convert.ToByte(_isMouseDown), PointAndSize.X + PointAndSize.Width - Convert.ToByte(_isMouseDown), PointAndSize.Y + PointAndSize.Height - Convert.ToByte(_isMouseDown), DX.GetColor(Math.Abs(BackColor.R - 255 * Convert.ToByte(_isMouseDown)), Math.Abs(BackColor.G - 255 * Convert.ToByte(_isMouseDown)), Math.Abs(BackColor.B - 255 * Convert.ToByte(_isMouseDown))), 1);
+			DX.DrawBox(PointAndSize.X + Convert.ToByte(_isMouseDown), PointAndSize.Y + Convert.ToByte(_isMouseDown), PointAndSize.X + PointAndSize.Width - Convert.ToByte(_isMouseDown), PointAndSize.Y + PointAndSize.Height - Convert.ToByte(_isMouseDown), DX.GetColor(Math.Abs(ForeColor.R - 255 * Convert.ToByte(_isMouseDown)), Math.Abs(ForeColor.G - 255 * Convert.ToByte(_isMouseDown)), Math.Abs(ForeColor.B - 255 * Convert.ToByte(_isMouseDown))), 0);
+			DX.DrawString(PointAndSize.X + PointAndSize.Width / 2 - DX.GetDrawStringWidth(Text, Text.Length) / 2, PointAndSize.Y + PointAndSize.Height / 2 - DX.GetFontSize() / 2, Text, DX.GetColor(Math.Abs(ForeColor.R - 255 * Convert.ToByte(_isMouseDown)), Math.Abs(ForeColor.G - 255 * Convert.ToByte(_isMouseDown)), Math.Abs(ForeColor.B - 255 * Convert.ToByte(_isMouseDown))));
 
 			int mx, my, mbtn;
 
 
 			DX.GetMousePoint(out mx, out my);
 			mbtn = DX.GetMouseInput();
-			bool contain = PointAndSize.Contains(mx, my);
+			var contain = PointAndSize.Contains(mx, my);
 
 
-			if (bmbtn > 0 && mbtn == 0 && contain)
+			if (_bmbtn > 0 && mbtn == 0 && contain)
 			{
 				if (ClickedAction != null)
-					taskqueue.Enqueue(Tuple.Create<Action<int, DXButton>, int>(ClickedAction, bmbtn));
+					_taskqueue.Enqueue(Tuple.Create<Action<int, DxButton>, int>(ClickedAction, _bmbtn));
 
 				//Console.WriteLine("debug_isclicked");
 			}
-			if (bmbtn == 0 && mbtn > 0 && !isMouseDown && contain)
+			if (_bmbtn == 0 && mbtn > 0 && !_isMouseDown && contain)
 			{
 
-				isMouseDown = true;
+				_isMouseDown = true;
 				if (MouseDownAction != null)
-					taskqueue.Enqueue(Tuple.Create<Action<int, DXButton>, int>(MouseDownAction, mbtn));
+					_taskqueue.Enqueue(Tuple.Create<Action<int, DxButton>, int>(MouseDownAction, mbtn));
 			}
 
-			if (mbtn > 0 && contain && isMouseDown)
+			if (mbtn > 0 && contain && _isMouseDown)
 			{
 				if (MouseDownAction2 != null)
-					taskqueue.Enqueue(Tuple.Create<Action<int, DXButton>, int>(MouseDownAction2, mbtn));
+					_taskqueue.Enqueue(Tuple.Create<Action<int, DxButton>, int>(MouseDownAction2, mbtn));
 			}
 
 			//DX.DrawString(0, 0, isMouseDown.ToString() + " " + mbtn + " " + Convert.ToByte(isMouseDown), DX.GetColor(255, 255, 255));
 
-			if (bmbtn > 0 && mbtn == 0 && isMouseDown)
+			if (_bmbtn > 0 && mbtn == 0 && _isMouseDown)
 			{
-				isMouseDown = false;
+				_isMouseDown = false;
 				if (MouseUpAction != null)
-					taskqueue.Enqueue(Tuple.Create<Action<int, DXButton>, int>(MouseUpAction, bmbtn));
+					_taskqueue.Enqueue(Tuple.Create<Action<int, DxButton>, int>(MouseUpAction, _bmbtn));
 				//Console.WriteLine("debug_ismouseup");
 			}
 
-			if (taskqueue.Count > 0)
+			if (_taskqueue.Count > 0)
 			{
-				Tuple<Action<int, DXButton>, int> temp = taskqueue.Dequeue();
+				var temp = _taskqueue.Dequeue();
 				temp.Item1.Invoke(temp.Item2, this);
 			}
 
-			bmbtn = mbtn;
+			_bmbtn = mbtn;
 		}
 
 	}
 
-	public class DXTrackBar
+	public class DxTrackBar
 	{
 		/// <summary>
 		/// 位置と大きさです。
@@ -225,9 +226,9 @@ namespace DefenderStory.GUI
 		/// <summary>
 		/// 値の変更が終わった瞬間のイベントです。
 		/// </summary>
-		public Action<int, DXTrackBar> ValueChangedAction { get; set; }
+		public Action<int, DxTrackBar> ValueChangedAction { get; set; }
 
-		Queue<Tuple<Action<int, DXTrackBar>, int>> taskqueue = new Queue<Tuple<Action<int, DXTrackBar>, int>>();
+		Queue<Tuple<Action<int, DxTrackBar>, int>> _taskqueue = new Queue<Tuple<Action<int, DxTrackBar>, int>>();
 
 		/// <summary>
 		/// 最大値です。
@@ -242,7 +243,7 @@ namespace DefenderStory.GUI
 		/// <param name="bc">背景色。</param>
 		/// <param name="fc">前景色。</param>
 		/// <param name="mv">最大値。</param>
-		public DXTrackBar(Rectangle pointsize, Color bc, Color fc, int mv)
+		public DxTrackBar(Rectangle pointsize, Color bc, Color fc, int mv)
 		{
 			PointAndSize = pointsize;
 			BackColor = bc;
@@ -250,7 +251,7 @@ namespace DefenderStory.GUI
 			MaxValue = mv;
 		}
 
-		int bmbtn = 0;
+		int _bmbtn;
 
 		//bool isMouseDown = false;
 
@@ -276,48 +277,48 @@ namespace DefenderStory.GUI
 
 			DX.GetMousePoint(out mx, out my);
 			mbtn = DX.GetMouseInput();
-			bool contain = PointAndSize.Contains(mx, my);
+			var contain = PointAndSize.Contains(mx, my);
 
 			if (mbtn == 1 && contain)
 			{
-				this.IsValueChanging = true;
+				IsValueChanging = true;
 				Value = (mx - PointAndSize.X) * (MaxValue / (PointAndSize.Width - PointAndSize.X));
 			}
 
-			if (bmbtn > 0 && mbtn == 0 && contain)
+			if (_bmbtn > 0 && mbtn == 0 && contain)
 			{
 				if (ValueChangedAction != null)
-					taskqueue.Enqueue(Tuple.Create<Action<int, DXTrackBar>, int>(ValueChangedAction, this.Value));
-				this.IsValueChanging = false;
+					_taskqueue.Enqueue(Tuple.Create<Action<int, DxTrackBar>, int>(ValueChangedAction, Value));
+				IsValueChanging = false;
 				//Console.WriteLine("debug_isclicked");
 			}
 
-			int dx = PointAndSize.X + Value * (PointAndSize.Width - PointAndSize.X) / MaxValue;
+			var dx = PointAndSize.X + Value * (PointAndSize.Width - PointAndSize.X) / MaxValue;
 			DX.DrawBox(PointAndSize.X, PointAndSize.Y, PointAndSize.X + PointAndSize.Width, PointAndSize.Y + PointAndSize.Height, (uint)BackColor.ToArgb(), 1);
 			DX.DrawBox(PointAndSize.X, PointAndSize.Y, PointAndSize.X + PointAndSize.Width, PointAndSize.Y + PointAndSize.Height, (uint)ForeColor.ToArgb(), 0);
 			DX.DrawBox(PointAndSize.X, PointAndSize.Y, dx, PointAndSize.Y + PointAndSize.Height, (uint)ForeColor.ToArgb(), 1);
 
 			//DX.DrawString(0, 0, isMouseDown.ToString() + " " + mbtn + " " + Convert.ToByte(isMouseDown), DX.GetColor(255, 255, 255));
 
-			if (taskqueue.Count > 0)
+			if (_taskqueue.Count > 0)
 			{
-				Tuple<Action<int, DXTrackBar>, int> temp = taskqueue.Dequeue();
+				var temp = _taskqueue.Dequeue();
 				temp.Item1.Invoke(temp.Item2, this);
 			}
 
-			bmbtn = mbtn;
+			_bmbtn = mbtn;
 		}
 
 	}
 
-	public class DXLabel
+	public class DxLabel
 	{
 		/// <summary>
 		/// 現在のラベルの位置です。
 		/// </summary>
 		public PointF Location { get; set; }
 
-		public float spdx, spdy;
+		public float Spdx, Spdy;
 
 		/// <summary>
 		/// ラベルで表示する文字列です。
@@ -332,20 +333,20 @@ namespace DefenderStory.GUI
 		/// </summary>
 		/// <param name="l"></param>
 		/// <param name="txt"></param>
-		public DXLabel(PointF l, string txt, Color bc, Color fc)
+		public DxLabel(PointF l, string txt, Color bc, Color fc)
 			: this(l, txt, bc, fc, 0, 0) { }
 
-		public DXLabel(PointF l, string txt, Color bc, Color fc, float speedx, float speedy)
+		public DxLabel(PointF l, string txt, Color bc, Color fc, float speedx, float speedy)
 		{
 			Location = l;
 			Text = txt;
 			BackColor = bc;
 			ForeColor = fc;
-			spdx = speedx;
-			spdy = speedy;
+			Spdx = speedx;
+			Spdy = speedy;
 		}
 
-		public DXLabel(float x, float y, string txt, Color bc, Color fc)
+		public DxLabel(float x, float y, string txt, Color bc, Color fc)
 			: this(new PointF(x, y), txt, bc, fc)
 		{
 		}
@@ -356,50 +357,50 @@ namespace DefenderStory.GUI
 		{
 			//if (BackColor != Color.Transparent)
 			//	DX.DrawBox((int)Location.X, (int)Location.Y, (int)Location.X + DX.GetDrawStringWidth(Text, Text.Length), (int)Location.Y + DX.GetFontSize() * , BackColor.ToArgb(), 1);
-			string[] hoge = Text.Split('\n');
-			int height = DX.GetFontSize();
-			for (int i = 0; i < hoge.Length; i++)
+			var hoge = Text.Split('\n');
+			var height = DX.GetFontSize();
+			for (var i = 0; i < hoge.Length; i++)
 			{
 				DX.DrawString((int)Location.X, (int)Location.Y + i * height, hoge[i], (uint)ForeColor.ToArgb());
 			}
 		}
 	}
 
-	public class DXOrb
+	public class DxOrb
 	{
-		public Point location;
+		public Point Location;
 
-		public SizeF nowSize;
-		public Color color;
+		public SizeF NowSize;
+		public Color Color;
 
-		public float speed;
+		public float Speed;
 
-		public DXOrb(Point loc, SizeF size, Color col, float spd)
+		public DxOrb(Point loc, SizeF size, Color col, float spd)
 		{
-			location = loc;
-			nowSize = size;
-			color = col;
-			speed = spd;
+			Location = loc;
+			NowSize = size;
+			Color = col;
+			Speed = spd;
 		}
 
 		public void Update()
 		{
-			nowSize.Width /= speed;
-			nowSize.Height /= speed;
-			if (nowSize.Width < 1)
-				nowSize.Width = 0;
-			if (nowSize.Height < 1)
-				nowSize.Height = 0;
-			if (nowSize.Width != 0.0 && nowSize.Height != 0.0)
+			NowSize.Width /= Speed;
+			NowSize.Height /= Speed;
+			if (NowSize.Width < 1)
+				NowSize.Width = 0;
+			if (NowSize.Height < 1)
+				NowSize.Height = 0;
+			if (NowSize.Width != 0.0 && NowSize.Height != 0.0)
 
-				DX.DrawOval(location.X, location.Y, (int)nowSize.Width, (int)nowSize.Height, (uint)color.ToArgb(), 0, 2);
+				DX.DrawOval(Location.X, Location.Y, (int)NowSize.Width, (int)NowSize.Height, (uint)Color.ToArgb(), 0, 2);
 		}
 
 	}
 
 	public class NumFont
 	{
-		public static ushort[] numfont = new ushort[]
+		public static ushort[] Numfont = new ushort[]
 				{
 					0x7b6f,	//0
 					0x6497,	//1
@@ -416,7 +417,7 @@ namespace DefenderStory.GUI
 		public static void DrawNumFontString(int x, int y, uint col, string number)
 		{
 			int tx = x, ty = y;
-			foreach (char c in number)
+			foreach (var c in number)
 			{
 				if (c == '\n')
 				{
@@ -426,7 +427,7 @@ namespace DefenderStory.GUI
 				}
 				if (!char.IsNumber(c))
 					throw new ArgumentException("描画する文字列は、0～9の数字だけでなければなりません。");
-				DrawNumFont(tx, ty, col, numfont[int.Parse(c.ToString())]);
+				DrawNumFont(tx, ty, col, Numfont[int.Parse(c.ToString())]);
 				tx += 4;
 			}
 		}

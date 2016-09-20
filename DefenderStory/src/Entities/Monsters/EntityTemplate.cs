@@ -1,0 +1,47 @@
+﻿using System.Drawing;
+using TakeUpJewel.Data;
+
+namespace TakeUpJewel.Entities
+{
+	[EntityRegistry("", 127)]
+	public class EntityTemplate : EntityLiving
+	{
+
+		public override int[] ImageHandle => null;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Other;
+
+		public EntityTemplate(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
+		{
+			Location = pnt;
+			Mpts = obj;
+			Map = chips;
+			Parent = par;
+			Size = new Size(16, 16);
+		}
+
+		public override void SetKilledAnime()
+		{
+			
+		}
+
+		public override void SetCrushedAnime()
+		{
+			
+		}
+
+		public override void OnUpdate(Status ks)
+		{
+			//TODO: ここにこの Entity が行う処理を記述してください。
+			base.OnUpdate(ks);
+		}
+
+		public override Entity SetEntityData(dynamic jsonobj)
+		{
+			base.SetEntityData((object)jsonobj);
+			return this;
+		}
+
+	}
+}

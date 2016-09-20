@@ -39,7 +39,7 @@ namespace MapEditor.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MapEditor.Properties.Resources", typeof(Resources).Assembly);
+                    var temp = new global::System.Resources.ResourceManager("MapEditor.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -65,7 +65,17 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap arrow_run_16xLG {
             get {
-                object obj = ResourceManager.GetObject("arrow_run_16xLG", resourceCulture);
+                var obj = ResourceManager.GetObject("arrow_run_16xLG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap DeleteHS {
+            get {
+                var obj = ResourceManager.GetObject("DeleteHS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -75,7 +85,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap FilledRectangleTool_214 {
             get {
-                object obj = ResourceManager.GetObject("FilledRectangleTool_214", resourceCulture);
+                var obj = ResourceManager.GetObject("FilledRectangleTool_214", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -85,7 +95,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap GotoNextRow_289_color {
             get {
-                object obj = ResourceManager.GetObject("GotoNextRow_289_color", resourceCulture);
+                var obj = ResourceManager.GetObject("GotoNextRow_289_color", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -95,7 +105,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap LineControl_10293 {
             get {
-                object obj = ResourceManager.GetObject("LineControl_10293", resourceCulture);
+                var obj = ResourceManager.GetObject("LineControl_10293", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -105,7 +115,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap NewFile_6276 {
             get {
-                object obj = ResourceManager.GetObject("NewFile_6276", resourceCulture);
+                var obj = ResourceManager.GetObject("NewFile_6276", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -115,7 +125,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Open_6529 {
             get {
-                object obj = ResourceManager.GetObject("Open_6529", resourceCulture);
+                var obj = ResourceManager.GetObject("Open_6529", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -125,7 +135,17 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap PencilTool_206 {
             get {
-                object obj = ResourceManager.GetObject("PencilTool_206", resourceCulture);
+                var obj = ResourceManager.GetObject("PencilTool_206", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static System.Drawing.Bitmap Pointer_6127 {
+            get {
+                var obj = ResourceManager.GetObject("Pointer_6127", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -135,7 +155,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap RectangleSelectionTool_200 {
             get {
-                object obj = ResourceManager.GetObject("RectangleSelectionTool_200", resourceCulture);
+                var obj = ResourceManager.GetObject("RectangleSelectionTool_200", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -145,7 +165,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Save_6530 {
             get {
-                object obj = ResourceManager.GetObject("Save_6530", resourceCulture);
+                var obj = ResourceManager.GetObject("Save_6530", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -155,7 +175,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Zoom_5442 {
             get {
-                object obj = ResourceManager.GetObject("Zoom_5442", resourceCulture);
+                var obj = ResourceManager.GetObject("Zoom_5442", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -165,7 +185,7 @@ namespace MapEditor.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap ZoomOut_12927 {
             get {
-                object obj = ResourceManager.GetObject("ZoomOut_12927", resourceCulture);
+                var obj = ResourceManager.GetObject("ZoomOut_12927", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

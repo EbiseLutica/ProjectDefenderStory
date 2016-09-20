@@ -18,14 +18,14 @@ namespace MusicSheet.Mssf
 
 		public float Freq { get; set; }
 
-		public EnvelopeFlag envflag = EnvelopeFlag.None;
+		public EnvelopeFlag Envflag = EnvelopeFlag.None;
 
 		public Envelope Envelope { get; set; }
 
 		public object Clone()
 		{
-			Tone t = (Tone)this.MemberwiseClone();
-			t.Wave = (short[])this.Wave.Clone();
+			var t = (Tone)MemberwiseClone();
+			t.Wave = (short[])Wave.Clone();
 			t.Envelope = new Envelope(
 										Envelope.AttackTime,
 										Envelope.DecayTime,
@@ -36,30 +36,24 @@ namespace MusicSheet.Mssf
 			return t;
 		}
 
-		public int OutVolume
-		{
-			get
-			{
-				return (int)_outvolume;
-			}
-		}
+		public int OutVolume => (int)_outvolume;
 
-		float _outvolume = 0;
+		float _outvolume;
 
-		public int tick { get; set; }
+		public int Tick { get; set; }
 
 		public bool Playing { get; set; }
 
 		public int Handle { get; set; }
-		public bool isStopping = false;
+		public bool IsStopping;
 		public int Velocity { get; set; }
 
-		public int noteno = 0;
+		public int Noteno;
 
-		public int bmilisec = 0;
-		public int startedMidiTick = 0;
-		public int nowMidiTick = 0;
-		public int releasedVolume = 0;
+		public int Bmilisec;
+		public int StartedMidiTick;
+		public int NowMidiTick;
+		public int ReleasedVolume;
 
 		public int PortamentTick { get; set; }
 
@@ -127,7 +121,7 @@ namespace MusicSheet.Mssf
 
 		}
 
-		public int gate;
+		public int Gate;
 
 		public void StartPlay(int miditick, int gate)
 		{
@@ -139,24 +133,24 @@ namespace MusicSheet.Mssf
 				DX.SetFrequencySoundMem((int)(GetFreq(Pitch, Octave - 2) * 100), Handle);
 			DX.PlaySoundMem(Handle, DX.DX_PLAYTYPE_LOOP);
 			//DX.ChangeVolumeSoundMem(0, Handle);
-			this.envflag = EnvelopeFlag.Attack;
-			tick = (int)(Envelope.AttackTime / 1.2);
-			bmilisec = DX.GetNowCount();
-			startedMidiTick = miditick;
-			this.gate = gate;
+			Envflag = EnvelopeFlag.Attack;
+			Tick = (int)(Envelope.AttackTime / 1.2);
+			Bmilisec = DX.GetNowCount();
+			StartedMidiTick = miditick;
+			this.Gate = gate;
 			//Console.WriteLine("[DEBUG]音源再生開始");
 		}
 
-		bool beforenew = false;
+		bool _beforenew;
 
 		public void PlayLoop(int miditick)
 		{
-			if (!this.Playing)
+			if (!Playing)
 				return;
-			if (isNew && beforenew)
-				isNew = false;
-			if (!beforenew)
-				beforenew = true;
+			if (IsNew && _beforenew)
+				IsNew = false;
+			if (!_beforenew)
+				_beforenew = true;
 			//if (DX.GetNowCount() - bmilisec <= 0)
 			//	return;
 
@@ -206,36 +200,36 @@ namespace MusicSheet.Mssf
 			*/
 			#endregion
 
-			switch (envflag)
+			switch (Envflag)
 			{
 				case EnvelopeFlag.Attack:
 					if (Envelope.AttackTime == 0)
 					{
 						_outvolume = 255;
-						envflag = EnvelopeFlag.Decay;
+						Envflag = EnvelopeFlag.Decay;
 						break;
 					}
 					var zoubun = 255f / Envelope.AttackTime;
-					_outvolume = _outvolume + zoubun * tick;
+					_outvolume = _outvolume + zoubun * Tick;
 					if (_outvolume >= 255)
 					{
 						_outvolume = 255;
-						envflag = EnvelopeFlag.Decay;
+						Envflag = EnvelopeFlag.Decay;
 					}
 					break;
 				case EnvelopeFlag.Decay:
 					if (Envelope.DecayTime == 0)
 					{
 						_outvolume = Envelope.SustainLevel;
-						envflag = EnvelopeFlag.Sustain;
+						Envflag = EnvelopeFlag.Sustain;
 						break;
 					}
 					var genbun = (255f - Envelope.SustainLevel) / Envelope.DecayTime;
-					_outvolume = _outvolume - genbun * tick;
+					_outvolume = _outvolume - genbun * Tick;
 					if (_outvolume <= Envelope.SustainLevel)
 					{
 						_outvolume = Envelope.SustainLevel;
-						envflag = EnvelopeFlag.Sustain;
+						Envflag = EnvelopeFlag.Sustain;
 					}
 					break;
 				case EnvelopeFlag.Release:
@@ -244,8 +238,8 @@ namespace MusicSheet.Mssf
 						Abort();
 						break;
 					}
-					var genbun2 = (float)releasedVolume / Envelope.ReleaseTime;
-					_outvolume = _outvolume - genbun2 * tick;
+					var genbun2 = (float)ReleasedVolume / Envelope.ReleaseTime;
+					_outvolume = _outvolume - genbun2 * Tick;
 					if (_outvolume <= 0)
 					{
 						_outvolume = 0;
@@ -254,28 +248,28 @@ namespace MusicSheet.Mssf
 					break;
 			}
 
-			nowMidiTick = miditick;
-			if (nowMidiTick - startedMidiTick > gate && gate != -1 && envflag != EnvelopeFlag.Release)
-				this.Stop();
-			tick = DX.GetNowCount() - bmilisec;
+			NowMidiTick = miditick;
+			if (NowMidiTick - StartedMidiTick > Gate && Gate != -1 && Envflag != EnvelopeFlag.Release)
+				Stop();
+			Tick = DX.GetNowCount() - Bmilisec;
 
-			bmilisec = DX.GetNowCount();
+			Bmilisec = DX.GetNowCount();
 			//Console.WriteLine("[DEBUG]音源ループ: {0}, {1}, {2}", outVolume, tick, envflag);
 		}
 
 		public void Stop()
 		{
-			releasedVolume = OutVolume;
-			envflag = EnvelopeFlag.Release;
-			tick = 0;
-			isStopping = true;
+			ReleasedVolume = OutVolume;
+			Envflag = EnvelopeFlag.Release;
+			Tick = 0;
+			IsStopping = true;
 			//Console.WriteLine("[DEBUG]音源再生終了リクエスト受信");
 		}
 
 		public void Abort()
 		{
-			tick = 0;
-			envflag = EnvelopeFlag.None;
+			Tick = 0;
+			Envflag = EnvelopeFlag.None;
 			DX.StopSoundMem(Handle);
 			DX.DeleteSoundMem(Handle);
 			Playing = false;
@@ -297,10 +291,10 @@ namespace MusicSheet.Mssf
 
 		public static int SetWave(short[] wave, int oct, int pan, NoiseOption no)
 		{
-			float hz = GetRelativeFreq(Math.Min(oct, 6));
-			int length = 0;
+			var hz = GetRelativeFreq(Math.Min(oct, 6));
+			var length = 0;
 			//string debug = "";
-			int sheed = 0x8000;
+			var sheed = 0x8000;
 			/*for (int i = 0; i < 44100; i++)
 				if ((decimal)Math.PI * 2 / (decimal)44100 * i * (hz + (hz / 440m)) > (decimal)Math.PI * 2)
 				{
@@ -322,20 +316,20 @@ namespace MusicSheet.Mssf
 			if (no != NoiseOption.None)
 				length = 11025;
 
-			int hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
+			var hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
 
 			//int[] sikis = new int[length];
-			ushort[] y = new ushort[length];
+			var y = new ushort[length];
 
-			ushort[] noise = new ushort[length];
+			var noise = new ushort[length];
 			if (no != NoiseOption.None)
 			{
 				noise = SetNoise(hz, ((no == NoiseOption.Short) ? true : false), ref sheed, length);
 			}
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				//t = wave[(int)((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360 / (359 / 31.0))]+32768; // divided by 10 means volume control
-				int siki = (int)Math.Round(2 / 44100.0 * i * hz * 180 % 360 / (360 / 31.0));
+				var siki = (int)Math.Round(2 / 44100.0 * i * hz * 180 % 360 / (360 / 31.0));
 				t = (float)(wave[siki] + 32768);
 				//var siki = Math.PI * 2 / 44100 * i * hz;
 				//t = (float)Math.Sin(siki) * 32768 + 32767;
@@ -361,7 +355,7 @@ namespace MusicSheet.Mssf
 				DX.WriteSoftSoundData(hSSnd, i, (ushort)t, (ushort)t);
 			}
 
-			int retval = DX.LoadSoundMemFromSoftSound(hSSnd);
+			var retval = DX.LoadSoundMemFromSoftSound(hSSnd);
 			DX.DeleteSoftSound(hSSnd);
 
 			return retval;
@@ -369,16 +363,16 @@ namespace MusicSheet.Mssf
 
 		public static ushort[] SetNoise(float hz, bool isShortFreq, ref int sheed, int length)
 		{
-			int output = 0;
+			var output = 0;
 
 
 
 
-			ushort[] data = new ushort[length];
+			var data = new ushort[length];
 			float t = 0;
 			//int hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
-			int kaisu = 1;
-			for (int i = 0; i < length; i++)
+			var kaisu = 1;
+			for (var i = 0; i < length; i++)
 			{
 				if (i > 8000 / hz * kaisu)
 				{
@@ -482,7 +476,7 @@ namespace MusicSheet.Mssf
 		}
 		*/
 
-		public bool isNew = true;
+		public bool IsNew = true;
 
 
 		public static float GetRelativeFreq(int oct)
@@ -492,26 +486,26 @@ namespace MusicSheet.Mssf
 
 		public float GetFreq(string pitch, int oct)
 		{
-			int hoge = oct * 12 + pitchnames.IndexOf(pitch) + 12;
-			this.noteno = hoge;
-			float hage = GetFreq(hoge);
+			var hoge = oct * 12 + Pitchnames.IndexOf(pitch) + 12;
+			Noteno = hoge;
+			var hage = GetFreq(hoge);
 
 			return hage;
 		}
 
 		public static float GetFreqS(string pitch, int oct)
 		{
-			int hoge = oct * 12 + pitchnames.IndexOf(pitch) + 12;
-			float hage = GetFreqS(hoge);
+			var hoge = oct * 12 + Pitchnames.IndexOf(pitch) + 12;
+			var hage = GetFreqS(hoge);
 
 			return hage;
 		}
 
-		public static List<string> pitchnames = new[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }.ToList();
+		public static List<string> Pitchnames = new[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }.ToList();
 
 		public float GetFreq(int noteno)
 		{
-			this.noteno = noteno;
+			this.Noteno = noteno;
 			return (float)(441 * Math.Pow(2, (noteno - 69) / 12.0));
 		}
 
@@ -563,7 +557,7 @@ namespace MusicSheet.Mssf
 		float Freq { get; set; }
 		int OutVolume { get; }
 
-		int tick { get; set; }
+		int Tick { get; set; }
 		bool Playing { get; set; }
 		int Handle { get; set; }
 
@@ -594,12 +588,12 @@ namespace MusicSheet.Mssf
 			{
 				throw new Exception("ERR:0004");
 			}
-			char[] head = br.ReadChars(8);
+			var head = br.ReadChars(8);
 			if (new string(head) != "MSSF_VER")
 			{
 				throw new Exception("ERR:0002");
 			}
-			int ver = 0;
+			var ver = 0;
 			try
 			{
 				ver = int.Parse(new string(br.ReadChars(3)));
@@ -636,7 +630,7 @@ namespace MusicSheet.Mssf
 				throw new Exception("ERR:0003");
 			}
 			bw.Write(new[] { 'M', 'S', 'S', 'F', '_', 'V', 'E', 'R', '0', '0', '1' }, 0, 11);	//ヘッダー
-			foreach (short wav in wave)
+			foreach (var wav in wave)
 				bw.Write(wav);							//波形データ
 			bw.Write(a);								//アタックタイム
 			bw.Write(d);								//ディケイタイム
@@ -659,7 +653,7 @@ namespace MusicSheet.Mssf
 				throw new Exception("ERR:0003");
 			}
 			bw.Write(new[] { 'M', 'S', 'S', 'F', '_', 'V', 'E', 'R', '0', '0', '2' }, 0, 11);	//ヘッダー
-			foreach (short wav in wave)
+			foreach (var wav in wave)
 				bw.Write(wav);							//波形データ
 			bw.Write(a);								//アタックタイム
 			bw.Write(d);								//ディケイタイム
@@ -682,7 +676,7 @@ namespace MusicSheet.Mssf
 			{
 				throw new Exception("ERR:0004");
 			}
-			char[] head = br.ReadChars(11);
+			var head = br.ReadChars(11);
 			if (new string(head) != "MSSF_VER001")
 			{
 				if (new string(head).Substring(0, 8) == "MSSF_VER")
@@ -694,7 +688,7 @@ namespace MusicSheet.Mssf
 					throw new Exception("ERR:0002");	//そのファイルは Music Sheet Sound File ではない。
 				}
 			}
-			for (int i = 0; i < 32; i++)
+			for (var i = 0; i < 32; i++)
 				wave[i] = br.ReadInt16();
 
 			a = br.ReadInt32();
@@ -718,7 +712,7 @@ namespace MusicSheet.Mssf
 			{
 				throw new Exception("ERR:0004");
 			}
-			char[] head = br.ReadChars(11);
+			var head = br.ReadChars(11);
 			if (new string(head) != "MSSF_VER002")
 			{
 				if (new string(head).Substring(0, 8) == "MSSF_VER")
@@ -730,7 +724,7 @@ namespace MusicSheet.Mssf
 					throw new Exception("ERR:0002");	//そのファイルは Music Sheet Sound File ではない。
 				}
 			}
-			for (int i = 0; i < 32; i++)
+			for (var i = 0; i < 32; i++)
 				wave[i] = br.ReadInt16();
 
 			a = br.ReadInt32();

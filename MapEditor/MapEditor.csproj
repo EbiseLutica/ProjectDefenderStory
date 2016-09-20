@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities.cs" />
     <Compile Include="ObjectSelectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +78,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\DeleteHS.png" />
+    <None Include="Resources\Pointer_6127.png" />
     <None Include="Resources\arrow_run_16xLG.png" />
     <None Include="Resources\Zoom_5442.png" />
     <None Include="Resources\ZoomOut_12927.png" />
@@ -104,9 +108,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibDefenderStory\LibDefenderStory.csproj">
-      <Project>{8a02d594-1e91-420c-9c9d-bb37cbd0bdc4}</Project>
-      <Name>LibDefenderStory</Name>
+    <ProjectReference Include="..\DefenderStory\DefenderStory.csproj">
+      <Project>{41f08c51-7455-4179-b2d9-e4864fa478f3}</Project>
+      <Name>DefenderStory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DynamicJson\DynamicJson.csproj">
+      <Project>{116b75d7-d429-4289-b7e6-ab8479d592e7}</Project>
+      <Name>DynamicJson</Name>
     </ProjectReference>
     <ProjectReference Include="..\LibGUI\LibGUI.csproj">
       <Project>{19dbf218-86de-45bf-acfb-2847e287a996}</Project>

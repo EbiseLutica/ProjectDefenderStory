@@ -5,7 +5,7 @@ using DxLibDLL;
 using System.Drawing;
 using System.Windows.Forms;
 using MusicSheet.Mssf;
-using DefenderStory.GUI;
+using TakeUpJewel.GUI;
 
 
 namespace MusicSheetSoundEditor
@@ -14,14 +14,14 @@ namespace MusicSheetSoundEditor
 	public class Program
 	{
 
-		public static short[] WAV_SQUARE = {
+		public static short[] WavSquare = {
 													 -32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768, 
 													 -32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768, 
 													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767, 
 													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767
 												 };
 
-		public static short[] WAV_TRIANGLE = {
+		public static short[] WavTriangle = {
 														-4096,  -8192, -12288, -16384, -20479, -24575, -28671, -32767,
 													   -32767, -28671, -24575, -20479, -16384, -12288,  -8192,  -4096,
 														 4096,   8192,  12288,  16384,  20479,  24575,  28671,  32767, 
@@ -30,7 +30,7 @@ namespace MusicSheetSoundEditor
 												   };
 
 
-		public static short[] WAV_12Pulse = {
+		public static short[] Wav12Pulse = {
 													 -32768, -32768, -32768, -32768,  32767,  32767,  32767,  32767,
 													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767,
 													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767, 
@@ -38,7 +38,7 @@ namespace MusicSheetSoundEditor
 												 };
 
 
-		public static short[] WAV_25Pulse = {
+		public static short[] Wav25Pulse = {
 													 -32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768,
 													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767,
 													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767, 
@@ -67,37 +67,37 @@ namespace MusicSheetSoundEditor
 				Console.WriteLine("[DEBUG]DirectX の初期化に失敗しました。");
 				return;
 			}
-			int f = 0;
-			int fps = 1;
+			var f = 0;
+			var fps = 1;
 			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 			//int nextFps = 60;
-			int bsec = DateTime.Now.Second;
-			int bmsec = DateTime.Now.Millisecond;
+			var bsec = DateTime.Now.Second;
+			var bmsec = DateTime.Now.Millisecond;
 
 			//int nowHandle = 0;
 			//short[] wave = new short[32];
-			short[] wave = WAV_SQUARE;
+			var wave = WavSquare;
 
-			int pan = 0;
+			var pan = 0;
 
 			//DX.PlaySoundMem(nowHandle = SetWave(wave, GetFreq("F", 4)), DX.DX_PLAYTYPE_LOOP);
 
 			// editMode 0...Wave 1...Play
-			int editMode = 0;
+			var editMode = 0;
 
-			NoiseOption noiseoption = NoiseOption.None;
+			var noiseoption = NoiseOption.None;
 
-			DXButton[] buttonsForEditMode1 = new DXButton[14];
-			int octave = 4;
+			var buttonsForEditMode1 = new DxButton[14];
+			var octave = 4;
 			
 			
 			string[] pitches = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
-			Envelope myenv = new Envelope(0, 0, 255, 0);
+			var myenv = new Envelope(0, 0, 255, 0);
 			Tone nowTone = null;
 
-			buttonsForEditMode1[0] = new DXButton(new Rectangle(2, 18, 32, 32), "←", Color.Black, Color.White);
-			buttonsForEditMode1[0].ClickedAction = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode1[0] = new DxButton(new Rectangle(2, 18, 32, 32), "←", Color.Black, Color.White);
+			buttonsForEditMode1[0].ClickedAction = (mbtn, dxb) =>
 			{
 				if (mbtn == DX.MOUSE_INPUT_LEFT)
 				{
@@ -105,10 +105,10 @@ namespace MusicSheetSoundEditor
 					if (octave < 0)
 						octave = 0;
 				}
-			});
+			};
 
-			buttonsForEditMode1[1] = new DXButton(new Rectangle(66, 18, 32, 32), "→", Color.Black, Color.White);
-			buttonsForEditMode1[1].ClickedAction = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode1[1] = new DxButton(new Rectangle(66, 18, 32, 32), "→", Color.Black, Color.White);
+			buttonsForEditMode1[1].ClickedAction = (mbtn, dxb) =>
 			{
 				if (mbtn == DX.MOUSE_INPUT_LEFT)
 				{
@@ -116,107 +116,107 @@ namespace MusicSheetSoundEditor
 					if (octave > 8)
 						octave = 8;
 				}
-			});
+			};
 
-			buttonsForEditMode1[2] = new DXButton(new Rectangle(30, 98, 20, 128), "C", Color.White, Color.Black);
-			buttonsForEditMode1[3] = new DXButton(new Rectangle(50, 98, 20, 96), "C#", Color.Black, Color.White);
-			buttonsForEditMode1[4] = new DXButton(new Rectangle(70, 98, 20, 128), "D", Color.White, Color.Black);
-			buttonsForEditMode1[5] = new DXButton(new Rectangle(90, 98, 20, 96), "D#", Color.Black, Color.White);
-			buttonsForEditMode1[6] = new DXButton(new Rectangle(110, 98, 20, 128), "E", Color.White, Color.Black);
-			buttonsForEditMode1[7] = new DXButton(new Rectangle(130, 98, 20, 128), "F", Color.White, Color.Black);
-			buttonsForEditMode1[8] = new DXButton(new Rectangle(150, 98, 20, 96), "F#", Color.Black, Color.White);
-			buttonsForEditMode1[9] = new DXButton(new Rectangle(170, 98, 20, 128), "G", Color.White, Color.Black);
-			buttonsForEditMode1[10] = new DXButton(new Rectangle(190, 98, 20, 96), "G#", Color.Black, Color.White);
-			buttonsForEditMode1[11] = new DXButton(new Rectangle(210, 98, 20, 128), "A", Color.White, Color.Black);
-			buttonsForEditMode1[12] = new DXButton(new Rectangle(230, 98, 20, 96), "A#", Color.Black, Color.White);
-			buttonsForEditMode1[13] = new DXButton(new Rectangle(250, 98, 20, 128), "B", Color.White, Color.Black);
+			buttonsForEditMode1[2] = new DxButton(new Rectangle(30, 98, 20, 128), "C", Color.White, Color.Black);
+			buttonsForEditMode1[3] = new DxButton(new Rectangle(50, 98, 20, 96), "C#", Color.Black, Color.White);
+			buttonsForEditMode1[4] = new DxButton(new Rectangle(70, 98, 20, 128), "D", Color.White, Color.Black);
+			buttonsForEditMode1[5] = new DxButton(new Rectangle(90, 98, 20, 96), "D#", Color.Black, Color.White);
+			buttonsForEditMode1[6] = new DxButton(new Rectangle(110, 98, 20, 128), "E", Color.White, Color.Black);
+			buttonsForEditMode1[7] = new DxButton(new Rectangle(130, 98, 20, 128), "F", Color.White, Color.Black);
+			buttonsForEditMode1[8] = new DxButton(new Rectangle(150, 98, 20, 96), "F#", Color.Black, Color.White);
+			buttonsForEditMode1[9] = new DxButton(new Rectangle(170, 98, 20, 128), "G", Color.White, Color.Black);
+			buttonsForEditMode1[10] = new DxButton(new Rectangle(190, 98, 20, 96), "G#", Color.Black, Color.White);
+			buttonsForEditMode1[11] = new DxButton(new Rectangle(210, 98, 20, 128), "A", Color.White, Color.Black);
+			buttonsForEditMode1[12] = new DxButton(new Rectangle(230, 98, 20, 96), "A#", Color.Black, Color.White);
+			buttonsForEditMode1[13] = new DxButton(new Rectangle(250, 98, 20, 128), "B", Color.White, Color.Black);
 
-			DXButton[] buttonsForEditMode2 = new DXButton[13];
+			var buttonsForEditMode2 = new DxButton[13];
 
-			buttonsForEditMode2[0] = new DXButton(new Rectangle(24, 16, 32, 32), "A↑", Color.Black, Color.White);
-			buttonsForEditMode2[1] = new DXButton(new Rectangle(64, 16, 32, 32), "D↑", Color.Black, Color.White);
-			buttonsForEditMode2[2] = new DXButton(new Rectangle(104, 16, 32, 32), "S↑", Color.Black, Color.White);
-			buttonsForEditMode2[3] = new DXButton(new Rectangle(144, 16, 32, 32), "R↑", Color.Black, Color.White);
+			buttonsForEditMode2[0] = new DxButton(new Rectangle(24, 16, 32, 32), "A↑", Color.Black, Color.White);
+			buttonsForEditMode2[1] = new DxButton(new Rectangle(64, 16, 32, 32), "D↑", Color.Black, Color.White);
+			buttonsForEditMode2[2] = new DxButton(new Rectangle(104, 16, 32, 32), "S↑", Color.Black, Color.White);
+			buttonsForEditMode2[3] = new DxButton(new Rectangle(144, 16, 32, 32), "R↑", Color.Black, Color.White);
 
-			buttonsForEditMode2[4] = new DXButton(new Rectangle(24, 208, 32, 32), "A↓", Color.Black, Color.White);
-			buttonsForEditMode2[5] = new DXButton(new Rectangle(64, 208, 32, 32), "D↓", Color.Black, Color.White);
-			buttonsForEditMode2[6] = new DXButton(new Rectangle(104, 208, 32, 32), "S↓", Color.Black, Color.White);
-			buttonsForEditMode2[7] = new DXButton(new Rectangle(144, 208, 32, 32), "R↓", Color.Black, Color.White);
+			buttonsForEditMode2[4] = new DxButton(new Rectangle(24, 208, 32, 32), "A↓", Color.Black, Color.White);
+			buttonsForEditMode2[5] = new DxButton(new Rectangle(64, 208, 32, 32), "D↓", Color.Black, Color.White);
+			buttonsForEditMode2[6] = new DxButton(new Rectangle(104, 208, 32, 32), "S↓", Color.Black, Color.White);
+			buttonsForEditMode2[7] = new DxButton(new Rectangle(144, 208, 32, 32), "R↓", Color.Black, Color.White);
 
-			buttonsForEditMode2[8] = new DXButton(new Rectangle(190, 162, 48, 32), "Save", Color.Black, Color.White);
-			buttonsForEditMode2[9] = new DXButton(new Rectangle(190, 208, 48, 32), "Load", Color.Black, Color.White);
-			buttonsForEditMode2[10] = new DXButton(new Rectangle(184, 16, 16, 16), "", Color.White, Color.Black);
-			buttonsForEditMode2[11] = new DXButton(new Rectangle(184, 40, 16, 16), "", Color.White, Color.Black);
-			buttonsForEditMode2[12] = new DXButton(new Rectangle(184, 64, 16, 16), "", Color.White, Color.Black);
+			buttonsForEditMode2[8] = new DxButton(new Rectangle(190, 162, 48, 32), "Save", Color.Black, Color.White);
+			buttonsForEditMode2[9] = new DxButton(new Rectangle(190, 208, 48, 32), "Load", Color.Black, Color.White);
+			buttonsForEditMode2[10] = new DxButton(new Rectangle(184, 16, 16, 16), "", Color.White, Color.Black);
+			buttonsForEditMode2[11] = new DxButton(new Rectangle(184, 40, 16, 16), "", Color.White, Color.Black);
+			buttonsForEditMode2[12] = new DxButton(new Rectangle(184, 64, 16, 16), "", Color.White, Color.Black);
 
 
 			
 
 
-			buttonsForEditMode2[0].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[0].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.AttackTime++;
-			});
+			};
 
-			buttonsForEditMode2[1].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[1].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.DecayTime++;
-			});
+			};
 
-			buttonsForEditMode2[2].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[2].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.SustainLevel++;
 				if (myenv.SustainLevel > 255)
 					myenv.SustainLevel = 255;
-			});
+			};
 
-			buttonsForEditMode2[3].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[3].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.ReleaseTime++;
-			});
+			};
 
-			buttonsForEditMode2[4].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[4].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.AttackTime--;
 				if (myenv.AttackTime < 0)
 					myenv.AttackTime = 0;
-			});
+			};
 
-			buttonsForEditMode2[5].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[5].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.DecayTime--;
 				if (myenv.DecayTime < 0)
 					myenv.DecayTime = 0;
-			});
+			};
 
-			buttonsForEditMode2[6].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[6].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.SustainLevel--;
 				if (myenv.SustainLevel < 0)
 					myenv.SustainLevel = 0;
-			});
+			};
 
-			buttonsForEditMode2[7].MouseDownAction2 = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[7].MouseDownAction2 = (mbtn, dxb) =>
 			{
 				myenv.ReleaseTime--;
 				if (myenv.ReleaseTime < 0)
 					myenv.ReleaseTime = 0;
-			});
+			};
 
-			buttonsForEditMode2[8].ClickedAction = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[8].ClickedAction = (mbtn, dxb) =>
 			{
-				SaveFileDialog sfd = new SaveFileDialog();
+				var sfd = new SaveFileDialog();
 				sfd.Filter = "Music Sheet サウンドファイル (*.mssf)|*.mssf|すべてのファイル (*.*)|*.*";
 				if (sfd.ShowDialog() == DialogResult.Cancel)
 					return;
 				MssfUtility.SaveFileVer2(sfd.FileName, wave, myenv.AttackTime, myenv.DecayTime, myenv.SustainLevel, myenv.ReleaseTime, pan, noiseoption);
 
 
-			});
+			};
 
-			buttonsForEditMode2[9].ClickedAction = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[9].ClickedAction = (mbtn, dxb) =>
 			{
-				OpenFileDialog ofd = new OpenFileDialog();
+				var ofd = new OpenFileDialog();
 				ofd.Filter = "Music Sheet サウンドファイル (*.mssf)|*.mssf|すべてのファイル (*.*)|*.*";
 				if (ofd.ShowDialog() == DialogResult.Cancel)
 					return;
@@ -230,24 +230,24 @@ namespace MusicSheetSoundEditor
 				myenv.SustainLevel = s;
 				myenv.ReleaseTime = r;
 
-			});
+			};
 
-			buttonsForEditMode2[10].ClickedAction = new Action<int, DXButton>((mbtn, dxb) =>
-				{
-					noiseoption = NoiseOption.None;
-				});
+			buttonsForEditMode2[10].ClickedAction = (mbtn, dxb) =>
+			{
+				noiseoption = NoiseOption.None;
+			};
 
-			buttonsForEditMode2[11].ClickedAction = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[11].ClickedAction = (mbtn, dxb) =>
 			{
 				noiseoption = NoiseOption.Long;
-			});
+			};
 
-			buttonsForEditMode2[12].ClickedAction = new Action<int, DXButton>((mbtn, dxb) =>
+			buttonsForEditMode2[12].ClickedAction = (mbtn, dxb) =>
 			{
 				noiseoption = NoiseOption.Short;
-			});
+			};
 
-			Action<int, DXButton> down = new Action<int, DXButton>((mbtn, dbt) =>
+			var down = new Action<int, DxButton>((mbtn, dbt) =>
 			{
 				
 				//DX.PlaySoundMem(nowHandle = SetWave(wave, GetFreq(dbt.Text, octave)), DX.DX_PLAYTYPE_LOOP);
@@ -260,7 +260,7 @@ namespace MusicSheetSoundEditor
 				nowTone.StartPlay(-1, -1);
 			});
 
-			Action<int, DXButton> up = new Action<int, DXButton>((mbtn, dbt) =>
+			var up = new Action<int, DxButton>((mbtn, dbt) =>
 			{
 				//DX.StopSoundMem(nowHandle);
 				//DX.DeleteSoundMem(nowHandle);
@@ -268,7 +268,7 @@ namespace MusicSheetSoundEditor
 			});
 
 
-			for (int i = 2; i <= 13; i++)
+			for (var i = 2; i <= 13; i++)
 			{
 				buttonsForEditMode1[i].MouseDownAction = down;
 				buttonsForEditMode1[i].MouseUpAction = up;
@@ -281,7 +281,7 @@ namespace MusicSheetSoundEditor
 
 			//int sheed = 0x8000;
 
-			Icon ico = new Icon("mssfedit.ico");
+			var ico = new Icon("mssfedit.ico");
 			DX.SetWindowIconHandle(ico.Handle);
 
 			//bool isShortFreq = false;
@@ -294,10 +294,10 @@ namespace MusicSheetSoundEditor
 				DX.ProcessMessage();
 				DX.ClearDrawScreen();
 
-				int key1 = DX.CheckHitKey(DX.KEY_INPUT_1);
-				int key2 = DX.CheckHitKey(DX.KEY_INPUT_2);
-				int key3 = DX.CheckHitKey(DX.KEY_INPUT_3);
-				int mouseIn = DX.GetMouseInput();
+				var key1 = DX.CheckHitKey(DX.KEY_INPUT_1);
+				var key2 = DX.CheckHitKey(DX.KEY_INPUT_2);
+				var key3 = DX.CheckHitKey(DX.KEY_INPUT_3);
+				var mouseIn = DX.GetMouseInput();
 				int mouseX, mouseY;
 
 				DX.GetMousePoint(out mouseX, out mouseY);
@@ -315,14 +315,14 @@ namespace MusicSheetSoundEditor
 				{
 					case 0:
 
-						int mouseGridX = mouseX / 10;
-						int mouseGridY = (mouseY - 16) / 15;
+						var mouseGridX = mouseX / 10;
+						var mouseGridY = (mouseY - 16) / 15;
 
-						for (int x = 0; x < 32; x++)
+						for (var x = 0; x < 32; x++)
 							DX.DrawBox(x * 10, 136, x * 10 + 10, 136 + (int)(wave[x] / 4095.875 * 15), DX.GetColor(0, 172, 224), 1);
-						for (int y = 0; y < 240; y += 15)
+						for (var y = 0; y < 240; y += 15)
 						{
-							for (int x = 0; x < 320; x += 10)
+							for (var x = 0; x < 320; x += 10)
 							{
 								DX.DrawBox(x, y + 16, x + 11, y + 32, DX.GetColor(64, 64, 64), 0);
 							}
@@ -347,7 +347,7 @@ namespace MusicSheetSoundEditor
 
 						break;
 					case 1:
-						foreach (DXButton dxb in buttonsForEditMode1)
+						foreach (var dxb in buttonsForEditMode1)
 						{
 							if (dxb != null)
 								dxb.Draw();
@@ -362,23 +362,23 @@ namespace MusicSheetSoundEditor
 							DX.DrawString(174, 8, "V OV " + nowTone.OutVolume, DX.GetColor(255, 255, 255));
 							DX.DrawBox(174, 83, 178, 83 - nowTone.Volume / 4, DX.GetColor(255, 255, 255), 1);
 							DX.DrawBox(188, 83, 199, 83 - nowTone.OutVolume / 4, DX.GetColor(255, 255, 255), 1);
-							string hoge = "";
-							if (((int)nowTone.envflag) >= 1)
+							var hoge = "";
+							if (((int)nowTone.Envflag) >= 1)
 								hoge += "A";
-							if (((int)nowTone.envflag) >= 2)
+							if (((int)nowTone.Envflag) >= 2)
 								hoge += "D";
-							if (((int)nowTone.envflag) >= 3)
+							if (((int)nowTone.Envflag) >= 3)
 								hoge += "S";
-							if (((int)nowTone.envflag) >= 4)
+							if (((int)nowTone.Envflag) >= 4)
 								hoge += "R";
 							DX.DrawString(210, 64, hoge, DX.GetColor(255,255,255));
-							for (int i = 0; i < 32; i++)
+							for (var i = 0; i < 32; i++)
 								DX.DrawLine(i + 202, (int)(wave[i] / 4095.875 * 1.2 + 51), i + 202, 51, 0xffffff);
 						}
 
 						break;
 					case 2:
-						foreach (DXButton dxb in buttonsForEditMode2)
+						foreach (var dxb in buttonsForEditMode2)
 						{
 							if (dxb != null)
 								dxb.Draw();
@@ -433,7 +433,7 @@ namespace MusicSheetSoundEditor
 
 				//Console.Write(output + "\t");
 
-				for (int i = 0; i < 16; i++)
+				for (var i = 0; i < 16; i++)
 				{
 					if (DateTime.Now.Millisecond - bmsec > 1)
 						i += DateTime.Now.Millisecond - bmsec - 1;
@@ -460,18 +460,18 @@ namespace MusicSheetSoundEditor
 
 		public static int SetNoise(int hz, bool isShortFreq, ref int sheed, int length)
 		{
-			int output = 0;
+			var output = 0;
 
 			
 			
 
-			int bcnt = -1;
+			var bcnt = -1;
 
-			Int16[] data = new Int16[length];
+			var data = new Int16[length];
 			float t = 0;
-			int hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
+			var hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
 
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				if ((int)(Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) != bcnt)
 				{
@@ -485,7 +485,7 @@ namespace MusicSheetSoundEditor
 				bcnt = (int)(Math.PI * 2 / 44100 * i * hz * 180 / Math.PI);
 			}
 
-			int retval = DX.LoadSoundMemFromSoftSound(hSSnd);
+			var retval = DX.LoadSoundMemFromSoftSound(hSSnd);
 			DX.DeleteSoftSound(hSSnd);
 
 			return retval;
@@ -508,8 +508,8 @@ namespace MusicSheetSoundEditor
 
 		static int SetWave(short[] wave, int hz)
 		{
-			int length = 0;
-			for (int i = 0; i < 44100; i++)
+			var length = 0;
+			for (var i = 0; i < 44100; i++)
 				if (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI >= 360)
 				{
 					Console.Write(Math.PI * 2 / 44100 * i * hz * 180 / Math.PI);
@@ -517,17 +517,17 @@ namespace MusicSheetSoundEditor
 					break;
 				}
 
-			Int16[] data = new Int16[length];
+			var data = new Int16[length];
 			float t = 0;
-			int hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
-			for (int i = 0; i < length; i++)
+			var hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
+			for (var i = 0; i < length; i++)
 			{
 				t = wave[(int)((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360 / (360 / 32.0))]; // divided by 10 means volume control
 				data[i] = (short)t;
 				DX.WriteSoftSoundData(hSSnd, i, (short)t, 0);
 			}
 
-			int retval = DX.LoadSoundMemFromSoftSound(hSSnd);
+			var retval = DX.LoadSoundMemFromSoftSound(hSSnd);
 			DX.DeleteSoftSound(hSSnd);
 			
 			return retval;

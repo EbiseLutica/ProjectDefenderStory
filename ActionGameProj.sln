@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicSheetSoundEditor", "ActionGameProj\MusicSheetSoundEditor.csproj", "{0B778EB9-36F3-40A3-97ED-468308700D33}"
 EndProject
@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMsseq", "LibMsseq\LibMss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMap", "LibMap\LibMap.csproj", "{16F4CD04-98B2-4B8E-B52F-07D507899B0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibDefenderStory", "LibDefenderStory\LibDefenderStory.csproj", "{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicJson", "DynamicJson\DynamicJson.csproj", "{116B75D7-D429-4289-B7E6-AB8479D592E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,18 +112,18 @@ Global
 		{16F4CD04-98B2-4B8E-B52F-07D507899B0B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{16F4CD04-98B2-4B8E-B52F-07D507899B0B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{16F4CD04-98B2-4B8E-B52F-07D507899B0B}.Release|Win32.ActiveCfg = Release|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Debug|Win32.Build.0 = Debug|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Win32.ActiveCfg = Release|Any CPU
-		{8A02D594-1E91-420C-9C9D-BB37CBD0BDC4}.Release|Win32.Build.0 = Release|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Debug|Win32.Build.0 = Debug|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Release|Win32.ActiveCfg = Release|Any CPU
+		{116B75D7-D429-4289-B7E6-AB8479D592E7}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

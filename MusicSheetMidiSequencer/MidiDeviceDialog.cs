@@ -12,13 +12,8 @@ namespace MusicSheetMidiSequencer
 {
 	public partial class MidiDeviceDialog : Form
 	{
-		public int SelectedDeviceIndex
-		{
-			get
-			{
-				return listBox1.SelectedIndex;
-			}
-		}
+		public int SelectedDeviceIndex => listBox1.SelectedIndex;
+
 		public MidiDeviceDialog(string[] devices)
 		{
 			InitializeComponent();

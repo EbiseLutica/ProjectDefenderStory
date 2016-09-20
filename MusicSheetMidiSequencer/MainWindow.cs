@@ -17,10 +17,10 @@ namespace MusicSheetMidiSequencer
 {
 	public partial class MainWindow : Form
 	{
-		Sequencer seq;
-		SoundModule sndmodule;
-		bool midiInIsOn = false;
-		Random rand = new Random(1145141919);
+		Sequencer _seq;
+		SoundModule _sndmodule;
+		bool _midiInIsOn = false;
+		Random _rand = new Random(1145141919);
 		public MainWindow()
 			: this(null) { }
 
@@ -37,8 +37,8 @@ namespace MusicSheetMidiSequencer
 				Console.WriteLine("[DEBUG]DirectX の初期化に失敗しました。");
 				Application.Exit();
 			}
-			seq = new Sequencer();
-			sndmodule = new SoundModule();
+			_seq = new Sequencer();
+			_sndmodule = new SoundModule();
 			//MessageBox.Show(System.IO.Path.GetDirectoryName(Application.ExecutablePath));
 			backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
 			//backgroundWorker1.RunWorkerAsync();
@@ -53,13 +53,13 @@ namespace MusicSheetMidiSequencer
 
 		void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			closerequest = false;
+			_closerequest = false;
 		}
 
 
 
-		public bool playRequest = false;
-		public string file = "";
+		public bool PlayRequest;
+		public string File = "";
 
 		/// <summary>
 		/// 再生リクエストが送られたかどうかを判定し、ある場合は指定した文字列変数にファイル名を代入します。
@@ -68,13 +68,13 @@ namespace MusicSheetMidiSequencer
 		/// <returns>リクエストが送られたかどうか。</returns>
 		public bool GetPlayRequest(ref string data)
 		{
-			if (playRequest)
-				data = file;
-			bool p = playRequest;
-			playRequest = false;
+			if (PlayRequest)
+				data = File;
+			var p = PlayRequest;
+			PlayRequest = false;
 			return p;
 		}
-		bool isPausing = false;
+		bool _isPausing;
 		private void button3_Click(object sender, EventArgs e)
 		{
 			Stop();
@@ -87,7 +87,7 @@ namespace MusicSheetMidiSequencer
 
 		private void button1_Click_1(object sender, EventArgs e)
 		{
-			if (seq.IsPlaying)
+			if (_seq.IsPlaying)
 				return;
 			Play();
 		}
@@ -118,7 +118,7 @@ Music Sheet v1.1.0
 
 		private void MainWindow_DragEnter(object sender, DragEventArgs e)
 		{
-			if (midiInIsOn)
+			if (_midiInIsOn)
 				return;
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 				//ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
@@ -130,28 +130,28 @@ Music Sheet v1.1.0
 
 		private void MainWindow_DragDrop(object sender, DragEventArgs e)
 		{
-			if (midiInIsOn)
+			if (_midiInIsOn)
 				return;
 			//コントロール内にドロップされたとき実行される
 			//ドロップされたすべてのファイル名を取得する
-			string[] fileName =
+			var fileName =
 				(string[])e.Data.GetData(DataFormats.FileDrop, false);
 			//ListBoxに追加する
 			if (fileName.Length > 1)
 				MessageBox.Show("複数のファイルがドロップされました。\r\n先頭のファイルのみ再生を開始します");
-			file = fileName[0];
+			File = fileName[0];
 			WorkerCancel();
-			Load(file);
+			Load(File);
 			Play();
 			
 		}
-		bool locked = false;
+		bool _locked;
 
-		private void Load(string file)
+		private new void Load(string file)
 		{
 			try
 			{
-				seq.Load(file);
+				_seq.Load(file);
 			}
 			catch (InvalidOperationException)
 			{
@@ -166,42 +166,42 @@ Music Sheet v1.1.0
 
 		private void Play()
 		{
-			if (midiInIsOn)
+			if (_midiInIsOn)
 				return;
 			
 			WorkerCancel();
-			bugged = false;
-			if (isPausing)
-				seq.Resume();
+			_bugged = false;
+			if (_isPausing)
+				_seq.Resume();
 			else
 			{
-				seq.Reset();
-				seq.Play();
+				_seq.Reset();
+				_seq.Play();
 			}
 			backgroundWorker1.RunWorkerAsync();
 			trackBar1.Value = 0;
 			trackBar1.Minimum = 0;
-			trackBar1.Maximum = seq.eot;
-			trackBar1.LargeChange = seq.eot / 10;
+			trackBar1.Maximum = _seq.Eot;
+			trackBar1.LargeChange = _seq.Eot / 10;
 		}
 
 		private void Pause()
 		{
-			if (midiInIsOn)
+			if (_midiInIsOn)
 				return;
 			WorkerCancel();
-			isPausing = true;
-			seq.Stop();
+			_isPausing = true;
+			_seq.Stop();
 			backgroundWorker1.RunWorkerAsync();
 		}
 
 		private void Stop()
 		{
-			if (midiInIsOn)
+			if (_midiInIsOn)
 				return;
 			WorkerCancel();
-			isPausing = false;
-			seq.Stop();
+			_isPausing = false;
+			_seq.Stop();
 			backgroundWorker1.RunWorkerAsync();
 		}
 
@@ -211,25 +211,25 @@ Music Sheet v1.1.0
 			new WaveList().Show();
 		}
 
-		SeqInfo info = SeqInfo.Title;
+		SeqInfo _info = SeqInfo.Title;
 
 		private void label4_Click(object sender, EventArgs e)
 		{
-			int i = (int)info;
+			var i = (int)_info;
 			i--;
 			if (i < 0)
 				i = 2;
-			info = (SeqInfo)i;
-			switch (info)
+			_info = (SeqInfo)i;
+			switch (_info)
 			{
 				case SeqInfo.Title:
-					label1.Text = seq.title;
+					label1.Text = _seq.Title;
 					break;
 				case SeqInfo.Copyright:
-					label1.Text = seq.copyright;
+					label1.Text = _seq.Copyright;
 					break;
 				case SeqInfo.Lyric:
-					label1.Text = seq.lyrics;
+					label1.Text = _seq.Lyrics;
 					break;
 			}
 		}
@@ -246,7 +246,7 @@ Music Sheet v1.1.0
 
 		private void label3_Click(object sender, EventArgs e)
 		{
-			int i = (int)info;
+			var i = (int)_info;
 			i++;
 			if (i > 2)
 				i = 0;
@@ -261,12 +261,12 @@ Music Sheet v1.1.0
 		private void label4_MouseUp(object sender, MouseEventArgs e)
 		{
 			((Label)sender).Font = new Font(((Label)sender).Font.FontFamily, 9);
-			if (!seq.IsLoaded)
+			if (!_seq.IsLoaded)
 			{
 				label1.Text = "No Standard Midi File";
 				return;
 			}
-			int i = (int)info;
+			var i = (int)_info;
 			if (sender == label4)
 			{
 				i--;
@@ -279,10 +279,10 @@ Music Sheet v1.1.0
 				if (i > 2)
 					i = 0;
 			}
-			info = (SeqInfo)i;
+			_info = (SeqInfo)i;
 		}
 
-		bool closerequest = false;
+		bool _closerequest;
 
 		private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -299,80 +299,80 @@ Music Sheet v1.1.0
 				Application.DoEvents();
 		}
 
-		bool bugged = false;
+		bool _bugged;
 
 		private void timer1_Tick(object sender, EventArgs e)
 		{
-			if (locked)
+			if (_locked)
 				return;
-			locked = true;
-			if (!midiInIsOn)
+			_locked = true;
+			if (!_midiInIsOn)
 			{
-				var pos = seq.Position;
+				var pos = _seq.Position;
 				label2.Text = string.Format("{0} : {1} : {2}", pos.Measure, pos.Beat, pos.Tick);
-				if (!seq.IsLoaded)
+				if (!_seq.IsLoaded)
 					label1.Text = "No Standard Midi File";
 				else
-					switch (info)
+					switch (_info)
 					{
 						case SeqInfo.Title:
-							label1.Text = seq.CurrentTitle;
+							label1.Text = _seq.CurrentTitle;
 							break;
 						case SeqInfo.Copyright:
-							label1.Text = seq.CurrentCopyright;
+							label1.Text = _seq.CurrentCopyright;
 							break;
 						case SeqInfo.Lyric:
-							label1.Text = seq.CurrentLyric;
+							label1.Text = _seq.CurrentLyric;
 							break;
 					}
 
-				trackBar1.Value = Math.Min(seq.eot, seq.nTickCount);
+				trackBar1.Value = Math.Min(_seq.Eot, _seq.NTickCount);
 			}
 
 			pictureBox2.Refresh();
 
 
 
-			if (seq.IsLoaded && bug)
+			if (_seq.IsLoaded && _bug)
 			{
-				if (rand.Next(34) == 0 && !bugged)
+				if (_rand.Next(34) == 0 && !_bugged)
 				{
-					bugged = true;
-					for (int i = 0; i < rand.Next(5) + 4; i++)
-						switch (rand.Next(4))
+					_bugged = true;
+					for (var i = 0; i < _rand.Next(5) + 4; i++)
+						switch (_rand.Next(4))
 						{
 							case 0:
-								seq.sm.channels[rand.Next(seq.MaxChannel)].volume = (byte)(rand.Next(64) + 64);
+								_seq.Sm.Channels[_rand.Next(_seq.MaxChannel)].Volume = (byte)(_rand.Next(64) + 64);
 								break;
 							case 1:
-								seq.sm.channels[rand.Next(seq.MaxChannel)].pitchbend = rand.Next(16384) - 8192;
+								_seq.Sm.Channels[_rand.Next(_seq.MaxChannel)].Pitchbend = _rand.Next(16384) - 8192;
 								break;
 							case 2:
-								seq.sm.channels[rand.Next(seq.MaxChannel)].expression = (byte)(rand.Next(64) + 64);
+								_seq.Sm.Channels[_rand.Next(_seq.MaxChannel)].Expression = (byte)(_rand.Next(64) + 64);
 								break;
 							case 3:
-								seq.sm.channels[rand.Next(seq.MaxChannel)].inst = (byte)rand.Next(128);
+								_seq.Sm.Channels[_rand.Next(_seq.MaxChannel)].Inst = (byte)_rand.Next(128);
 								break;
 						}
 				}
-				if (rand.Next(32) == 0)
+				if (_rand.Next(32) == 0)
 				{
-					bugged = false;
+					_bugged = false;
 				}
 			}
-			locked = false;
+			_locked = false;
 		}
 
 
 		private void trackBar1_Scroll(object sender, EventArgs e)
 		{
 			WorkerCancel();
-			seq.sm.Panic();
-			seq.btick = trackBar1.Value;
-			seq.mc.TickCount = trackBar1.Value;
+			_seq.Sm.Panic();
+			_seq.Btick = trackBar1.Value;
+			_seq.Mc.TickCount = trackBar1.Value;
 			backgroundWorker1.RunWorkerAsync();
 		}
-		bool workerlocked = false;
+		bool _workerlocked;
 		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
 		{
 
@@ -382,33 +382,33 @@ Music Sheet v1.1.0
 				if (backgroundWorker1.CancellationPending)
 				{
 					e.Cancel = true;
-					closerequest = false;
+					_closerequest = false;
 					break;
 				}
-				workerlocked = true;
+				_workerlocked = true;
 				try
 				{
-					seq.PlayLoop();
+					_seq.PlayLoop();
 				}
 				catch (Exception ex)
 				{
 					Console.WriteLine(ex.Message);
 				}
-				workerlocked = false;
+				_workerlocked = false;
 				DX.WaitVSync(1);
 			}
 		}
 
-		bool bug = false;
+		bool _bug;
 		private void netcitringomusicSheetةڼةڼةڼةڼةڼToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			if (!bug)
+			if (!_bug)
 			{
 				MessageBox.Show("重大な障害が発生したため、このプログラムをしゅうｒｙ└(՞ةڼ◔)」ｷｴｴｴｴｴﾇﾍﾞﾁﾞｮﾝﾇｿﾞﾁﾞｮﾝﾍﾞﾙﾒｯﾃｨｽﾓｹﾞﾛﾝﾎﾞｮwwwwww", "v(՞ةڼ◔)vﾋｨｨｨwwwｲﾋｨｨｨｨｨｨwwwwwwww", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-				this.Text = "(՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔)";
-				ReplaceToKichigai(this.Controls);
-				bug = true;
-				bugged = false;
+				Text = "(՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔՞ةڼ◔)";
+				ReplaceToKichigai(Controls);
+				_bug = true;
+				_bugged = false;
 			}
 			else
 			{
@@ -433,9 +433,9 @@ Music Sheet v1.1.0
 
 		private void pictureBox2_Paint(object sender, PaintEventArgs e)
 		{
-			int x = 64;
-			int y = 16;
-			Graphics g = e.Graphics;
+			var x = 64;
+			var y = 16;
+			var g = e.Graphics;
 
 			g.DrawString("Volume", new Font(FontFamily.GenericMonospace, 7), Brushes.Black, 2, 24);
 			g.DrawString("Expression", new Font(FontFamily.GenericMonospace, 7), Brushes.Black, 2, 36);
@@ -445,8 +445,8 @@ Music Sheet v1.1.0
 			g.DrawString("PitchBend", new Font(FontFamily.GenericMonospace, 7), Brushes.Black, 2, 104);
 			g.DrawString("P.Change", new Font(FontFamily.GenericMonospace, 7), Brushes.Black, 2, 116);
 			g.DrawString("Frequency", new Font(FontFamily.GenericMonospace, 7), Brushes.Black, 2, 126);
-			int cnt = 0;
-			foreach (Channel ch in seq.sm.channels)
+			var cnt = 0;
+			foreach (var ch in _seq.Sm.Channels)
 			{
 				DrawChannels(x, y, ch, g, cnt);
 				x += 34;
@@ -470,35 +470,35 @@ Music Sheet v1.1.0
 			g.DrawRectangle(Pens.Black, x + 2, y + 78, 28, 8);
 			g.DrawRectangle(Pens.Black, x + 2, y + 88, 28, 8);
 
-			g.DrawString(string.Format("{0, 5}", ch.inst), new Font(FontFamily.GenericMonospace, 7), Brushes.Black, x, y + 98);
+			g.DrawString(string.Format("{0, 5}", ch.Inst), new Font(FontFamily.GenericMonospace, 7), Brushes.Black, x, y + 98);
 
-			g.FillRectangle(Brushes.Lime, x + 3, y + 13 + (64 - 64 * (ch.volume / 127f)), 5, 64 * (ch.volume / 127f) - 1);
-			g.FillRectangle(Brushes.Lime, x + 9, y + 13 + (64 - 64 * (ch.expression / 127f)), 5, 64 * (ch.expression / 127f) - 1);
+			g.FillRectangle(Brushes.Lime, x + 3, y + 13 + (64 - 64 * (ch.Volume / 127f)), 5, 64 * (ch.Volume / 127f) - 1);
+			g.FillRectangle(Brushes.Lime, x + 9, y + 13 + (64 - 64 * (ch.Expression / 127f)), 5, 64 * (ch.Expression / 127f) - 1);
 
-			g.FillRectangle(Brushes.Lime, GetRectBy4Point(x + 16, y + 79, (int)(x + 3 + ch.panpot * (26 / 127f)), y + 85));
-			g.FillRectangle(Brushes.Lime, GetRectBy4Point(x + 16, y + 89, (int)(x + 16 + (ch.pitchbend * (13 / 8192f))), y + 95));
+			g.FillRectangle(Brushes.Lime, GetRectBy4Point(x + 16, y + 79, (int)(x + 3 + ch.Panpot * (26 / 127f)), y + 85));
+			g.FillRectangle(Brushes.Lime, GetRectBy4Point(x + 16, y + 89, (int)(x + 16 + (ch.Pitchbend * (13 / 8192f))), y + 95));
 
-			for (int i = y + 14; i < y + 14 + 62; i += 2)
+			for (var i = y + 14; i < y + 14 + 62; i += 2)
 			{
 				g.DrawLine(Pens.Black, x + 3, i, x + 7, i);
 				g.DrawLine(Pens.Black, x + 9, i, x + 13, i);
 			}
 
 			Tone lt;
-			if (seq.sm.LastTone[chcnt] != null)
+			if (_seq.Sm.LastTone[chcnt] != null)
 			{
-				lt = (Tone)seq.sm.LastTone[chcnt].Clone();
+				lt = (Tone)_seq.Sm.LastTone[chcnt].Clone();
 
-				float a = (lt.OutVolume * (ch.volume / 127f) * (ch.expression / 127f) * (lt.Velocity / 127f)) / 255f;
+				var a = (lt.OutVolume * (ch.Volume / 127f) * (ch.Expression / 127f) * (lt.Velocity / 127f)) / 255f;
 
 				g.FillRectangle(Brushes.Lime, x + 15, y + 13 + (64 - 64 * (lt.OutVolume / 255f)), 5, 64 * (lt.OutVolume / 255f) - 1);
 
 				g.FillRectangle(Brushes.Lime, x + 21, y + 13 + (64 - 64 * a), 9, 64 * a - 1);
 
-				g.DrawString(string.Format("{0, 5}", (int)(lt.Freq * Math.Pow(2, (ch.pitchbend / 8192.0) * (ch.bendRange.Data / 12.0)) * Math.Pow(2, (ch.tweak.Data / 8192f) * (2 / 12f)) * Math.Pow(2, ch.noteShift.Data / 12f))), new Font(FontFamily.GenericMonospace, 7), Brushes.Black, x + 1, y + 108);
+				g.DrawString(string.Format("{0, 5}", (int)(lt.Freq * Math.Pow(2, (ch.Pitchbend / 8192.0) * (ch.BendRange.Data / 12.0)) * Math.Pow(2, (ch.Tweak.Data / 8192f) * (2 / 12f)) * Math.Pow(2, ch.NoteShift.Data / 12f))), new Font(FontFamily.GenericMonospace, 7), Brushes.Black, x + 1, y + 108);
 			}
 
-			for (int i = y + 14; i < y + 14 + 62; i += 2)
+			for (var i = y + 14; i < y + 14 + 62; i += 2)
 			{
 				g.DrawLine(Pens.Black, x + 15, i, x + 19, i);
 				g.DrawLine(Pens.Black, x + 21, i, x + 30, i);

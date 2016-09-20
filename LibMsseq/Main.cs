@@ -23,7 +23,7 @@ namespace MusicSheet.Sequence
 
 	public class MidiClock
 	{
-		public int BPM
+		public int Bpm
 		{
 			get; set;
 		}
@@ -32,12 +32,12 @@ namespace MusicSheet.Sequence
 			get; set;
 		}
 
-		int btime;
+		int _btime;
 		
 
 		public MidiClock(int bpm, int resolution)
 		{
-			BPM = bpm;
+			Bpm = bpm;
 			Resolution = resolution;
 
 		}
@@ -50,17 +50,17 @@ namespace MusicSheet.Sequence
 			get
 			{
 				int ret, ntime = DX.GetNowCount();
-				if (IsRunning || ntime > btime)
-					ret = (int)(_tick += TempoMap.GetTickLength(ntime - btime, BPM, Resolution));
+				if (IsRunning || ntime > _btime)
+					ret = (int)(_tick += TempoMapBase.GetTickLength(ntime - _btime, Bpm, Resolution));
 				else
 					ret = (int)_tick;
-				btime = DX.GetNowCount();
+				_btime = DX.GetNowCount();
 				return ret;
 
 			}
 			set
 			{
-				this._tick = value;
+				_tick = value;
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace MusicSheet.Sequence
 
 		public void Start()
 		{
-			btime = DX.GetNowCount();
+			_btime = DX.GetNowCount();
 			IsRunning = true;
 		}
 
@@ -107,22 +107,22 @@ namespace MusicSheet.Sequence
 
 	public class Sequencer
 	{
-		public SoundModule sm;
-		public MidiData mfd;
-		public MidiClock mc;
-		public int nMillisec, nTickCount, btick, bpm;
-		public int eot = 0;
-		public List<int> drumtracks = new List<int>();
-		public string title, copyright, lyrics;
-		public int loop = -1;
+		public SoundModule Sm;
+		public MidiData Mfd;
+		public MidiClock Mc;
+		public int NMillisec, NTickCount, Btick, Bpm;
+		public int Eot;
+		public List<int> Drumtracks = new List<int>();
+		public string Title, Copyright, Lyrics;
+		public int Loop = -1;
 		public bool IsPlaying { get; private set; }
 		public int MaxChannel { get; private set; }
 
-		public List<MetaEvent> metas = new List<MetaEvent>();
+		public List<MetaEvent> Metas = new List<MetaEvent>();
 
-		public static MidiData LoadSMF(string filename)
+		public static MidiData LoadSmf(string filename)
 		{
-			MidiReader mfr = new MidiReader(new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read), Encoding.Default);
+			var mfr = new MidiReader(new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read), Encoding.Default);
 			var m = mfr.ReadFile();
 			mfr.Close();
 			return m;
@@ -130,8 +130,7 @@ namespace MusicSheet.Sequence
 
 		public Sequencer()
 		{
-			this.Reset();
-		
+			Reset();
 		}
 
 		public Sequencer(MidiData md)
@@ -139,47 +138,41 @@ namespace MusicSheet.Sequence
 		{
 			SetMidiData(md);
 		}
-		TempoMap tm;
-		public int MusicTime
-		{
-			get
-			{
-				return tm?.ToMilliSeconds(eot) ?? 0;
-			}
-		}
+		TempoMap _tm;
+		public int MusicTime => _tm?.ToMilliSeconds(Eot) ?? 0;
 
 		public void SetMidiData(MidiData md)
 		{
-			mfd = md;
-			tm = new TempoMap(mfd);
-			this.Stop();
-			this.Reset();
-			eot = 0;
-			drumtracks = new List<int>();
-			if (mfd != null)
+			Mfd = md;
+			_tm = new TempoMap(Mfd);
+			Stop();
+			Reset();
+			Eot = 0;
+			Drumtracks = new List<int>();
+			if (Mfd != null)
 			{
-				mc = new MidiClock(120, mfd.Resolution.Resolution);
+				Mc = new MidiClock(120, Mfd.Resolution.Resolution);
 			}
-			int cnt = 0;
-			foreach (NextMidi.Data.Track.MidiTrack lst in mfd.Tracks)
+			var cnt = 0;
+			foreach (var lst in Mfd.Tracks)
 			{
-				if (lst.Channel.GetValueOrDefault() == 9 && !drumtracks.Contains(cnt))
-					drumtracks.Add(cnt);
+				if (lst.Channel.GetValueOrDefault() == 9 && !Drumtracks.Contains(cnt))
+					Drumtracks.Add(cnt);
 
-				if (eot < (lst.TickLength))
-					eot = lst.TickLength;
+				if (Eot < (lst.TickLength))
+					Eot = lst.TickLength;
 				cnt++;
 			}
 			
-			loaded = true;
+			_loaded = true;
 		}
 
 
-		public int CurrentBPM
+		public int CurrentBpm
 		{
 			get
 			{
-				var a = metas.FindLast(new Predicate<MetaEvent>((te) => te is TempoEvent && te.Tick <= nTickCount)) as TempoEvent;
+				var a = Metas.FindLast(te => te is TempoEvent && te.Tick <= NTickCount) as TempoEvent;
 				if (a != null)
 					return a.Tempo;
 				return 120;
@@ -190,7 +183,7 @@ namespace MusicSheet.Sequence
 		{
 			get
 			{
-				return metas.FindLast(new Predicate<MetaEvent>((te) => te is RhythmEvent && te.Tick <= nTickCount)) as RhythmEvent;
+				return Metas.FindLast(te => te is RhythmEvent && te.Tick <= NTickCount) as RhythmEvent;
 			}
 		}
 
@@ -198,7 +191,7 @@ namespace MusicSheet.Sequence
 		{
 			get
 			{
-				var a = metas.FindLast(new Predicate<MetaEvent>((te) => te is MidiTrackTitle && te.Tick <= nTickCount)) as MidiTrackTitle;
+				var a = Metas.FindLast(te => te is MidiTrackTitle && te.Tick <= NTickCount) as MidiTrackTitle;
 				if (a != null)
 					return a.Text;
 				return "";
@@ -209,7 +202,7 @@ namespace MusicSheet.Sequence
 		{
 			get
 			{
-				var a = metas.FindLast(new Predicate<MetaEvent>((te) => te is MidiCopyright && te.Tick <= nTickCount)) as MidiCopyright;
+				var a = Metas.FindLast(te => te is MidiCopyright && te.Tick <= NTickCount) as MidiCopyright;
 				if (a != null)
 					return a.Text;
 				return "";
@@ -220,25 +213,25 @@ namespace MusicSheet.Sequence
 		{
 			get
 			{
-				var a = metas.FindLast(new Predicate<MetaEvent>((te) => te is MidiLyric && te.Tick <= nTickCount)) as MidiLyric;
+				var a = Metas.FindLast(te => te is MidiLyric && te.Tick <= NTickCount) as MidiLyric;
 				if (a != null)
 					return a.Text;
 				return "";
 			}
 		}
-		public SMFPosition Position
+		public SmfPosition Position
 		{
 			get
 			{
-				Queue<RhythmEvent> qre = new Queue<RhythmEvent>(metas.FindAll(new Predicate<MetaEvent>((te) => te is RhythmEvent)).Cast<RhythmEvent>());
-				SMFPosition last = new SMFPosition();
+				var qre = new Queue<RhythmEvent>(Metas.FindAll(te => te is RhythmEvent).Cast<RhythmEvent>());
+				var last = new SmfPosition();
 				last.Measure = 1;
 				last.Beat = 1;
 
-				RhythmEvent tmp = new RhythmEvent(4, 4);
-				for (int i = 0; i < nTickCount; i++)
+				var tmp = new RhythmEvent(4, 4);
+				for (var i = 0; i < NTickCount; i++)
 				{
-					if (last.Tick >= 4f / tmp.Note * mfd.Resolution.Resolution)
+					if (last.Tick >= 4f / tmp.Note * Mfd.Resolution.Resolution)
 					{
 						last.Beat++;
 						last.Tick = 0;
@@ -264,77 +257,72 @@ namespace MusicSheet.Sequence
 
 		public void Reset()
 		{
-			if (sm != null)
-				sm.Panic();
+			if (Sm != null)
+				Sm.Panic();
 			
 			
-			sm = new SoundModule();
+			Sm = new SoundModule();
 			
 			MaxChannel = 0;
-			bpm = 120;
-			btick = -1;
-			loop = -1;
-			title = copyright = lyrics = "";
+			Bpm = 120;
+			Btick = -1;
+			Loop = -1;
+			Title = Copyright = Lyrics = "";
 		}
 
-		bool loaded = false;
+		bool _loaded;
 
-		public bool IsLoaded
-		{
-			get
-			{
-				return loaded;
-			}
-		}
+		public bool IsLoaded => _loaded;
 
 		public void Load(string filename)
 		{
 			Stop();
 			Reset();
-			SetMidiData(LoadSMF(filename));
+			SetMidiData(LoadSmf(filename));
 		}
 
 		public void Play()
 		{
-			if (!loaded)
+			if (!_loaded)
 				return;
-
-			metas.Clear();
+			if (Mc == null || Mfd == null)
+				return;
+			Metas.Clear();
 			var cnt = 0;
-			foreach (NextMidi.Data.Track.MidiTrack mt in mfd.Tracks)
+			foreach (var mt in Mfd.Tracks)
 			{
 				if (mt.Channel != null && mt.Channel != 9 && MaxChannel < mt.Channel)
 					MaxChannel = (int)mt.Channel;
-				foreach (NextMidi.DataElement.MidiEvent me in mt.GetData())
+				foreach (var me in mt.GetData())
 				{
 					if (me is MetaEvent)
 						if (me is MidiTrackTitle && cnt == 0 || !(me is MidiTrackTitle))
-							metas.Add(me as MetaEvent);
+							Metas.Add(me as MetaEvent);
 					if (me is ControlEvent && ((ControlEvent)me).Number == 111)
-						loop = me.Tick;
+						Loop = me.Tick;
 				}
 				cnt++;
 			}
-			mc.Reset();
-			mc.Start();
+			Mc.Reset();
+			Mc.Start();
 			IsPlaying = true;
 		}
 
 		public void Resume()
 		{
-			if (!loaded)
+			if (!_loaded)
 				return;
-			mc.Start();
+			Mc.Start();
 			IsPlaying = true;
 		}
 
 		public void Stop()
 		{
-			if (!loaded)
+			if (!_loaded)
 				return;
-			if (mc != null)
-				sm.Panic();
-			mc.Stop();
+			if (Mc != null)
+				Sm.Panic();
+			Mc.Stop();
 			IsPlaying = false;
 		}
 
@@ -342,35 +330,35 @@ namespace MusicSheet.Sequence
 		public void	PlayLoop()
 		{
 			//Console.WriteLine("mc:{0}", mc.IsRunning());
-			if (!mc.IsRunning)
+			if (Mc == null || !Mc.IsRunning)
 				return;
-			nMillisec = mc.MiliSec;
-			nTickCount = mc.TickCount;
-			mc.BPM = bpm = CurrentBPM;
+			NMillisec = Mc.MiliSec;
+			NTickCount = Mc.TickCount;
+			Mc.Bpm = Bpm = CurrentBpm;
 
 
 			//List<MidiEvent> mes = mfd.Tracks[2].GetData();
 			//string debug2 = "";
-			for (int j = 1; j < mfd.Tracks.Count; j++)
+			for (var j = 1; j < Mfd.Tracks.Count; j++)
 			{
 				//int hoge = mfd.Tracks[j].Channel.GetValueOrDefault();
 				//debug2 += hoge + " ";
 
-				NextMidi.Data.Track.MidiTrack mt = mfd.Tracks[j];
-				if (nTickCount <= mt.TickLength)
+				var mt = Mfd.Tracks[j];
+				if (NTickCount <= mt.TickLength)
 				{
 
-					foreach (MidiEvent me in mt.GetTickData(btick + 1, nTickCount + 1))
+					foreach (var me in mt.GetTickData(Btick + 1, NTickCount + 1))
 					{
 						//	try
 						//	{
-						sm.SendEvent(me, mt.Channel, nTickCount, ref mc);
+						Sm.SendEvent(me, mt.Channel, NTickCount, ref Mc);
 
 
 						if (me is MidiLyric)
 						{
-							MidiLyric ml = me as MidiLyric;
-							lyrics = ml.Text;
+							var ml = me as MidiLyric;
+							Lyrics = ml.Text;
 						}
 					}
 					//	}
@@ -383,25 +371,25 @@ namespace MusicSheet.Sequence
 
 			
 
-			sm.PlayTones(nTickCount);
+			Sm.PlayTones(NTickCount);
 
-			if (nTickCount > eot)
+			if (NTickCount > Eot)
 			{
-				sm.Panic();
-				if (loop == -1)
+				Sm.Panic();
+				if (Loop == -1)
 				{
-					this.IsPlaying = false;
-					mc.Stop();
+					IsPlaying = false;
+					Mc.Stop();
 				}
 				else
 				{
-					mc.TickCount = loop;
-					nTickCount = loop - 1;
+					Mc.TickCount = Loop;
+					NTickCount = Loop - 1;
 				}
 			}
 			
 
-			btick = nTickCount;
+			Btick = NTickCount;
 		}
 		
 
@@ -414,56 +402,56 @@ namespace MusicSheet.Sequence
 	{
 		public Dictionary<int, Tone>[] Tones { get; set; }
 
-		Mssf[] insts = new Mssf[128];
+		Mssf[] _insts = new Mssf[128];
 
-		public Tone[] bTone = new Tone[16];
+		public Tone[] BTone = new Tone[16];
 
-		public Tone nowTone = null;
+		public Tone NowTone;
 
-		public int bms = 0;
+		public int Bms;
 
 		public Tone[] LastTone { get; private set; }
 
-		public Channel[] channels = new Channel[16];
+		public Channel[] Channels = new Channel[16];
 
 		public int Volume
 		{
 			get
 			{
-				return volume;
+				return _volume;
 			}
 			set
 			{
 				if (value < 0 || value > 100)
-					throw new ArgumentOutOfRangeException("value");
-				volume = value;
+					throw new ArgumentOutOfRangeException(nameof(value));
+				_volume = value;
 			}
 		}
 
-		int volume = 100;
+		int _volume = 100;
 
-		public int loop = -1;
-		Queue<Tone> tonequeue = new Queue<Tone>(4);
-		public int portamenttick = 0;
+		public int Loop = -1;
+		Queue<Tone> _tonequeue = new Queue<Tone>(4);
+		public int Portamenttick;
 
-		public int[] hPercs = new int[128];
+		public int[] HPercs = new int[128];
 
 		public SoundModule()
 		{
 			Tones = new Dictionary<int, Tone>[16];
 			LastTone = new Tone[16];
-			for (int i = 0; i < 16; i++)
+			for (var i = 0; i < 16; i++)
 			{
 				Tones[i] = new Dictionary<int, Tone>();
 				if (i != 10)
-					channels[i] = new Channel(0, false, 64, 100, 127, 0, 0, new RPN(0), new RPN(0), new RPN(2));
+					Channels[i] = new Channel(0, false, 64, 100, 127, 0, 0, new Rpn(0), new Rpn(0), new Rpn(2));
 				else
-					channels[i] = new Channel(0, true, 64, 100, 127, 0, 0, new RPN(0), new RPN(0), new RPN(2));
+					Channels[i] = new Channel(0, true, 64, 100, 127, 0, 0, new Rpn(0), new Rpn(0), new Rpn(2));
 
 			}
 
 
-			for (int i = 0; i < 128; i++)
+			for (var i = 0; i < 128; i++)
 			{
 				int a = 0, d = 0, r = 0, pan = 0;
 				byte s = 0;
@@ -472,37 +460,37 @@ namespace MusicSheet.Sequence
 				if (System.IO.File.Exists(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Insts\\" + i + ".mssf"))
 				{
 					MssfUtility.LoadFileDynamic(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Insts\\" + i + ".mssf", out wave, out a, out d, out s, out r, out pan, out no);
-					insts[i] = new Mssf(wave, a, d, s, r, pan, no);
+					_insts[i] = new Mssf(wave, a, d, s, r, pan, no);
 				}
 				else
 				{
-					insts[i] = Mssf.Empty;
+					_insts[i] = Mssf.Empty;
 				}
 
 
 				if (System.IO.File.Exists(string.Format(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Drums\\{0}.wav", i)))
-					hPercs[i] = DX.LoadSoundMem(string.Format(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Drums\\{0}.wav", i));
+					HPercs[i] = DX.LoadSoundMem(string.Format(System.IO.Path.GetDirectoryName(Application.ExecutablePath) + "\\Drums\\{0}.wav", i));
 				else
-					hPercs[i] = 0;
+					HPercs[i] = 0;
 
 			}
 		}
 
 		~SoundModule()
 		{
-			foreach (int hoge in hPercs)
+			foreach (var hoge in HPercs)
 			{
 				DX.DeleteSoundMem(hoge);
 			}
 
 		}
 
-		ControlEvent[] rpns = new ControlEvent[4];
+		ControlEvent[] _rpns = new ControlEvent[4];
 
 		public void Panic()
 		{
-			foreach (Dictionary<int, Tone> tones in Tones)
-				foreach (Tone tone in tones.Values)
+			foreach (var tones in Tones)
+				foreach (var tone in tones.Values)
 				{
 					tone.Abort();
 				}
@@ -512,8 +500,8 @@ namespace MusicSheet.Sequence
 		{
 			if (channel == null)
 				return;
-			Mssf m = insts[channels[channel.GetValueOrDefault()].inst];
-			if (m.wave == null && channel.GetValueOrDefault() != 9)
+			var m = _insts[Channels[channel.GetValueOrDefault()].Inst];
+			if (m.Wave == null && channel.GetValueOrDefault() != 9)
 
 				return;
 			
@@ -523,7 +511,7 @@ namespace MusicSheet.Sequence
 				if (me is NoteEvent)
 				{
 					//Tone a;
-					NoteEvent ne = (NoteEvent)me;
+					var ne = (NoteEvent)me;
 
 					if (ne.Note < 120 && ne.Note > 11 && ne.Channel.Value != 9)
 					{
@@ -536,26 +524,26 @@ namespace MusicSheet.Sequence
 							Tones[(int)channel][ne.Note].Abort();
 							Tones[(int)channel].Remove(ne.Note);
 						}
-						bTone[ne.Channel.Value] = nowTone;
-						Tone t = new Tone(pitchnames[ne.Note % 12], (ne.Note - 12) / 12, m.wave, new Envelope(m.a, m.d, m.s, m.r), 255, 0, ne.Velocity, m.noiseoption);
+						BTone[ne.Channel.Value] = NowTone;
+						var t = new Tone(Pitchnames[ne.Note % 12], (ne.Note - 12) / 12, m.Wave, new Envelope(m.A, m.D, m.S, m.R), 255, 0, ne.Velocity, m.Noiseoption);
 						LastTone[(byte)channel] = t;
 						Tones[(int)channel].Add(ne.Note, t);
 						Tones[(int)channel][ne.Note].StartPlay(miditick, ne.Gate);
-						tonequeue.Enqueue(t);
+						_tonequeue.Enqueue(t);
 
-						nowTone = t;
-						portamenttick = 0;
-						bms = DX.GetNowCount();
+						NowTone = t;
+						Portamenttick = 0;
+						Bms = DX.GetNowCount();
 					}
 					else
 					{
-						DX.PlaySoundMem(hPercs[ne.Note], DX.DX_PLAYTYPE_BACK);
-						foreach (int handle in hPercs)
+						DX.PlaySoundMem(HPercs[ne.Note], DX.DX_PLAYTYPE_BACK);
+						foreach (var handle in HPercs)
 						{
 							if (handle == 0)
 								continue;
-							DX.ChangePanSoundMem((channels[9].panpot - 64) * 4, hPercs[ne.Note]);
-							DX.ChangeVolumeSoundMem((int)(255 * (channels[9].volume / 127.0) * (channels[9].expression / 127.0) * (ne.Velocity / 127.0) * (Volume / 100f)), hPercs[ne.Note]);
+							DX.ChangePanSoundMem((Channels[9].Panpot - 64) * 4, HPercs[ne.Note]);
+							DX.ChangeVolumeSoundMem((int)(255 * (Channels[9].Volume / 127.0) * (Channels[9].Expression / 127.0) * (ne.Velocity / 127.0) * (Volume / 100f)), HPercs[ne.Note]);
 						}
 					}
 				}
@@ -565,7 +553,7 @@ namespace MusicSheet.Sequence
 				if (me is NoteOnEvent)
 				{
 					//Tone a;
-					NoteOnEvent ne = (NoteOnEvent)me;
+					var ne = (NoteOnEvent)me;
 					if (ne.Note < 120 && ne.Note > 11 && ne.Channel.Value != 9)
 					{
 
@@ -578,121 +566,121 @@ namespace MusicSheet.Sequence
 							Tones[(int)channel][ne.Note].Abort();
 							Tones[(int)channel].Remove(ne.Note);
 						}
-						Tone t = new Tone(pitchnames[ne.Note % 12], (ne.Note - 12) / 12, m.wave, new Envelope(m.a, m.d, m.s, m.r), 255, 0, ne.Velocity, m.noiseoption);
+						var t = new Tone(Pitchnames[ne.Note % 12], (ne.Note - 12) / 12, m.Wave, new Envelope(m.A, m.D, m.S, m.R), 255, 0, ne.Velocity, m.Noiseoption);
 						LastTone[(byte)channel] = t;
 						Tones[(int)channel].Add(ne.Note, t);
 						Tones[(int)channel][ne.Note].StartPlay(-1, -1);
-						tonequeue.Enqueue(t);
+						_tonequeue.Enqueue(t);
 					}
 					else
 					{
-						DX.PlaySoundMem(hPercs[ne.Note], DX.DX_PLAYTYPE_BACK);
-						foreach (int handle in hPercs)
+						DX.PlaySoundMem(HPercs[ne.Note], DX.DX_PLAYTYPE_BACK);
+						foreach (var handle in HPercs)
 						{
 							if (handle == 0)
 								continue;
-							DX.ChangePanSoundMem((channels[9].panpot - 64) * 4, hPercs[ne.Note]);
-							DX.ChangeVolumeSoundMem((int)(255 * (channels[9].volume / 127.0) * (channels[9].expression / 127.0) * (ne.Velocity / 127.0)), hPercs[ne.Note]);
+							DX.ChangePanSoundMem((Channels[9].Panpot - 64) * 4, HPercs[ne.Note]);
+							DX.ChangeVolumeSoundMem((int)(255 * (Channels[9].Volume / 127.0) * (Channels[9].Expression / 127.0) * (ne.Velocity / 127.0)), HPercs[ne.Note]);
 						}
 					}
 				}
 				//ノートオフ
 				if (me is NoteOffEvent)
 				{
-					NoteOffEvent noe = (NoteOffEvent)me;
+					var noe = (NoteOffEvent)me;
 					Tones[(int)channel][noe.Note].Stop();
 				}
 			}
 
 			if (me is ProgramEvent)
 			{
-				channels[(int)channel].inst = ((ProgramEvent)me).Value;
+				Channels[(int)channel].Inst = ((ProgramEvent)me).Value;
 			}
 
 			if (me is ControlEvent)
 			{
-				ControlEvent ce = (ControlEvent)me;
+				var ce = (ControlEvent)me;
 				switch (ce.Number)
 				{
 					case 10:
-						channels[(int)channel].panpot = ce.Value;
+						Channels[(int)channel].Panpot = ce.Value;
 						break;
 					case 7:
-						channels[(int)channel].volume = ce.Value;
+						Channels[(int)channel].Volume = ce.Value;
 						break;
 					case 11:
-						channels[(int)channel].expression = ce.Value;
+						Channels[(int)channel].Expression = ce.Value;
 						break;
 					case 101:
-						rpns[0] = ce;
+						_rpns[0] = ce;
 						break;
 					case 100:
-						rpns[1] = ce;
+						_rpns[1] = ce;
 						break;
 					case 6:
-						rpns[2] = ce;
-						if (rpns[1] == null)
+						_rpns[2] = ce;
+						if (_rpns[1] == null)
 							break;
-						switch (rpns[1].Value)
+						switch (_rpns[1].Value)
 						{
 							case 0:
-								channels[(int)channel].bendRange = new RPN(rpns[2].Value);
+								Channels[(int)channel].BendRange = new Rpn(_rpns[2].Value);
 								break;
 
 							case 2:
-								channels[(int)channel].noteShift = new RPN((short)(rpns[2].Value - 64));
+								Channels[(int)channel].NoteShift = new Rpn((short)(_rpns[2].Value - 64));
 								break;
 
 						}
 						break;
 					case 38:
-						rpns[3] = ce;
-						if (rpns[1] == null || rpns[2] == null)
+						_rpns[3] = ce;
+						if (_rpns[1] == null || _rpns[2] == null)
 							break;
-						if (rpns[1].Value == 1)
+						if (_rpns[1].Value == 1)
 						{
-							channels[(int)channel].tweak = new RPN((short)(rpns[2].Value * 128 + rpns[3].Value - 8192));
+							Channels[(int)channel].Tweak = new Rpn((short)(_rpns[2].Value * 128 + _rpns[3].Value - 8192));
 						}
 						break;
 					case 111:
-						loop = ce.Tick;
+						Loop = ce.Tick;
 						break;
 					case 65:
-						channels[(int)channel].portament = ce.Value;
+						Channels[(int)channel].Portament = ce.Value;
 						break;
 					case 5:
-						channels[(int)channel].portamentTime = ce.Value;
+						Channels[(int)channel].PortamentTime = ce.Value;
 						break;
 				}
 			}
 
 			if (me is PitchEvent)
 			{
-				byte[] native = me.ToNativeEvent();
-				int pitchdata = native[2] * 128 + native[1] - 8192;
+				var native = me.ToNativeEvent();
+				var pitchdata = native[2] * 128 + native[1] - 8192;
 
-				channels[(int)channel].pitchbend = pitchdata;
+				Channels[(int)channel].Pitchbend = pitchdata;
 
 				//Console.WriteLine("Decimal: " + pe.Value + "Hexa: " + pe.Value.ToString("X2") + "Binary: " + Convert.ToString(2, pe.Value));
 			}
 
-			if (cmc != null && me is NextMidi.DataElement.MetaData.MidiEndOfTrack)
+			if (cmc != null && me is MidiEndOfTrack)
 			{
 
-				channels[me.Channel.GetValueOrDefault()].end = true;
-				bool allend = true;
-				foreach (Channel c in channels)
-					if (!c.end)
+				Channels[me.Channel.GetValueOrDefault()].End = true;
+				var allend = true;
+				foreach (var c in Channels)
+					if (!c.End)
 					{
 						allend = false;
 						break;
 					}
 				if (allend)
 				{
-					if (loop == -1)
+					if (Loop == -1)
 						cmc.Stop();
 					else
-						cmc.TickCount = loop;
+						cmc.TickCount = Loop;
 				}
 
 			}
@@ -700,31 +688,31 @@ namespace MusicSheet.Sequence
 
 
 
-		public string[] pitchnames = new[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+		public string[] Pitchnames = new[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
-		int bmilisec = DX.GetNowCount();
+		int _bmilisec = DX.GetNowCount();
 
 		public void PlayTones(int miditick)
 		{
 			//(Dictionary<int, Tone> channel in Tones)
-			for (int i = 0; i < Tones.Length; i++)
+			for (var i = 0; i < Tones.Length; i++)
 			{
-				Dictionary<int, Tone> channel = Tones[i];
+				var channel = Tones[i];
 				//bool canDelete = false;
 				//foreach (KeyValuePair<int, Tone> tone in channel)
-				KeyValuePair<int, Tone>[] tones = channel.ToArray();
-				for (int j = 0; j < channel.Count; j++)
+				var tones = channel.ToArray();
+				for (var j = 0; j < channel.Count; j++)
 				{
-					KeyValuePair<int, Tone> tone = tones[j];
+					var tone = tones[j];
 
 					tone.Value.PlayLoop(miditick);
-					DX.ChangePanSoundMem((channels[i].panpot - 64) * 4, tone.Value.Handle);
-					DX.ChangeVolumeSoundMem((int)(tone.Value.OutVolume * (channels[i].volume / 127.0) * (channels[i].expression / 127.0) * (tone.Value.Velocity / 127.0) * (Volume / 100f)), tone.Value.Handle);
+					DX.ChangePanSoundMem((Channels[i].Panpot - 64) * 4, tone.Value.Handle);
+					DX.ChangeVolumeSoundMem((int)(tone.Value.OutVolume * (Channels[i].Volume / 127.0) * (Channels[i].Expression / 127.0) * (tone.Value.Velocity / 127.0) * (Volume / 100f)), tone.Value.Handle);
 					//DX.SetFrequencySoundMem(44100 + (int)(channels[i].pitchbend * ((44100 * (channels[i].bendRange.Data / 12.0)) / 8192.0)), tone.Value.Handle);
-					int a = (int)
+					var a = (int)
 						(
 						((tone.Value.Octave > 6) ? (tone.Value.GetFreq(tone.Value.Pitch, tone.Value.Octave - 2) * 100) : (tone.Value.GetFreq(tone.Value.Pitch, 4) * 100))
-						* Math.Pow(2, (channels[i].pitchbend / 8192.0) * (channels[i].bendRange.Data / 12.0)) * Math.Pow(2, (channels[i].tweak.Data / 8192f) * (2 / 12f)) * Math.Pow(2, (channels[i].noteShift.Data / 12f))
+						* Math.Pow(2, (Channels[i].Pitchbend / 8192.0) * (Channels[i].BendRange.Data / 12.0)) * Math.Pow(2, (Channels[i].Tweak.Data / 8192f) * (2 / 12f)) * Math.Pow(2, (Channels[i].NoteShift.Data / 12f))
 						);
 					DX.SetFrequencySoundMem(a, tone.Value.Handle);
 
@@ -764,10 +752,10 @@ namespace MusicSheet.Sequence
 		/// <returns>リリース状態でない Playing な Tone の数。</returns>
 		public static int GetPlayingTone(Dictionary<int, Tone> ch)
 		{
-			int i = 0;
-			foreach (Tone dat in ch.Values)
+			var i = 0;
+			foreach (var dat in ch.Values)
 			{
-				if (dat.Playing && dat.envflag != EnvelopeFlag.Release)
+				if (dat.Playing && dat.Envflag != EnvelopeFlag.Release)
 					i++;
 			}
 			return i;
@@ -775,18 +763,18 @@ namespace MusicSheet.Sequence
 
 	}
 
-	public struct RPN
+	public struct Rpn
 	{
 		public short Data;
 
-		public RPN(short data)
+		public Rpn(short data)
 		{
 			Data = data;
 		}
 
 	}
 
-	public struct SMFPosition
+	public struct SmfPosition
 	{
 		public int Measure;
 		public int Beat;
@@ -795,40 +783,40 @@ namespace MusicSheet.Sequence
 
 	public struct Channel
 	{
-		public byte inst;
-		public bool isDrum;
-		public byte panpot;
-		public byte volume;
-		public byte expression;
+		public byte Inst;
+		public bool IsDrum;
+		public byte Panpot;
+		public byte Volume;
+		public byte Expression;
 
-		public int pitchbend;
+		public int Pitchbend;
 
-		public bool end;
+		public bool End;
 
-		public int portamentTime;
+		public int PortamentTime;
 
-		public int portament;
+		public int Portament;
 
-		public RPN tweak;
+		public Rpn Tweak;
 
-		public RPN noteShift;
+		public Rpn NoteShift;
 
-		public RPN bendRange;
+		public Rpn BendRange;
 
-		public Channel(byte i, bool id, byte p, byte v, byte e, int pmt, int pm, RPN t, RPN n, RPN b)
+		public Channel(byte i, bool id, byte p, byte v, byte e, int pmt, int pm, Rpn t, Rpn n, Rpn b)
 		{
-			inst = i;
-			isDrum = id;
-			panpot = p;
-			volume = v;
-			expression = e;
-			end = false;
-			portamentTime = pmt;
-			portament = pm;
-			tweak = t;
-			noteShift = n;
-			bendRange = b;
-			pitchbend = 0;
+			Inst = i;
+			IsDrum = id;
+			Panpot = p;
+			Volume = v;
+			Expression = e;
+			End = false;
+			PortamentTime = pmt;
+			Portament = pm;
+			Tweak = t;
+			NoteShift = n;
+			BendRange = b;
+			Pitchbend = 0;
 		}
 
 
@@ -837,31 +825,31 @@ namespace MusicSheet.Sequence
 
 	public struct Mssf
 	{
-		public short[] wave;
-		public int a, d, r, pan;
-		public byte s;
+		public short[] Wave;
+		public int A, D, R, Pan;
+		public byte S;
 		public static readonly Mssf Empty = new Mssf();
-		public NoiseOption noiseoption;
+		public NoiseOption Noiseoption;
 		public Mssf(short[] w, int a, int d, byte s, int r, int pan)
 		{
-			this.wave = w;
-			this.a = a;
-			this.d = d;
-			this.s = s;
-			this.r = r;
-			this.pan = pan;
-			noiseoption = NoiseOption.None;
+			Wave = w;
+			this.A = a;
+			this.D = d;
+			this.S = s;
+			this.R = r;
+			this.Pan = pan;
+			Noiseoption = NoiseOption.None;
 		}
 
 		public Mssf(short[] w, int a, int d, byte s, int r, int pan, NoiseOption noise)
 		{
-			this.wave = w;
-			this.a = a;
-			this.d = d;
-			this.s = s;
-			this.r = r;
-			this.pan = pan;
-			noiseoption = noise;
+			Wave = w;
+			this.A = a;
+			this.D = d;
+			this.S = s;
+			this.R = r;
+			this.Pan = pan;
+			Noiseoption = noise;
 		}
 
 

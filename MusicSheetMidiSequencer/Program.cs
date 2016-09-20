@@ -1,7 +1,7 @@
 ﻿using DxLibDLL;
 using MusicSheet.Mssf;
 using MusicSheet.Sequence;
-using DefenderStory.GUI;
+using TakeUpJewel.GUI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,12 +14,11 @@ namespace MusicSheetMidiSequencer
 	class Program
 	{
 
-		static DXLabel textviewer = null;
+		static DxLabel _textviewer = null;
 
 		[STAThread]
 		static void Main(string[] args)
 		{
-			bool isFullScreen = false;
 
 			//Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
 
@@ -764,7 +763,7 @@ namespace MusicSheetMidiSequencer
 		static void dxform_MouseWheel(object sender, MouseEventArgs e)
 		{
 			Console.WriteLine("debug");
-			textviewer.Location = new PointF(textviewer.Location.X, textviewer.Location.Y + e.Delta * SystemInformation.MouseWheelScrollLines / 120);
+			_textviewer.Location = new PointF(_textviewer.Location.X, _textviewer.Location.Y + e.Delta * SystemInformation.MouseWheelScrollLines / 120);
 		}
 
 		static void dxform_DragEnter(object sender, DragEventArgs e)
@@ -777,25 +776,25 @@ namespace MusicSheetMidiSequencer
 				e.Effect = DragDropEffects.None;
 		}
 
-		static string file = "";
-		static bool playRequest = false;
+		static string _file = "";
+		static bool _playRequest;
 
 		static void dxform_DragDrop(object sender, DragEventArgs e)
 		{
 			//コントロール内にドロップされたとき実行される
 			//ドロップされたすべてのファイル名を取得する
-			string[] fileName =
+			var fileName =
 				(string[])e.Data.GetData(DataFormats.FileDrop, false);
 			//ListBoxに追加する
 			if (fileName.Length > 1)
 				MessageBox.Show("複数のファイルがドロップされました。\r\n先頭のファイルのみ再生を開始します");
-			file = fileName[0];
-			playRequest = true;
+			_file = fileName[0];
+			_playRequest = true;
 		}
 
 
 
-		public static int GetBPM(byte b1, byte b2, byte b3)
+		public static int GetBpm(byte b1, byte b2, byte b3)
 		{
 			return 60 * 1000000 / ((b1 << 16) + (b2 << 8) + b3);
 		}

@@ -39,7 +39,7 @@ namespace MusicSheetMidiSequencer.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MusicSheetMidiSequencer.Properties.Resources", typeof(Resources).Assembly);
+                    var temp = new global::System.Resources.ResourceManager("MusicSheetMidiSequencer.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -65,7 +65,7 @@ namespace MusicSheetMidiSequencer.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap StatusAnnotations_Complete_and_ok_32xLG_color {
             get {
-                object obj = ResourceManager.GetObject("StatusAnnotations_Complete_and_ok_32xLG_color", resourceCulture);
+                var obj = ResourceManager.GetObject("StatusAnnotations_Complete_and_ok_32xLG_color", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -75,7 +75,7 @@ namespace MusicSheetMidiSequencer.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap StatusAnnotations_Critical_32xLG_color {
             get {
-                object obj = ResourceManager.GetObject("StatusAnnotations_Critical_32xLG_color", resourceCulture);
+                var obj = ResourceManager.GetObject("StatusAnnotations_Critical_32xLG_color", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -85,7 +85,7 @@ namespace MusicSheetMidiSequencer.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Symbols_Pause_32xLG {
             get {
-                object obj = ResourceManager.GetObject("Symbols_Pause_32xLG", resourceCulture);
+                var obj = ResourceManager.GetObject("Symbols_Pause_32xLG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -95,7 +95,7 @@ namespace MusicSheetMidiSequencer.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Symbols_Play_32xLG {
             get {
-                object obj = ResourceManager.GetObject("Symbols_Play_32xLG", resourceCulture);
+                var obj = ResourceManager.GetObject("Symbols_Play_32xLG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -105,7 +105,7 @@ namespace MusicSheetMidiSequencer.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Symbols_Stop_32xLG {
             get {
-                object obj = ResourceManager.GetObject("Symbols_Stop_32xLG", resourceCulture);
+                var obj = ResourceManager.GetObject("Symbols_Stop_32xLG", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
