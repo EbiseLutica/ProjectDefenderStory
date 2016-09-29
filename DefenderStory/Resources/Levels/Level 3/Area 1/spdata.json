@@ -1,263 +1,52 @@
 [
 	{
 		"PosX": 32,
-		"PosY": 1552,
+		"PosY": 0,
+		"Tag": null,
+		"ZIndex": 0,
 		"EntityID": 0,
-		"EntityData": {
-			"SpawnFromDoor": false,
-			"TargetDoorIndex": 0
-		}
-	},
-	{
-		"PosX": 112,
-		"PosY": 1424,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 6 }
-	},
-	{
-		"PosX": 864,
-		"PosY": 1104,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 8 }
-	},
-	{
-		"PosX": 1056,
-		"PosY": 1312,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 256,
-		"PosY": 1520,
-		"EntityID": 17,
-		"EntityData": null
-	},
-	{
-		"PosX": 208,
-		"PosY": 1424,
-		"EntityID": 15,
-		"EntityData": null
-	},
-	{
-		"PosX": 288,
-		"PosY": 1376,
-		"EntityID": 15,
-		"EntityData": null
-	},
-	{
-		"PosX": 352,
-		"PosY": 1344,
-		"EntityID": 15,
-		"EntityData": null
-	},
-	{
-		"PosX": 496,
-		"PosY": 1408,
-		"EntityID": 16,
-		"EntityData": null
-	},
-	{
-		"PosX": 576,
-		"PosY": 1296,
-		"EntityID": 16,
-		"EntityData": null
-	},
-	{
-		"PosX": 432,
-		"PosY": 1344,
-		"EntityID": 14,
-		"EntityData": null
-	},
-	{
-		"PosX": 672,
-		"PosY": 1472,
-		"EntityID": 15,
-		"EntityData": null
-	},
-	{
-		"PosX": 944,
-		"PosY": 1424,
-		"EntityID": 17,
-		"EntityData": null
-	},
-	{
-		"PosX": 880,
-		"PosY": 1360,
-		"EntityID": 16,
-		"EntityData": null
-	},
-	{
-		"PosX": 880,
-		"PosY": 1232,
-		"EntityID": 16,
-		"EntityData": null
-	},
-	{
-		"PosX": 784,
-		"PosY": 1296,
-		"EntityID": 14,
-		"EntityData": null
-	},
-	{
-		"PosX": 944,
-		"PosY": 1184,
-		"EntityID": 14,
-		"EntityData": null
-	},
-	{
-		"PosX": 1248,
-		"PosY": 1361,
-		"EntityID": 14,
-		"EntityData": null
-	},
-	{
-		"PosX": 1376,
-		"PosY": 1328,
-		"EntityID": 9,
-		"EntityData": null
-	},
-	{
-		"PosX": 1344,
-		"PosY": 1344,
-		"EntityID": 9,
-		"EntityData": null
-	},
-	{
-		"PosX": 1056,
-		"PosY": 1344,
-		"EntityID": 10,
-		"EntityData": null
-	},
-	{
-		"PosX": 96,
-		"PosY": 1472,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 128,
-		"PosY": 1472,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 208,
-		"PosY": 1392,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 208,
-		"PosY": 1376,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 288,
-		"PosY": 1328,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 288,
-		"PosY": 1344,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 352,
-		"PosY": 1296,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 352,
-		"PosY": 1312,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 576,
-		"PosY": 1248,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 624,
-		"PosY": 1440,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 672,
-		"PosY": 1408,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 736,
-		"PosY": 1376,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 800,
-		"PosY": 1408,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 880,
-		"PosY": 1328,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 784,
-		"PosY": 1264,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 880,
-		"PosY": 1200,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 944,
-		"PosY": 1152,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1024,
-		"PosY": 1424,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1056,
-		"PosY": 1408,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1088,
-		"PosY": 1392,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 752,
-		"PosY": 1424,
-		"EntityID": 83,
-		"EntityData": null
-	},
-	{
-		"PosX": 1472,
-		"PosY": 1343,
-		"EntityID": 18,
-		"EntityData": { "NextStage": 4 }
-	}
+		"EntityData": { "SpawnFromDoor": false, "TargetDoorTag": null }
+	}, { "PosX": 2064, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2096, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2112, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2144, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 544, "PosY": 16, "Tag": null, "ZIndex": 0, "EntityID": 12, "EntityData": { "TargetEntityTag": "6" } },
+	{ "PosX": 544, "PosY": 64, "Tag": "6", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 128, "PosY": 128, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 2 } },
+	{ "PosX": 768, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 6 } },
+	{ "PosX": 1056, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 1152, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 1200, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 368, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 752, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 13, "EntityData": null },
+	{ "PosX": 2208, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 18, "EntityData": { "NextStage": 4 } },
+	{ "PosX": 1912, "PosY": 64, "Tag": "7", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 1912, "PosY": 16, "Tag": null, "ZIndex": 0, "EntityID": 12, "EntityData": { "TargetEntityTag": "7" } },
+	{ "PosX": 1584, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 4, "EntityData": null },
+	{ "PosX": 416, "PosY": 208, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 576, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 608, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 640, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 672, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 672, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 640, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 704, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 704, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 704, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 976, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 960, "PosY": 128, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 992, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1008, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1024, "PosY": 128, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1968, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 2000, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 1984, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 2016, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 2032, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 2048, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 461, "PosY": 3, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 0 } },
+	{ "PosX": 1808, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 3, "EntityData": null },
+	{ "PosX": 1760, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 3, "EntityData": null },
+	{ "PosX": 1712, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 3, "EntityData": null },
+	{ "PosX": 1280, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 85, "EntityData": null }
 ]

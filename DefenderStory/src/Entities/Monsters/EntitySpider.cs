@@ -9,12 +9,6 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("Spider", 11)]
 	public class EntitySpider : EntityFlying
 	{
-
-		public override int[] ImageHandle => ResourceUtility.Spider;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
-
 		protected float Accel = 0.1f;
 
 		public EntitySpider(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
@@ -27,6 +21,11 @@ namespace TakeUpJewel.Entities
 			CollisionAIs.Add(new AiKillDefender(this));
 		}
 
+		public override int[] ImageHandle => ResourceUtility.Spider;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
+
 		public override void CheckCollision()
 		{
 			if (!IsDying)
@@ -35,12 +34,10 @@ namespace TakeUpJewel.Entities
 
 		public override void SetKilledAnime()
 		{
-
 		}
 
 		public override void SetCrushedAnime()
 		{
-			
 		}
 
 		public override void OnUpdate(Status ks)
@@ -61,17 +58,12 @@ namespace TakeUpJewel.Entities
 			base.Kill();
 			Velocity.Y = 0;
 		}
-
-
 	}
 
 	[EntityRegistry("SpiderString", 12)]
 	public class EntityString : EntityVisible
 	{
 		private string _targetTag = "";
-		
-
-		public override EntityGroup MyGroup => EntityGroup.Stage;
 
 		public EntityString(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
@@ -81,13 +73,14 @@ namespace TakeUpJewel.Entities
 			Parent = par;
 		}
 
+
+		public override EntityGroup MyGroup => EntityGroup.Stage;
+
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			if (jsonobj.IsDefined("TargetEntityTag"))
-			{
 				_targetTag = jsonobj.TargetEntityTag;
-			}
 			return this;
 		}
 
@@ -95,10 +88,10 @@ namespace TakeUpJewel.Entities
 		{
 			foreach (var te in Parent.FindEntitiesByTag(_targetTag))
 			{
-				if (te is EntityLiving && ((EntityLiving)te).IsDying)
+				if (te is EntityLiving && ((EntityLiving) te).IsDying)
 					continue;
 				var pp = new PointF(ks.Camera.X + te.Location.X, ks.Camera.Y + te.Location.Y);
-				DX.DrawLine((int)p.X + 8, (int)p.Y + 8, (int)pp.X + 8, (int)pp.Y + 8, DX.GetColor(255, 255, 255));
+				DX.DrawLine((int) p.X + 8, (int) p.Y + 8, (int) pp.X + 8, (int) pp.Y + 8, DX.GetColor(255, 255, 255));
 			}
 		}
 	}

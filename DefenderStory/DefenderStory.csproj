@@ -61,10 +61,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Google Drive\lib\DxLibDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="DynamicJson, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Google Drive\lib\DynamicJson.dll</HintPath>
-    </Reference>
     <Reference Include="nextmidi.data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Google Drive\lib\nextmidi.data.dll</HintPath>
@@ -93,10 +89,12 @@
     </Compile>
     <Compile Include="src\Entities\AbstractEntities.cs" />
     <Compile Include="src\Entities\Defenders\EntityPlayer.cs" />
+    <Compile Include="src\Entities\Defenders\EntityPlayerGhost.cs" />
     <Compile Include="src\Entities\Defenders\Weapons.cs" />
     <Compile Include="src\Entities\EntityCollection.cs" />
     <Compile Include="src\Entities\EntityList.cs" />
     <Compile Include="src\Entities\EntityRegister.cs" />
+    <Compile Include="src\Entities\EventScripters\EntityTalkable.cs" />
     <Compile Include="src\Entities\Monsters\EntityArcher.cs" />
     <Compile Include="src\Entities\Monsters\EntityBlackServer.cs" />
     <Compile Include="src\Entities\Monsters\EntityBoxer.cs" />
@@ -107,6 +105,7 @@
     <Compile Include="src\Entities\Monsters\EntityDensy.cs" />
     <Compile Include="src\Entities\Monsters\EntityFolderFly.cs" />
     <Compile Include="src\Entities\Monsters\EntityModokee.cs" />
+    <Compile Include="src\Entities\Monsters\EntityQueenBoss.cs" />
     <Compile Include="src\Entities\Monsters\EntitySolider.cs" />
     <Compile Include="src\Entities\Monsters\EntitySpider.cs" />
     <Compile Include="src\Entities\Monsters\EntityStrangeFlower.cs" />
@@ -116,6 +115,8 @@
     <Compile Include="src\Entities\Others\Items.cs" />
     <Compile Include="src\Entities\Others\Particles.cs" />
     <Compile Include="src\Entities\Others\Stages.cs" />
+    <Compile Include="src\GameEngine\EventRuntime.cs" />
+    <Compile Include="src\GameEngine\EventScript.cs" />
     <Compile Include="src\GameEngine\GameEngine.cs" />
     <Compile Include="src\GameEngine\Scenes.cs" />
     <Compile Include="src\Objects.cs" />
@@ -489,17 +490,8 @@
     <None Include="Resources\Levels\Level 2\Area 1\spdata.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Levels\Level 2\Area 2\area.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Levels\Level 2\Area 2\map.citmap">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Levels\Level 2\Area 2\spdata.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\Levels\Level 2\lvldat.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Levels\Level 3\Area 1\area.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -511,7 +503,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Levels\Level 3\lvldat.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Levels\Level 4\Area 1\area.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -526,13 +518,22 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Levels\Level 5\Area 1\area.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Levels\Level 5\Area 1\map.citmap">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Levels\Level 5\Area 1\spdata.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Levels\Level 5\Area 2\area.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Levels\Level 5\Area 2\map.citmap">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Levels\Level 5\Area 2\spdata.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Levels\Level 5\lvldat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -636,21 +637,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Document\iroiro.txt" />
-    <Content Include="Resources\Document\prolog.txt">
+    <Content Include="Resources\Document\prolog-female.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Document\prolog-male.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Document\spriteID.txt" />
     <Content Include="Resources\Document\staffrole.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Graphics\bgbreaktime.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Graphics\bgjukebox.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\bglvl1area1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\bglvl2area2.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Graphics\bglvl3area1.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\bglvl4area1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -658,16 +665,14 @@
     <Content Include="Resources\Graphics\bglvl5area1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\bglvl5area1.png">
+    <Content Include="Resources\Graphics\bglvl5area2.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Graphics\bgsoulchoco.bmp" />
     <Content Include="Resources\Graphics\citringo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\commonMob.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\fglvl5area1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\font.png">
@@ -679,13 +684,7 @@
     <Content Include="Resources\Graphics\joypadactgame.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\joypadstory.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Graphics\kbactgame.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\kbstory.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\logo.png">
@@ -694,7 +693,9 @@
     <Content Include="Resources\Graphics\mpt1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\mpt1_hj.png" />
+    <Content Include="Resources\Graphics\mpt1_hj.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\mpt2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -713,13 +714,12 @@
     <Content Include="Resources\Graphics\mpt4_hj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\mpttest.png">
+    <Content Include="Resources\Graphics\mpt5.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\mpttest_hj.png">
+    <Content Include="Resources\Graphics\mpt5_hj.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\player_wearing.png" />
     <Content Include="Resources\Graphics\sparcher.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -736,49 +736,51 @@
     <Content Include="Resources\Graphics\spCaveModokee.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spcloud.png" />
     <Content Include="Resources\Graphics\spdaemon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\spDensy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spDevilTsubasa.png" />
+    <Content Include="Resources\Graphics\spdoor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spdwarf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spelise.png" />
+    <Content Include="Resources\Graphics\spfemaleplayer.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Graphics\spfemaleplayer_fire.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Graphics\spfemaleplayer_ice.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Graphics\spfemaleplayer_magic.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spfighter.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spfireball.bmp" />
-    <Content Include="Resources\Graphics\spfireball.png" />
+    <Content Include="Resources\Graphics\spflutist.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spFolderFly.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spfox.png" />
-    <Content Include="Resources\Graphics\spgirlpainting.png" />
-    <Content Include="Resources\Graphics\spgoblingirl.bmp" />
-    <Content Include="Resources\Graphics\spgoblingirl.png" />
-    <Content Include="Resources\Graphics\spHobgobln.png" />
     <Content Include="Resources\Graphics\spitem.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spjaws.png" />
-    <Content Include="Resources\Graphics\spjellyfish.png" />
-    <Content Include="Resources\Graphics\spkappa.png" />
-    <Content Include="Resources\Graphics\spMagicCrystal.png" />
+    <Content Include="Resources\Graphics\spking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spModokee.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spninja.png" />
-    <Content Include="Resources\Graphics\sppacmanflower.png" />
-    <Content Include="Resources\Graphics\spparentpaintng.png" />
     <Content Include="Resources\Graphics\spparticle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\sppassenger.png" />
-    <Content Include="Resources\Graphics\sppearl.png" />
     <Content Include="Resources\Graphics\spplayer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -791,17 +793,18 @@
     <Content Include="Resources\Graphics\spplayer_ice.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spplayer_leaf.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Graphics\spplayer_magic.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\sprobot1.png" />
+    <Content Include="Resources\Graphics\spqueen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\sprollingrock.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spSadako.png" />
+    <Content Include="Resources\Graphics\spsign.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\spspider.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -809,7 +812,6 @@
     <Content Include="Resources\Graphics\spstrangeflower.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\sptrain.png" />
     <Content Include="Resources\Graphics\spturbo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -819,96 +821,25 @@
     <Content Include="Resources\Graphics\spTurcosShell.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\spUmbrellaBoy.png" />
     <Content Include="Resources\Graphics\spweapon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\spwitch.png" />
-    <Content Include="Resources\Graphics\spwoody.png" />
-    <Content Include="Resources\Graphics\spyuan.png" />
-    <Content Include="Resources\Graphics\spyuanmagic.png" />
-    <Content Include="Resources\Graphics\story_1.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\story_2.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\story_3.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Graphics\theend.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Graphics\bglvl2area1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Graphics\uimesbox.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\おじさん\死.png">
+    <Content Include="Resources\Music\c006.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\おじさん\汗.png">
+    <Content Include="Resources\Music\c014.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Graphics\おじさん\通常.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\セシル\ツッコミ.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\セシル\哀.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\セシル\照.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\セシル\笑.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\セシル\素.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\セシル\驚.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\デンジー\機.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\イラッ.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\ツッコミ.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\哀.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\怒.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\照.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\笑.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\素.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Graphics\翔\驚.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Levels\Level 2\story.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Levels\Level 3\story.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Levels\Level 4\story.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Music\c011.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Music\c011_piano.mid">
+    <Content Include="Resources\Music\fanfare.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Music\hometownv2.mid">
@@ -917,13 +848,13 @@
     <Content Include="Resources\Music\IcyHeart.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Music\icypulse_rec.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Music\jingle_gameclear.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Music\muteki.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Music\nahha.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Music\nothing.mid">
@@ -932,28 +863,20 @@
     <Content Include="Resources\Music\omedeto.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Music\revenge.mid" />
+    <Content Include="Resources\Music\team-spyway.mid">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Music\zannnenn.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Music\おもちゃエレクトロニクス.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Music\registertown.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Music\入道雲は天高く.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Music\散歩.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Music\流れる水の働き.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Music\草原をゆくv5.mid">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Music\雨の日の散歩.mid">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Sounds\0.wav">
@@ -1028,6 +951,24 @@
     <Content Include="Resources\Sounds\3.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Sounds\30.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\31.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\32.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\33.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\34.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\35.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Sounds\4.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1074,6 +1015,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DynamicJson\DynamicJson.csproj">
+      <Project>{116b75d7-d429-4289-b7e6-ab8479d592e7}</Project>
+      <Name>DynamicJson</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibMap\LibMap.csproj">
       <Project>{16f4cd04-98b2-4b8e-b52f-07d507899b0b}</Project>
       <Name>LibMap</Name>

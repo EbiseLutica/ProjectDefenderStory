@@ -48,7 +48,7 @@
     </Reference>
     <Reference Include="DxLibDotNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\DxLibDotNet.dll</HintPath>
+      <HintPath>..\..\..\Google Drive\lib\DxLibDotNet.dll</HintPath>
     </Reference>
     <Reference Include="MIDIClock.CSharp">
       <HintPath>..\..\lib\MIDIClock.CSharp.dll</HintPath>

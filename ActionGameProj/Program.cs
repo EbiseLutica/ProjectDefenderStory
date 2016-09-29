@@ -1,59 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DxLibDLL;
 using System.Drawing;
 using System.Windows.Forms;
+using DxLibDLL;
 using MusicSheet.Mssf;
 using TakeUpJewel.GUI;
 
-
 namespace MusicSheetSoundEditor
 {
-	
 	public class Program
 	{
+		public static short[] WavSquare =
+		{
+			-32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768,
+			-32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767
+		};
 
-		public static short[] WavSquare = {
-													 -32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768, 
-													 -32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768, 
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767, 
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767
-												 };
-
-		public static short[] WavTriangle = {
-														-4096,  -8192, -12288, -16384, -20479, -24575, -28671, -32767,
-													   -32767, -28671, -24575, -20479, -16384, -12288,  -8192,  -4096,
-														 4096,   8192,  12288,  16384,  20479,  24575,  28671,  32767, 
-														32767,  28671,  24575,  20479,  16384,  12288,   8192,   4096
-													   
-												   };
-
-
-		public static short[] Wav12Pulse = {
-													 -32768, -32768, -32768, -32768,  32767,  32767,  32767,  32767,
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767,
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767, 
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767
-												 };
+		public static short[] WavTriangle =
+		{
+			-4096, -8192, -12288, -16384, -20479, -24575, -28671, -32767,
+			-32767, -28671, -24575, -20479, -16384, -12288, -8192, -4096,
+			4096, 8192, 12288, 16384, 20479, 24575, 28671, 32767,
+			32767, 28671, 24575, 20479, 16384, 12288, 8192, 4096
+		};
 
 
-		public static short[] Wav25Pulse = {
-													 -32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768,
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767,
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767, 
-													  32767,  32767,  32767,  32767,  32767,  32767,  32767,  32767
-												 };
+		public static short[] Wav12Pulse =
+		{
+			-32768, -32768, -32768, -32768, 32767, 32767, 32767, 32767,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767
+		};
+
+
+		public static short[] Wav25Pulse =
+		{
+			-32768, -32768, -32768, -32768, -32768, -32768, -32768, -32768,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767,
+			32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767
+		};
 
 
 		[STAThread]
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			//波形編集モード: 1マスは 10*15
 
 
 			DX.SetGraphMode(320, 256, 32);
-			
+
 			DX.ChangeWindowMode(1);
 			DX.SetWaitVSyncFlag(0);
 			DX.SetFontSize(14);
@@ -89,9 +87,9 @@ namespace MusicSheetSoundEditor
 
 			var buttonsForEditMode1 = new DxButton[14];
 			var octave = 4;
-			
-			
-			string[] pitches = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+
+
+			string[] pitches = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
 			var myenv = new Envelope(0, 0, 255, 0);
 			Tone nowTone = null;
@@ -150,18 +148,9 @@ namespace MusicSheetSoundEditor
 			buttonsForEditMode2[12] = new DxButton(new Rectangle(184, 64, 16, 16), "", Color.White, Color.Black);
 
 
-			
+			buttonsForEditMode2[0].MouseDownAction2 = (mbtn, dxb) => { myenv.AttackTime++; };
 
-
-			buttonsForEditMode2[0].MouseDownAction2 = (mbtn, dxb) =>
-			{
-				myenv.AttackTime++;
-			};
-
-			buttonsForEditMode2[1].MouseDownAction2 = (mbtn, dxb) =>
-			{
-				myenv.DecayTime++;
-			};
+			buttonsForEditMode2[1].MouseDownAction2 = (mbtn, dxb) => { myenv.DecayTime++; };
 
 			buttonsForEditMode2[2].MouseDownAction2 = (mbtn, dxb) =>
 			{
@@ -170,10 +159,7 @@ namespace MusicSheetSoundEditor
 					myenv.SustainLevel = 255;
 			};
 
-			buttonsForEditMode2[3].MouseDownAction2 = (mbtn, dxb) =>
-			{
-				myenv.ReleaseTime++;
-			};
+			buttonsForEditMode2[3].MouseDownAction2 = (mbtn, dxb) => { myenv.ReleaseTime++; };
 
 			buttonsForEditMode2[4].MouseDownAction2 = (mbtn, dxb) =>
 			{
@@ -209,9 +195,8 @@ namespace MusicSheetSoundEditor
 				sfd.Filter = "Music Sheet サウンドファイル (*.mssf)|*.mssf|すべてのファイル (*.*)|*.*";
 				if (sfd.ShowDialog() == DialogResult.Cancel)
 					return;
-				MssfUtility.SaveFileVer2(sfd.FileName, wave, myenv.AttackTime, myenv.DecayTime, myenv.SustainLevel, myenv.ReleaseTime, pan, noiseoption);
-
-
+				MssfUtility.SaveFileVer2(sfd.FileName, wave, myenv.AttackTime, myenv.DecayTime, myenv.SustainLevel,
+					myenv.ReleaseTime, pan, noiseoption);
 			};
 
 			buttonsForEditMode2[9].ClickedAction = (mbtn, dxb) =>
@@ -220,7 +205,7 @@ namespace MusicSheetSoundEditor
 				ofd.Filter = "Music Sheet サウンドファイル (*.mssf)|*.mssf|すべてのファイル (*.*)|*.*";
 				if (ofd.ShowDialog() == DialogResult.Cancel)
 					return;
-				int a,d,r;
+				int a, d, r;
 				byte s;
 
 				MssfUtility.LoadFileDynamic(ofd.FileName, out wave, out a, out d, out s, out r, out pan, out noiseoption);
@@ -229,29 +214,18 @@ namespace MusicSheetSoundEditor
 				myenv.DecayTime = d;
 				myenv.SustainLevel = s;
 				myenv.ReleaseTime = r;
-
 			};
 
-			buttonsForEditMode2[10].ClickedAction = (mbtn, dxb) =>
-			{
-				noiseoption = NoiseOption.None;
-			};
+			buttonsForEditMode2[10].ClickedAction = (mbtn, dxb) => { noiseoption = NoiseOption.None; };
 
-			buttonsForEditMode2[11].ClickedAction = (mbtn, dxb) =>
-			{
-				noiseoption = NoiseOption.Long;
-			};
+			buttonsForEditMode2[11].ClickedAction = (mbtn, dxb) => { noiseoption = NoiseOption.Long; };
 
-			buttonsForEditMode2[12].ClickedAction = (mbtn, dxb) =>
-			{
-				noiseoption = NoiseOption.Short;
-			};
+			buttonsForEditMode2[12].ClickedAction = (mbtn, dxb) => { noiseoption = NoiseOption.Short; };
 
 			var down = new Action<int, DxButton>((mbtn, dbt) =>
 			{
-				
 				//DX.PlaySoundMem(nowHandle = SetWave(wave, GetFreq(dbt.Text, octave)), DX.DX_PLAYTYPE_LOOP);
-				if (nowTone != null && nowTone.Playing)
+				if ((nowTone != null) && nowTone.Playing)
 				{
 					nowTone.Abort();
 					nowTone = null;
@@ -272,11 +246,7 @@ namespace MusicSheetSoundEditor
 			{
 				buttonsForEditMode1[i].MouseDownAction = down;
 				buttonsForEditMode1[i].MouseUpAction = up;
-				
 			}
-
-
-
 
 
 			//int sheed = 0x8000;
@@ -286,11 +256,10 @@ namespace MusicSheetSoundEditor
 
 			//bool isShortFreq = false;
 			DX.SetWindowVisibleFlag(1);
-			
+
 
 			while (true)
 			{
-
 				DX.ProcessMessage();
 				DX.ClearDrawScreen();
 
@@ -319,70 +288,60 @@ namespace MusicSheetSoundEditor
 						var mouseGridY = (mouseY - 16) / 15;
 
 						for (var x = 0; x < 32; x++)
-							DX.DrawBox(x * 10, 136, x * 10 + 10, 136 + (int)(wave[x] / 4095.875 * 15), DX.GetColor(0, 172, 224), 1);
+							DX.DrawBox(x * 10, 136, x * 10 + 10, 136 + (int) (wave[x] / 4095.875 * 15), DX.GetColor(0, 172, 224), 1);
 						for (var y = 0; y < 240; y += 15)
-						{
 							for (var x = 0; x < 320; x += 10)
-							{
 								DX.DrawBox(x, y + 16, x + 11, y + 32, DX.GetColor(64, 64, 64), 0);
-							}
-						}
 
 						if (mouseY < 16)
 							mouseGridY = 0;
 						else
 						{
 							DX.DrawCircle(mouseGridX * 10 + 5, mouseGridY * 15 + 15, 4, DX.GetColor(255, 255, 255), 1);
-							if (mouseGridX < 32 && mouseGridX >= 0 && mouseGridY < 17)
+							if ((mouseGridX < 32) && (mouseGridX >= 0) && (mouseGridY < 17))
 								if (mouseIn == DX.MOUSE_INPUT_LEFT)
-								{
-									wave[mouseGridX] = (short)((mouseGridY - 8) * 4095.875);
-								}
+									wave[mouseGridX] = (short) ((mouseGridY - 8) * 4095.875);
 								else if (mouseIn == DX.MOUSE_INPUT_RIGHT)
-								{
 									wave[mouseGridX] = 0;
-								}
 						}
-						DX.DrawString(0, 0, string.Format("MouseX: {0} MouseY: {1} MGridX: {2} MGridY: {3}", mouseX, mouseY, mouseGridX, mouseGridY), DX.GetColor(255, 255, 255));
+						DX.DrawString(0, 0,
+							string.Format("MouseX: {0} MouseY: {1} MGridX: {2} MGridY: {3}", mouseX, mouseY, mouseGridX, mouseGridY),
+							DX.GetColor(255, 255, 255));
 
 						break;
 					case 1:
 						foreach (var dxb in buttonsForEditMode1)
-						{
 							if (dxb != null)
 								dxb.Draw();
-						}
 						DX.DrawString(48, 24, octave.ToString(), DX.GetColor(255, 255, 255));
 
 						DX.DrawString(110, 24, "テスター", DX.GetColor(255, 255, 255));
 
-						if (nowTone != null && nowTone.Playing)
+						if ((nowTone != null) && nowTone.Playing)
 						{
 							DX.DrawString(174, 84, nowTone.Freq.ToString(), DX.GetColor(255, 255, 255));
 							DX.DrawString(174, 8, "V OV " + nowTone.OutVolume, DX.GetColor(255, 255, 255));
 							DX.DrawBox(174, 83, 178, 83 - nowTone.Volume / 4, DX.GetColor(255, 255, 255), 1);
 							DX.DrawBox(188, 83, 199, 83 - nowTone.OutVolume / 4, DX.GetColor(255, 255, 255), 1);
 							var hoge = "";
-							if (((int)nowTone.Envflag) >= 1)
+							if ((int) nowTone.Envflag >= 1)
 								hoge += "A";
-							if (((int)nowTone.Envflag) >= 2)
+							if ((int) nowTone.Envflag >= 2)
 								hoge += "D";
-							if (((int)nowTone.Envflag) >= 3)
+							if ((int) nowTone.Envflag >= 3)
 								hoge += "S";
-							if (((int)nowTone.Envflag) >= 4)
+							if ((int) nowTone.Envflag >= 4)
 								hoge += "R";
-							DX.DrawString(210, 64, hoge, DX.GetColor(255,255,255));
+							DX.DrawString(210, 64, hoge, DX.GetColor(255, 255, 255));
 							for (var i = 0; i < 32; i++)
-								DX.DrawLine(i + 202, (int)(wave[i] / 4095.875 * 1.2 + 51), i + 202, 51, 0xffffff);
+								DX.DrawLine(i + 202, (int) (wave[i] / 4095.875 * 1.2 + 51), i + 202, 51, 0xffffff);
 						}
 
 						break;
 					case 2:
 						foreach (var dxb in buttonsForEditMode2)
-						{
 							if (dxb != null)
 								dxb.Draw();
-						}
 
 						DX.DrawString(24, 105, myenv.AttackTime.ToString(), DX.GetColor(255, 255, 255));
 
@@ -392,16 +351,19 @@ namespace MusicSheetSoundEditor
 
 						DX.DrawString(144, 105, myenv.ReleaseTime.ToString(), DX.GetColor(255, 255, 255));
 
-						
+
 						buttonsForEditMode2[10].Text = "";
 						buttonsForEditMode2[11].Text = "";
 						buttonsForEditMode2[12].Text = "";
 
-						buttonsForEditMode2[10 + (int)noiseoption].Text = "×";
+						buttonsForEditMode2[10 + (int) noiseoption].Text = "×";
 
-						DX.DrawString(buttonsForEditMode2[10].PointAndSize.X + 24, buttonsForEditMode2[10].PointAndSize.Y, "ノイズ無し", 0xffffff);
-						DX.DrawString(buttonsForEditMode2[11].PointAndSize.X + 24, buttonsForEditMode2[11].PointAndSize.Y, "長周期ノイズ", 0xffffff);
-						DX.DrawString(buttonsForEditMode2[12].PointAndSize.X + 24, buttonsForEditMode2[12].PointAndSize.Y, "短周期ノイズ", 0xffffff);
+						DX.DrawString(buttonsForEditMode2[10].PointAndSize.X + 24, buttonsForEditMode2[10].PointAndSize.Y, "ノイズ無し",
+							0xffffff);
+						DX.DrawString(buttonsForEditMode2[11].PointAndSize.X + 24, buttonsForEditMode2[11].PointAndSize.Y, "長周期ノイズ",
+							0xffffff);
+						DX.DrawString(buttonsForEditMode2[12].PointAndSize.X + 24, buttonsForEditMode2[12].PointAndSize.Y, "短周期ノイズ",
+							0xffffff);
 						break;
 				}
 
@@ -428,17 +390,16 @@ namespace MusicSheetSoundEditor
 				}
 
 
-				
-
-
 				//Console.Write(output + "\t");
 
 				for (var i = 0; i < 16; i++)
 				{
 					if (DateTime.Now.Millisecond - bmsec > 1)
 						i += DateTime.Now.Millisecond - bmsec - 1;
-					while (DateTime.Now.Millisecond - bmsec == 0) { }
-					if (nowTone != null && nowTone.Playing)
+					while (DateTime.Now.Millisecond - bmsec == 0)
+					{
+					}
+					if ((nowTone != null) && nowTone.Playing)
 					{
 						nowTone.PlayLoop(-1);
 						DX.ChangeVolumeSoundMem(nowTone.OutVolume, nowTone.Handle);
@@ -450,39 +411,33 @@ namespace MusicSheetSoundEditor
 						return;
 					}
 				}
-
-
-
 			}
 		}
-
 
 
 		public static int SetNoise(int hz, bool isShortFreq, ref int sheed, int length)
 		{
 			var output = 0;
 
-			
-			
 
 			var bcnt = -1;
 
-			var data = new Int16[length];
+			var data = new short[length];
 			float t = 0;
 			var hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
 
 			for (var i = 0; i < length; i++)
 			{
-				if ((int)(Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) != bcnt)
+				if ((int) (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) != bcnt)
 				{
 					sheed >>= 1;
 					sheed |= ((sheed ^ (sheed >> (isShortFreq ? 6 : 1))) & 1) << 15;
 					output = sheed & 1;
 				}
 				t = output * 32767; // divided by 10 means volume control
-				data[i] = (short)t;
-				DX.WriteSoftSoundData(hSSnd, i, (short)t, 0);
-				bcnt = (int)(Math.PI * 2 / 44100 * i * hz * 180 / Math.PI);
+				data[i] = (short) t;
+				DX.WriteSoftSoundData(hSSnd, i, (short) t, 0);
+				bcnt = (int) (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI);
 			}
 
 			var retval = DX.LoadSoundMemFromSoftSound(hSSnd);
@@ -492,21 +447,18 @@ namespace MusicSheetSoundEditor
 		}
 
 
-		static int GetPlusMinus(int flag)
+		private static int GetPlusMinus(int flag)
 		{
-			return (flag == 1 ? 1 : -1);
+			return flag == 1 ? 1 : -1;
 		}
 
-		static int GetPlusMinus(bool flag)
+		private static int GetPlusMinus(bool flag)
 		{
-			return (flag ? 1 : -1);
+			return flag ? 1 : -1;
 		}
 
 
-
-		
-
-		static int SetWave(short[] wave, int hz)
+		private static int SetWave(short[] wave, int hz)
 		{
 			var length = 0;
 			for (var i = 0; i < 44100; i++)
@@ -517,23 +469,23 @@ namespace MusicSheetSoundEditor
 					break;
 				}
 
-			var data = new Int16[length];
+			var data = new short[length];
 			float t = 0;
 			var hSSnd = DX.MakeSoftSound1Ch16Bit44KHz(length);
 			for (var i = 0; i < length; i++)
 			{
-				t = wave[(int)((Math.PI * 2 / 44100 * i * hz * 180 / Math.PI) % 360 / (360 / 32.0))]; // divided by 10 means volume control
-				data[i] = (short)t;
-				DX.WriteSoftSoundData(hSSnd, i, (short)t, 0);
+				t = wave[(int) (Math.PI * 2 / 44100 * i * hz * 180 / Math.PI % 360 / (360 / 32.0))];
+					// divided by 10 means volume control
+				data[i] = (short) t;
+				DX.WriteSoftSoundData(hSSnd, i, (short) t, 0);
 			}
 
 			var retval = DX.LoadSoundMemFromSoftSound(hSSnd);
 			DX.DeleteSoftSound(hSSnd);
-			
+
 			return retval;
 		}
 
-		
 
 		public static int GetFreq(string pitch, int oct)
 		{
@@ -589,12 +541,11 @@ namespace MusicSheetSoundEditor
 					break;
 				default:
 					throw new ArgumentException("音階名が異常です。");
-					
 			}
-			
+
 
 			if (oct >= 4)
-				freq = freq * ((int)Math.Pow(2, oct - 4));
+				freq = freq * (int) Math.Pow(2, oct - 4);
 			else
 				switch (oct)
 				{
@@ -609,13 +560,8 @@ namespace MusicSheetSoundEditor
 						return freq / 100;
 					default:
 						throw new ArgumentException("オクターブが以上です。");
-					   
 				}
 			return freq / 100;
 		}
-			
 	}
-
-	
-
 }

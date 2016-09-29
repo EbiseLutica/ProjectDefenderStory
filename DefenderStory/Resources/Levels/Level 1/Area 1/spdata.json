@@ -1,570 +1,182 @@
-[
+﻿[
 	{
 		"PosX": 64,
 		"PosY": 208,
+		"Tag": null,
+		"ZIndex": 0,
 		"EntityID": 0,
-		"EntityData": {
-			"SpawnFromDoor": false,
-			"TargetDoorIndex": 0
-		}
-	},
-	{
-		"PosX": 192,
-		"PosY": 224,
-		"EntityID": 1,
-		"EntityData": null
-	},
-	{
-		"PosX": 288,
-		"PosY": 224,
-		"EntityID": 1,
-		"EntityData": null
-	},
-	{
-		"PosX": 432,
-		"PosY": 224,
-		"EntityID": 1,
-		"EntityData": null
-	},
-	{
-		"PosX": 672,
-		"PosY": 160,
-		"EntityID": 1,
-		"EntityData": null
-	},
-	{
-		"PosX": 816,
-		"PosY": 208,
-		"EntityID": 2,
-		"EntityData": null
-	},
-	{
-		"PosX": 944,
-		"PosY": 208,
-		"EntityID": 1,
-		"EntityData": null
-	},
-	{
-		"PosX": 1680,
-		"PosY": 224,
-		"EntityID": 3,
-		"EntityData": null
-	},
-	{
-		"PosX": 1392,
-		"PosY": 208,
-		"EntityID": 3,
-		"EntityData": null
-	},
-	{
-		"PosX": 2400,
-		"PosY": 176,
-		"EntityID": 4,
-		"EntityData": null
-	},
-	{
-		"PosX": 2745,
-		"PosY": 188,
-		"EntityID": 5,
-		"EntityData": {
-			"TargetEntity": {
-				"EntityID": 1,
-				"EntityData": null
-			}
-		}
-	},
-	{
-		"PosX": 2875,
-		"PosY": 128,
-		"EntityID": 6,
-		"EntityData": null
-	},
-	{
-		"PosX": 2967,
-		"PosY": 202,
-		"EntityID": 6,
-		"EntityData": null
-	},
-	{
-		"PosX": 528,
-		"PosY": 128,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 544,
-		"PosY": 128,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 560,
-		"PosY": 144,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 512,
-		"PosY": 144,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 624,
-		"PosY": 160,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 656,
-		"PosY": 128,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 704,
-		"PosY": 128,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 736,
-		"PosY": 160,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1040,
-		"PosY": 176,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1024,
-		"PosY": 176,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1072,
-		"PosY": 160,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1088,
-		"PosY": 160,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1136,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1136,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1120,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1104,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1328,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1328,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1360,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1376,
-		"PosY": 160,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1392,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1408,
-		"PosY": 160,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1424,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1344,
-		"PosY": 160,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1968,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 1984,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2016,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2016,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2000,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2176,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2160,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2192,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2208,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2240,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2240,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2256,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2224,
-		"PosY": 256,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2336,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2320,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2352,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2480,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2496,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2464,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2608,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2640,
-		"PosY": 176,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2672,
-		"PosY": 176,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2704,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2800,
-		"PosY": 192,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2832,
-		"PosY": 176,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2912,
-		"PosY": 176,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
-	{
-		"PosX": 2944,
-		"PosY": 208,
-		"EntityID": 28,
-		"EntityData": {
-			"WorkingType": 0
-		}
-	},
+		"EntityData": { "SpawnFromDoor": false, "TargetDoorTag": "" }
+	}, { "PosX": 144, "PosY": 192, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 0 } },
+	{ "PosX": 224, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 304, "PosY": 192, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 576, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 592, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 608, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 560, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 432, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 416, "PosY": 160, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 1 } },
 	{
 		"PosX": 128,
-		"PosY": 176,
-		"EntityID": 22,
-		"EntityData": {
-			"EntityType": 10
-		}
-	},
-	{
-		"PosX": 160,
-		"PosY": 176,
-		"EntityID": 22,
-		"EntityData": {
-			"EntityType": 10
-		}
-	},
-	{
-		"PosX": 144,
-		"PosY": 128,
-		"EntityID": 22,
-		"EntityData": {
-			"EntityType": 6
-		}
-	},
-	{
-		"PosX": 1920,
-		"PosY": 176,
-		"EntityID": 22,
-		"EntityData": {
-			"EntityType": 10
-		}
-	},
-	{
-		"PosX": 1936,
-		"PosY": 176,
-		"EntityID": 22,
-		"EntityData": {
-			"EntityType": 6
-		}
-	},
-	{
-		"PosX": 1952,
-		"PosY": 176,
-		"EntityID": 22,
-		"EntityData": {
-			"EntityType": 10
-		}
-	},
-	{
-		"PosX": 3221,
-		"PosY": 220,
-		"EntityID": 18,
-		"EntityData": {
-			"NextStage": 2
-		}
-	},
-	{
-		"PosX": 1296,
-		"PosY": 192,
-		"EntityID": 83,
-		"EntityData": null
-	},
-	{
-		"PosX": 1920,
 		"PosY": 224,
-		"EntityID": 83,
-		"EntityData": null
-	},
+		"Tag": null,
+		"ZIndex": -1,
+		"EntityID": 89,
+		"EntityData": {
+			"Script":
+				"[enstop]\u000d\u000a[mesbox:up]\u000d\u000a[mes:冒険の　心得]\u000d\u000a[mes:♥が　なくなると　しんでしまう！]\u000d\u000a[mes:ハート型の　チョコレートを　とると　♥が　回復する！]\u000d\u000a[mes:しんでしまうと　残機が　1つ　へってしまう！]\u000d\u000a[mes:残機が　すべて　なくなると　ゲームオーバー！]\u000d\u000a[mes:コインを　50枚　集めると　残機が 1つ　ふえる！]\u000d\u000a[mes:⌚時間が　0になると　時間切れで　しんでしまう！]\u000d\u000a[mes:吹き出しが出てきたら　話しかけてみよう！]\u000d\u000a\u000d\u000a[mesend]\u000d\u000a[enstart]",
+			"TextureFile": "spsign.png",
+			"Width": 16,
+			"Height": 16,
+			"StartIndex": 0,
+			"EndIndex": 0,
+			"Speed": 0,
+			"UseAnime": false
+		}
+	}, { "PosX": 1712, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 3 } },
 	{
-		"PosX": 672,
-		"PosY": 112,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 6 }
+		"PosX": 1632,
+		"PosY": 224,
+		"Tag": null,
+		"ZIndex": -1,
+		"EntityID": 89,
+		"EntityData": {
+			"Script":
+				"[enstop]\u000d\u000a[mesbox:down]\u000d\u000a[mes:フルートの　練習を　してるの]\u000d\u000a[mes:もしよければ　きいてくれるかしら？]\u000d\u000a[mesend]\u000d\u000a[enstart]\u000d\u000a[bgmvol:2,120]",
+			"TextureFile": "spflutist.png",
+			"Width": 32,
+			"Height": 32,
+			"StartIndex": 0,
+			"EndIndex": 0,
+			"Speed": 0,
+			"UseAnime": false
+		}
+	}, { "PosX": 704, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 672, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 736, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 768, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 896, "PosY": 208, "Tag": null, "ZIndex": 0, "EntityID": 6, "EntityData": null },
+	{ "PosX": 960, "PosY": 208, "Tag": null, "ZIndex": 0, "EntityID": 6, "EntityData": null },
+	{ "PosX": 1088, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 2, "EntityData": null },
+	{ "PosX": 1056, "PosY": 208, "Tag": null, "ZIndex": 0, "EntityID": 2, "EntityData": null },
+	{ "PosX": 2519, "PosY": 232, "Tag": null, "ZIndex": 0, "EntityID": 18, "EntityData": { "NextStage": 2 } },
+	{ "PosX": 1280, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 3, "EntityData": null },
+	{ "PosX": 1392, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 1335, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 1452, "PosY": 224, "Tag": null, "ZIndex": 0, "EntityID": 1, "EntityData": null },
+	{ "PosX": 800, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 0 } },
+	{ "PosX": 800, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 816, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{
+		"PosX": 1904,
+		"PosY": 240,
+		"Tag": null,
+		"ZIndex": 0,
+		"EntityID": 89,
+		"EntityData": {
+			"Script":
+				"[enstop]\u000d\u000a[mesbox:down]\u000d\u000a[mes:お得な　掲示版！]\u000d\u000a[mes:ジャンプして　壁について　さらにジャンプしようとすると　壁キックできます！！]\u000d\u000a[enstart]",
+			"TextureFile": "spsign.png",
+			"Width": 16,
+			"Height": 16,
+			"StartIndex": 0,
+			"EndIndex": 0,
+			"Speed": 0,
+			"UseAnime": false
+		}
+	}, { "PosX": 1888, "PosY": 176, "Tag": null, "ZIndex": 0, "EntityID": 2, "EntityData": null },
+	{ "PosX": 1840, "PosY": 144, "Tag": null, "ZIndex": 0, "EntityID": 2, "EntityData": null },
+	{ "PosX": 2048, "PosY": 128, "Tag": null, "ZIndex": 0, "EntityID": 12, "EntityData": { "TargetEntityTag": "" } },
+	{ "PosX": 2000, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 2016, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 2048, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 2064, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 2080, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 2112, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 2096, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 2032, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 1984, "PosY": 160, "Tag": "s", "ZIndex": 0, "EntityID": 11, "EntityData": null },
+	{ "PosX": 1968, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1984, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1968, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1968, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1968, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1968, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1968, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1984, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1984, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1984, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1984, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1984, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2000, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2016, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2000, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2000, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2016, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2000, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2000, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2000, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2016, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2016, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2016, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2016, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2032, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2048, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2064, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2080, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2112, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2096, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2128, "PosY": 32, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2128, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2128, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2128, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2128, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2112, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2096, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2080, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2064, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2048, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2032, "PosY": 80, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2032, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2048, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2064, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2080, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2096, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2112, "PosY": 64, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2032, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2048, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2080, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2064, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2112, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2096, "PosY": 48, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2112, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2096, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2064, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2080, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2048, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2032, "PosY": 96, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2048, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2032, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2080, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2064, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2112, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2096, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2128, "PosY": 112, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{
+		"PosX": 2160,
+		"PosY": 240,
+		"Tag": null,
+		"ZIndex": 0,
+		"EntityID": 89,
+		"EntityData": {
+			"Script":
+				"[enstop]\u000d\u000a[mesbox]\u000d\u000a[mes:倉庫のコイン　取るべからず]\u000d\u000a[wait:40]\u000d\u000a[mes:おい]\u000d\u000a[mes:お前　倉庫のコイン　盗んだだろ？]\u000d\u000a[mes:\\lは　身の危険を　感じて　逃げた。]\u000d\u000a[enstart]",
+			"TextureFile": "spsign.png",
+			"Width": 16,
+			"Height": 16,
+			"StartIndex": 0,
+			"EndIndex": 0,
+			"Speed": 0,
+			"UseAnime": false
+		}
 	}
 ]

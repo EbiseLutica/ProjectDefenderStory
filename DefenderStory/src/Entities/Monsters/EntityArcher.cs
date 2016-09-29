@@ -8,12 +8,6 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("Archer", 4)]
 	public class EntityArcher : EntityLiving
 	{
-
-		public override int[] ImageHandle => ResourceUtility.Archer;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
-
 		public EntityArcher(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -24,6 +18,11 @@ namespace TakeUpJewel.Entities
 			MainAi = new AiArch(this);
 			CollisionAIs.Add(new AiKillDefender(this));
 		}
+
+		public override int[] ImageHandle => ResourceUtility.Archer;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
 
 		public override void SetKilledAnime()
 		{
@@ -40,11 +39,6 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("Arrow", 67)]
 	public class EntityArrow : EntityProjectile
 	{
-		public override int[] ImageHandle => ResourceUtility.Weapon;
-
-		public override EntityGroup MyGroup => EntityGroup.MonsterWeapon;
-
-
 		public EntityArrow(PointF pnt, Object[] obj, byte[,,] chps, EntityList par)
 		{
 			Mpts = obj;
@@ -55,6 +49,10 @@ namespace TakeUpJewel.Entities
 			Velocity.X = -2;
 		}
 
+		public override int[] ImageHandle => ResourceUtility.Weapon;
+
+		public override EntityGroup MyGroup => EntityGroup.MonsterWeapon;
+
 		public override void OnStucked()
 		{
 			SoundUtility.PlaySound(Sounds.StuckArrow);
@@ -63,28 +61,24 @@ namespace TakeUpJewel.Entities
 
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			if (jsonobj.IsDefined("Speed"))
-				Velocity.X = (float)jsonobj.Speed;
+				Velocity.X = (float) jsonobj.Speed;
 			return this;
 		}
 
 		public override void OnUpdate(Status ks)
 		{
 			if (!IsStucked)
-			{
 				foreach (EntityPlayer ep in Parent.FindEntitiesByType<EntityPlayer>())
 				{
 					if (ep.IsDying)
 						continue;
-					if (new Rectangle((int)ep.Location.X, (int)ep.Location.Y, ep.Size.Width, ep.Size.Height)
-						.CheckCollision(new Rectangle((int)Location.X, (int)Location.Y, Size.Width, Size.Height)))
+					if (new Rectangle((int) ep.Location.X, (int) ep.Location.Y, ep.Size.Width, ep.Size.Height)
+						.CheckCollision(new Rectangle((int) Location.X, (int) Location.Y, Size.Width, Size.Height)))
 						ep.Kill();
 				}
-			}
 			base.OnUpdate(ks);
 		}
-
 	}
-
 }

@@ -1,25 +1,21 @@
-﻿using DxLibDLL;
-using MusicSheet.Mssf;
-using MusicSheet.Sequence;
-using TakeUpJewel.GUI;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using DxLibDLL;
+using TakeUpJewel.GUI;
 
 namespace MusicSheetMidiSequencer
 {
-	class Program
+	internal class Program
 	{
+		private static readonly DxLabel _textviewer = null;
 
-		static DxLabel _textviewer = null;
+		private static string _file = "";
+		private static bool _playRequest;
 
 		[STAThread]
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
-
 			//Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
 
 			Application.EnableVisualStyles();
@@ -30,9 +26,8 @@ namespace MusicSheetMidiSequencer
 				Application.Run(new MainWindow());
 			else
 				Application.Run(new MainWindow(args[0]));
-				return;
 			//}
-			
+
 			/*DX.ChangeWindowMode(1);
 			//DX.SetEnableXAudioFlag(1);
 			DX.SetWaitVSyncFlag(0);
@@ -502,84 +497,34 @@ namespace MusicSheetMidiSequencer
 				DX.DrawString(32, 216, seq.bpm.ToString(), DX.GetColor(255, 255, 255));
 				DX.DrawString(32, 248, seq.IsPlaying.ToString(), DX.GetColor(255, 255, 255));
 				*/
-				//Console.WriteLine(nTickCount);
-				//Meta Data 解析
-				/*
+			//Console.WriteLine(nTickCount);
+			//Meta Data 解析
+			/*
 
-				seq.PlayLoop();
-				if (!SeekBar.IsValueChanging)
-					SeekBar.Value = seq.mc.GetTickCount();
+			seq.PlayLoop();
+			if (!SeekBar.IsValueChanging)
+				SeekBar.Value = seq.mc.GetTickCount();
 
-				//textBox1.Text = debug2;
+			//textBox1.Text = debug2;
 
-				//End
+			//End
 
-				string debug = "[Playing]; [位相]; [音量]; [出力音量]; [音名]; [ピッチベンド]; [ベンド幅] \n";
-				int c = 1;
+			string debug = "[Playing]; [位相]; [音量]; [出力音量]; [音名]; [ピッチベンド]; [ベンド幅] \n";
+			int c = 1;
 
-				int idx = 0;
+			int idx = 0;
 
-				DX.SetDrawScreen(pianoRoll);
-					DX.DrawGraph(-1, 0, pianoRoll, 0);
-					DX.DrawLine(sx - mainMonitor.X - 1, 0, sx - mainMonitor.X - 1, sy - mainMonitor.Y, 0);
-				int barheight = (isFullScreen ? 6 : 3);
+			DX.SetDrawScreen(pianoRoll);
+				DX.DrawGraph(-1, 0, pianoRoll, 0);
+				DX.DrawLine(sx - mainMonitor.X - 1, 0, sx - mainMonitor.X - 1, sy - mainMonitor.Y, 0);
+			int barheight = (isFullScreen ? 6 : 3);
 
-				
-				
-				foreach (int num in seq.drumtracks)
-					if (seq.nTickCount + baseofdrumspeed * bairitu < seq.mfd.Tracks[num].TickLength)
-					{
-						foreach (MidiEvent evnt in seq.mfd.Tracks[num].GetTickData(btick + baseofdrumspeed * bairitu, seq.nTickCount + baseofdrumspeed * bairitu))
-						{
-							if (!(evnt is NoteEvent))
-								continue;
-							NoteEvent ne = (NoteEvent)evnt;
-
-							switch (ne.Note)
-							{
-								case 36:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus, mainMonitor.Y, "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 38:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 16, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 40:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 42:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 46:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 48, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 49:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 64, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 50:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 48:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 47:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 45:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 43:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-								case 41:
-									drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
-									break;
-							}
-						}
-					}
-				if (seq.sm.loop != -1 && seq.eot > 0 && seq.nTickCount + baseofdrumspeed * bairitu >= seq.eot)
+			
+			
+			foreach (int num in seq.drumtracks)
+				if (seq.nTickCount + baseofdrumspeed * bairitu < seq.mfd.Tracks[num].TickLength)
 				{
-					foreach (int num in seq.drumtracks)
-						foreach (MidiEvent evnt in seq.mfd.Tracks[num].GetTickData((btick + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop, (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop))
+					foreach (MidiEvent evnt in seq.mfd.Tracks[num].GetTickData(btick + baseofdrumspeed * bairitu, seq.nTickCount + baseofdrumspeed * bairitu))
 					{
 						if (!(evnt is NoteEvent))
 							continue;
@@ -588,185 +533,236 @@ namespace MusicSheetMidiSequencer
 						switch (ne.Note)
 						{
 							case 36:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus, mainMonitor.Y, "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 38:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 16, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 16, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 40:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 42:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 46:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 48, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 48, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 49:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 64, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 64, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 50:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 48:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 47:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 45:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 43:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 							case 41:
-								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+								drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y , "●", Color.Transparent, Color.White), seq.nTickCount));
 								break;
 						}
 					}
 				}
-
-					foreach (Dictionary<int, Tone> channel in seq.sm.Tones)
-					{
-
-						debug += c + "Channel ---------------\n";
-						foreach (KeyValuePair<int, Tone> item in channel)
-						{
-							debug += string.Format("item{0}: {1}; {2}; {3}; {4}; {5}; {6}; {7}; {8}; {9}; {10}; {11}; {12};\n", idx, item.Value.Envelope.AttackTime, item.Value.Envelope.DecayTime, item.Value.Envelope.SustainLevel, item.Value.Envelope.ReleaseTime, seq.sm.channels[c - 1].inst, item.Value.Playing, (seq.sm.channels[c - 1].panpot - 64) * 4, item.Value.Volume, item.Value.OutVolume, item.Value.Pitch, seq.sm.channels[c - 1].pitchbend, seq.sm.channels[c - 1].bendRange.Data);
-							idx++;
-								if (!item.Value.isStopping)
-									DX.DrawLine(sx - mainMonitor.X - 1, (int)(-(item.Value.noteno - 127) * barheight - seq.sm.channels[c - 1].pitchbend / (227 * (12 / (float)seq.sm.channels[c - 1].bendRange.Data))), sx - mainMonitor.X - 1, (int)(-(item.Value.noteno - 127) * barheight - seq.sm.channels[c - 1].pitchbend / (227 * (12 / (float)seq.sm.channels[c - 1].bendRange.Data))) + barheight, (uint)ColorPallete.GetColorByIndex(c - 1).ToArgb());
-								if (item.Value.isNew)
-									orbs.Add(new DXOrb(new Point(sx - mainMonitor.X - barheight, (int)(-(item.Value.noteno - 127) * barheight - seq.sm.channels[c - 1].pitchbend / (227 * (12 / (float)seq.sm.channels[c - 1].bendRange.Data)))), new SizeF(barheight, barheight * 2), ColorPallete.GetColorByIndex(c - 1), 1.2f));
-						}
-						c++;
-					}
-					
-				DX.SetDrawScreen(DX.DX_SCREEN_BACK);
-
-				for (int i = 0; i < drumorbs.Count; i++)
+			if (seq.sm.loop != -1 && seq.eot > 0 && seq.nTickCount + baseofdrumspeed * bairitu >= seq.eot)
+			{
+				foreach (int num in seq.drumtracks)
+					foreach (MidiEvent evnt in seq.mfd.Tracks[num].GetTickData((btick + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop, (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop))
 				{
-					Tuple<DXLabel, int> item = drumorbs[i];
-					item.Item1.Location = new PointF(item.Item1.Location.X, mainMonitor.Y + (seq.nTickCount - item.Item2) / (float)baseofdrumspeed * bairitu * (isFullScreen ? 736 : 448));
-					if (item.Item1.Location.Y >= (isFullScreen ? 736 : 448))
-					{
-						drumorbs.Remove(item);
+					if (!(evnt is NoteEvent))
 						continue;
+					NoteEvent ne = (NoteEvent)evnt;
+
+					switch (ne.Note)
+					{
+						case 36:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 38:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 16, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 40:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 42:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 32, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 46:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 48, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 49:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 64, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 50:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 48:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 80, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 47:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 45:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 96, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 43:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
+						case 41:
+							drumorbs.Add(Tuple.Create(new DXLabel(mainMonitor.X + xplus + 112, mainMonitor.Y, "●", Color.Transparent, Color.White), (seq.nTickCount + baseofdrumspeed * bairitu) % seq.eot + seq.sm.loop));
+							break;
 					}
-
 				}
+			}
 
-				switch (mode)
+				foreach (Dictionary<int, Tone> channel in seq.sm.Tones)
 				{
-					case 0:
-						textviewer.Text = debug;
-						textviewer.Draw();
-						for (int i = 0; i < wav.Length; i++)
-							DX.DrawPixel(i >> 1, 256 + (wav[i] >> 9), 0xffffff);
-						break;
-					case 1:
-						DX.DrawGraph(mainMonitor.X, mainMonitor.Y, pianoRoll, 0);
-						Queue<DXOrb> tmp = new Queue<DXOrb>();
-						foreach (DXOrb orb in orbs)
-						{
-							if (orb.location.IsEmpty)
-								tmp.Enqueue(orb);
-							orb.Update();
-						}
-						while (tmp.Count > 0)
-							orbs.Remove(tmp.Dequeue());
-						break;
-					case 2:
-						Gakkyoku1.Draw();
-						Gakkyoku2.Draw();
-						Gakkyoku3.Draw();
-						Gakkyoku4.Draw();
-						Gakkyoku5.Draw();
-						Gakkyoku6.Draw();
-						Gakkyoku7.Draw();
-						Gakkyoku8.Draw();
-						Gakkyoku9.Draw();
-						Gakkyoku10.Draw();
-						Gakkyoku11.Draw();
-						Gakkyoku12.Draw();
-						Gakkyoku13.Draw();
-						Gakkyoku14.Draw();
 
-						break;
-					case 3:
-						foreach(Tuple<DXLabel, int> item in drumorbs)
-							item.Item1.Draw();
-						break;
-				}
-
-				
-
-				Mode1Btn.Draw();
-				Mode2Btn.Draw();
-				Mode3Btn.Draw();
-				Mode4Btn.Draw();
-				Play.Draw();
-				Pause.Draw();
-				Stop.Draw();
-				SeekBar.Draw();
-
-				int mx, my;
-				DX.GetMousePoint(out mx, out my);
-				DX.DrawTriangle(mx, my, mx + 8, my + 24, mx + 24, my + 16, 0xff00ff, 1);
-
-				if (bcopy != seq.copyright)
-					DX.SetWindowText(seq.copyright);
-
-				if (btitle != seq.title)
-					DX.SetWindowText(seq.title);
-
-				if (blyric != seq.lyrics)
-					DX.SetWindowText(seq.lyrics);
-
-
-				btitle = seq.title;
-				bcopy = seq.copyright;
-				blyric = seq.lyrics;
-				btick2 += seq.nTickCount - btick;
-
-				if (DX.GetNowCount() - bmilisec >= 1000)
-				{
-					tps = btick2;
-					btick2 = 0;
-					bmilisec = DX.GetNowCount();
-					fps = f;
-					f = 0;
+					debug += c + "Channel ---------------\n";
+					foreach (KeyValuePair<int, Tone> item in channel)
+					{
+						debug += string.Format("item{0}: {1}; {2}; {3}; {4}; {5}; {6}; {7}; {8}; {9}; {10}; {11}; {12};\n", idx, item.Value.Envelope.AttackTime, item.Value.Envelope.DecayTime, item.Value.Envelope.SustainLevel, item.Value.Envelope.ReleaseTime, seq.sm.channels[c - 1].inst, item.Value.Playing, (seq.sm.channels[c - 1].panpot - 64) * 4, item.Value.Volume, item.Value.OutVolume, item.Value.Pitch, seq.sm.channels[c - 1].pitchbend, seq.sm.channels[c - 1].bendRange.Data);
+						idx++;
+							if (!item.Value.isStopping)
+								DX.DrawLine(sx - mainMonitor.X - 1, (int)(-(item.Value.noteno - 127) * barheight - seq.sm.channels[c - 1].pitchbend / (227 * (12 / (float)seq.sm.channels[c - 1].bendRange.Data))), sx - mainMonitor.X - 1, (int)(-(item.Value.noteno - 127) * barheight - seq.sm.channels[c - 1].pitchbend / (227 * (12 / (float)seq.sm.channels[c - 1].bendRange.Data))) + barheight, (uint)ColorPallete.GetColorByIndex(c - 1).ToArgb());
+							if (item.Value.isNew)
+								orbs.Add(new DXOrb(new Point(sx - mainMonitor.X - barheight, (int)(-(item.Value.noteno - 127) * barheight - seq.sm.channels[c - 1].pitchbend / (227 * (12 / (float)seq.sm.channels[c - 1].bendRange.Data)))), new SizeF(barheight, barheight * 2), ColorPallete.GetColorByIndex(c - 1), 1.2f));
+					}
+					c++;
 				}
 				
-				//tps = seq.nTickCount - btick;
+			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 
-				//bmilisec = seq.nMillisec;
-				f++;
-				if (DX.ScreenFlip() == -1)
+			for (int i = 0; i < drumorbs.Count; i++)
+			{
+				Tuple<DXLabel, int> item = drumorbs[i];
+				item.Item1.Location = new PointF(item.Item1.Location.X, mainMonitor.Y + (seq.nTickCount - item.Item2) / (float)baseofdrumspeed * bairitu * (isFullScreen ? 736 : 448));
+				if (item.Item1.Location.Y >= (isFullScreen ? 736 : 448))
 				{
-					DX.DxLib_End();
-					seq.mc.Stop();
-					return;
+					drumorbs.Remove(item);
+					continue;
 				}
-
-
-
-				btick = seq.nTickCount;
-				DX.WaitTimer(1);
-
 
 			}
-				 */
+
+			switch (mode)
+			{
+				case 0:
+					textviewer.Text = debug;
+					textviewer.Draw();
+					for (int i = 0; i < wav.Length; i++)
+						DX.DrawPixel(i >> 1, 256 + (wav[i] >> 9), 0xffffff);
+					break;
+				case 1:
+					DX.DrawGraph(mainMonitor.X, mainMonitor.Y, pianoRoll, 0);
+					Queue<DXOrb> tmp = new Queue<DXOrb>();
+					foreach (DXOrb orb in orbs)
+					{
+						if (orb.location.IsEmpty)
+							tmp.Enqueue(orb);
+						orb.Update();
+					}
+					while (tmp.Count > 0)
+						orbs.Remove(tmp.Dequeue());
+					break;
+				case 2:
+					Gakkyoku1.Draw();
+					Gakkyoku2.Draw();
+					Gakkyoku3.Draw();
+					Gakkyoku4.Draw();
+					Gakkyoku5.Draw();
+					Gakkyoku6.Draw();
+					Gakkyoku7.Draw();
+					Gakkyoku8.Draw();
+					Gakkyoku9.Draw();
+					Gakkyoku10.Draw();
+					Gakkyoku11.Draw();
+					Gakkyoku12.Draw();
+					Gakkyoku13.Draw();
+					Gakkyoku14.Draw();
+
+					break;
+				case 3:
+					foreach(Tuple<DXLabel, int> item in drumorbs)
+						item.Item1.Draw();
+					break;
+			}
+
+			
+
+			Mode1Btn.Draw();
+			Mode2Btn.Draw();
+			Mode3Btn.Draw();
+			Mode4Btn.Draw();
+			Play.Draw();
+			Pause.Draw();
+			Stop.Draw();
+			SeekBar.Draw();
+
+			int mx, my;
+			DX.GetMousePoint(out mx, out my);
+			DX.DrawTriangle(mx, my, mx + 8, my + 24, mx + 24, my + 16, 0xff00ff, 1);
+
+			if (bcopy != seq.copyright)
+				DX.SetWindowText(seq.copyright);
+
+			if (btitle != seq.title)
+				DX.SetWindowText(seq.title);
+
+			if (blyric != seq.lyrics)
+				DX.SetWindowText(seq.lyrics);
+
+
+			btitle = seq.title;
+			bcopy = seq.copyright;
+			blyric = seq.lyrics;
+			btick2 += seq.nTickCount - btick;
+
+			if (DX.GetNowCount() - bmilisec >= 1000)
+			{
+				tps = btick2;
+				btick2 = 0;
+				bmilisec = DX.GetNowCount();
+				fps = f;
+				f = 0;
+			}
+			
+			//tps = seq.nTickCount - btick;
+
+			//bmilisec = seq.nMillisec;
+			f++;
+			if (DX.ScreenFlip() == -1)
+			{
+				DX.DxLib_End();
+				seq.mc.Stop();
+				return;
+			}
+
+
+
+			btick = seq.nTickCount;
+			DX.WaitTimer(1);
+
+
+		}
+			 */
 		}
 
-		static void dxform_MouseWheel(object sender, MouseEventArgs e)
+		private static void dxform_MouseWheel(object sender, MouseEventArgs e)
 		{
 			Console.WriteLine("debug");
-			_textviewer.Location = new PointF(_textviewer.Location.X, _textviewer.Location.Y + e.Delta * SystemInformation.MouseWheelScrollLines / 120);
+			_textviewer.Location = new PointF(_textviewer.Location.X,
+				_textviewer.Location.Y + e.Delta * SystemInformation.MouseWheelScrollLines / 120);
 		}
 
-		static void dxform_DragEnter(object sender, DragEventArgs e)
+		private static void dxform_DragEnter(object sender, DragEventArgs e)
 		{
 			if (e.Data.GetDataPresent(DataFormats.FileDrop))
 				//ドラッグされたデータ形式を調べ、ファイルのときはコピーとする
@@ -776,15 +772,12 @@ namespace MusicSheetMidiSequencer
 				e.Effect = DragDropEffects.None;
 		}
 
-		static string _file = "";
-		static bool _playRequest;
-
-		static void dxform_DragDrop(object sender, DragEventArgs e)
+		private static void dxform_DragDrop(object sender, DragEventArgs e)
 		{
 			//コントロール内にドロップされたとき実行される
 			//ドロップされたすべてのファイル名を取得する
 			var fileName =
-				(string[])e.Data.GetData(DataFormats.FileDrop, false);
+				(string[]) e.Data.GetData(DataFormats.FileDrop, false);
 			//ListBoxに追加する
 			if (fileName.Length > 1)
 				MessageBox.Show("複数のファイルがドロップされました。\r\n先頭のファイルのみ再生を開始します");
@@ -793,14 +786,13 @@ namespace MusicSheetMidiSequencer
 		}
 
 
-
 		public static int GetBpm(byte b1, byte b2, byte b3)
 		{
 			return 60 * 1000000 / ((b1 << 16) + (b2 << 8) + b3);
 		}
 
 		/// <summary>
-		///	DXLibを終了してエラーメッセージを表示します。
+		///     DXLibを終了してエラーメッセージを表示します。
 		/// </summary>
 		/// <param name="text"></param>
 		public static void ShowError(string text)
@@ -809,6 +801,7 @@ namespace MusicSheetMidiSequencer
 			MessageBox.Show(string.Format(@"実行中にエラーが発生しました。
 エラー内容: {0}", text), "エラー", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 		}
+
 		/*
 		static int CreateFM(out int[] wav)
 		{
@@ -879,10 +872,5 @@ namespace MusicSheetMidiSequencer
 			}
 			
 		}*/
-
 	}
-
-
-
-
 }

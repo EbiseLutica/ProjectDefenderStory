@@ -8,12 +8,6 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("Densy", 88)]
 	public class EntityDensy : EntityFlying
 	{
-
-		public override int[] ImageHandle => ResourceUtility.Densy;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
-
 		public EntityDensy(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -24,6 +18,11 @@ namespace TakeUpJewel.Entities
 			MainAi = new AiFlySearch(this, 2, 0, 3, 0, 3);
 			CollisionAIs.Add(new AiKillDefender(this));
 		}
+
+		public override int[] ImageHandle => ResourceUtility.Densy;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
 
 		public override void SetKilledAnime()
 		{
@@ -39,17 +38,15 @@ namespace TakeUpJewel.Entities
 		public override void OnUpdate(Status ks)
 		{
 			//TODO: ここにこの Entity が行う処理を記述してください。
-			
+
 			base.OnUpdate(ks);
 		}
 
 
-
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			return this;
 		}
-
 	}
 }

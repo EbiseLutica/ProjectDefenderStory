@@ -8,11 +8,8 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("StrangeFlower", 13)]
 	public class EntityStrangeFlower : EntityLiving, IScaffold
 	{
-
-		public override int[] ImageHandle => ResourceUtility.StrangeFlower;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Stage;
+		private int _nowstatus;
+		private int _tick;
 
 		public EntityStrangeFlower(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
@@ -23,18 +20,21 @@ namespace TakeUpJewel.Entities
 			Size = new Size(48, 48);
 		}
 
+		public override int[] ImageHandle => ResourceUtility.StrangeFlower;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Stage;
+
 		public override RectangleF Collision => new RectangleF(16, 16, 16, 32);
 
 		PointF IScaffold.Location => Location;
 
 		public override void SetKilledAnime()
 		{
-			
 		}
 
 		public override void SetCrushedAnime()
 		{
-			
 		}
 
 		public override void OnUpdate(Status ks)
@@ -48,10 +48,6 @@ namespace TakeUpJewel.Entities
 			base.OnUpdate(ks);
 		}
 
-		
-
-		int _nowstatus, _tick;
-
 		public void UpdateStatus()
 		{
 			switch (_nowstatus)
@@ -60,25 +56,27 @@ namespace TakeUpJewel.Entities
 					SetGraphic(0);
 					foreach (EntityLiving sp in new List<Entity>(Parent.FindEntitiesByType<EntityLiving>()))
 					{
-						if (sp.MyGroup != EntityGroup.Defender && sp.MyGroup != EntityGroup.Monster)
+						if ((sp.MyGroup != EntityGroup.Friend) && (sp.MyGroup != EntityGroup.Enemy))
 							continue;
 
 						if (sp.IsDying)
 							continue;
-						if (new Rectangle((int)(sp.Location.X + sp.Collision.Left), (int)(sp.Location.Y + sp.Collision.Bottom), (int)sp.Collision.Width, 3).CheckCollision(
-							new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)Collision.Width, (int)Collision.Height)))
+						if (new Rectangle((int) (sp.Location.X + sp.Collision.Left), (int) (sp.Location.Y + sp.Collision.Bottom),
+							(int) sp.Collision.Width, 3).CheckCollision(
+							new Rectangle((int) (Location.X + Collision.Left), (int) (Location.Y + Collision.Y), (int) Collision.Width,
+								(int) Collision.Height)))
 						{
 							_nowstatus = 1;
 							_tick = -1;
 							sp.Velocity = Vector.Zero;
 						}
 					}
-					
+
 					if (_tick > 240)
 					{
 						_tick = -1;
 						_nowstatus++;
-						
+
 						SoundUtility.PlaySound(Sounds.Paku1);
 					}
 					break;
@@ -86,16 +84,16 @@ namespace TakeUpJewel.Entities
 					SetGraphic(1);
 					foreach (EntityLiving sp in new List<Entity>(Parent.FindEntitiesByType<EntityLiving>()))
 					{
-						if (sp.MyGroup != EntityGroup.Defender && sp.MyGroup != EntityGroup.Monster)
+						if ((sp.MyGroup != EntityGroup.Friend) && (sp.MyGroup != EntityGroup.Enemy))
 							continue;
 
 						if (sp.IsDying)
 							continue;
-						if (new Rectangle((int)(sp.Location.X + sp.Collision.Left), (int)(sp.Location.Y + sp.Collision.Bottom), (int)sp.Collision.Width, 3).CheckCollision(
-							new Rectangle((int)(Location.X + Collision.Left), (int)(Location.Y + Collision.Y), (int)Collision.Width, (int)Collision.Height)))
-						{
+						if (new Rectangle((int) (sp.Location.X + sp.Collision.Left), (int) (sp.Location.Y + sp.Collision.Bottom),
+							(int) sp.Collision.Width, 3).CheckCollision(
+							new Rectangle((int) (Location.X + Collision.Left), (int) (Location.Y + Collision.Y), (int) Collision.Width,
+								(int) Collision.Height)))
 							sp.Velocity = Vector.Zero;
-						}
 					}
 					if (_tick > 30)
 					{
@@ -104,12 +102,14 @@ namespace TakeUpJewel.Entities
 						SoundUtility.PlaySound(Sounds.Paku2);
 						foreach (EntityLiving sp in new List<Entity>(Parent.FindEntitiesByType<EntityLiving>()))
 						{
-							if (sp.MyGroup != EntityGroup.Defender && sp.MyGroup != EntityGroup.Monster)
+							if ((sp.MyGroup != EntityGroup.Friend) && (sp.MyGroup != EntityGroup.Enemy))
 								continue;
 
 							if (sp.IsDying)
 								continue;
-							if (sp != this && new RectangleF(sp.Location.X, sp.Location.Y, sp.Size.Width, sp.Size.Height).CheckCollision(new RectangleF(Location.X, Location.Y, Size.Width, Size.Height)))
+							if ((sp != this) &&
+								new RectangleF(sp.Location.X, sp.Location.Y, sp.Size.Width, sp.Size.Height).CheckCollision(
+									new RectangleF(Location.X, Location.Y, Size.Width, Size.Height)))
 							{
 								sp.Kill();
 								_nowstatus = 2;
@@ -127,12 +127,12 @@ namespace TakeUpJewel.Entities
 					}
 					break;
 				case 3: // むずむず
-					if (_tick == 0 || _tick == 30)
+					if ((_tick == 0) || (_tick == 30))
 					{
 						SoundUtility.PlaySound(Sounds.Poyo);
 						SetGraphic(3);
 					}
-					else if (_tick == 15 || _tick == 60)
+					else if ((_tick == 15) || (_tick == 60))
 					{
 						SoundUtility.PlaySound(Sounds.Poyo);
 						SetGraphic(4);
@@ -158,9 +158,8 @@ namespace TakeUpJewel.Entities
 
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			return this;
 		}
-
 	}
 }

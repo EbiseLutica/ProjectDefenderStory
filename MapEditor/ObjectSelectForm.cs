@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,19 +10,36 @@ using TakeUpJewel.Entities;
 
 namespace MapEditor
 {
-
 	public partial class ObjectSelectForm : Form
 	{
 		public readonly string[] Items;
+
+
+		private int _gradient = 255;
+		private int _tmpx = -1;
+		private int _tmpy = -1;
+
+		private ToolFlag _tool = ToolFlag.Pen;
+
+		private readonly int[] _zoom = {10, 20, 50, 70, 100};
+
+		public int Chipno;
+
+		public ChipPack Chippack = new ChipPack(1, 1, 0);
+
+		public int Pzoom = 4;
+
+		public RequestFlag Request = RequestFlag.None;
+
+		public Random Rnd = new Random(100);
+		public ScreenFlag Sf = ScreenFlag.Fore;
 
 		public ObjectSelectForm()
 		{
 			InitializeComponent();
 
 			foreach (var s in Enum.GetNames(typeof(PlayerForm)))
-			{
 				PlayerFormSelector.Items.Add(s);
-			}
 
 			Items = (from a in GameEngine.EntityRegister.Items
 				where a.EntityId != -1
@@ -38,94 +52,54 @@ namespace MapEditor
 			listBox1.SelectedIndex = 0;
 
 			PlayerFormSelector.SelectedIndex = 0;
-			
-		}
-
-		public RequestFlag Request = RequestFlag.None;
-		
-
-		public string Path
-		{
-			get
-			{
-				return toolStripButton2.Text;
-			}
-			private set
-			{
-				toolStripButton2.Text = value;
-			}
-		}
-
-		public bool ForeVisible
-		{
-			get
-			{
-				return toolStripButton9.Checked;
-			}
-			set
-			{
-				toolStripButton9.Checked = value;
-			}
-		}
-
-		public bool BackVisible
-		{
-			get
-			{
-				return toolStripButton8.Checked;
-			}
-			set
-			{
-				toolStripButton8.Checked = value;
-			}
-		}
-
-		public string StatusMessage
-		{
-			get
-			{
-				return statusStrip1.Items[0].Text;
-			}
-			set
-			{
-				statusStrip1.Items[0].Text = value;
-			}
 		}
 
 		public ObjectSelectForm(string filename)
-			:this()
+			: this()
 		{
 			if (filename != null)
 				pictureBox1.Image = new Bitmap(filename);
-			Task.Factory.StartNew(()=>
+			Task.Factory.StartNew(() =>
 			{
 				while (true)
 				{
 					if (!IsHandleCreated)
 						continue;
-					Invoke(new MethodInvoker(() =>
-					{
-						pictureBox1.Refresh();
-					}));
+					Invoke(new MethodInvoker(() => { pictureBox1.Refresh(); }));
 					_gradient = (_gradient + 10) % 360;
 					Thread.Sleep(16);
-						
 				}
 			});
 		}
 
-		public int Chipno;
 
-		public Random Rnd = new Random(100);
+		public string Path
+		{
+			get { return toolStripButton2.Text; }
+			private set { toolStripButton2.Text = value; }
+		}
 
-		ToolFlag _tool = ToolFlag.Pen;
+		public bool ForeVisible
+		{
+			get { return toolStripButton9.Checked; }
+			set { toolStripButton9.Checked = value; }
+		}
+
+		public bool BackVisible
+		{
+			get { return toolStripButton8.Checked; }
+			set { toolStripButton8.Checked = value; }
+		}
+
+		public string StatusMessage
+		{
+			get { return statusStrip1.Items[0].Text; }
+			set { statusStrip1.Items[0].Text = value; }
+		}
 
 		public ToolFlag Tool
 		{
-			get
-			{
-				return _tool;
-			}
+			get { return _tool; }
 			set
 			{
 				_tool = value;
@@ -136,12 +110,34 @@ namespace MapEditor
 				toolStripButton13.Checked = value == ToolFlag.SpPut;
 				toolStripButton14.Checked = value == ToolFlag.SpSel;
 				toolStripButton12.Checked = value == ToolFlag.SpDel;
-
 			}
 		}
-		int _tmpx = -1, _tmpy = -1;
 
-		public ChipPack Chippack = new ChipPack(1, 1, 0);
+		public Size MapSize
+		{
+			get { return new Size(int.Parse(numericTextBox1.Text), int.Parse(numericTextBox2.Text)); }
+			set
+			{
+				numericTextBox1.Text = value.Width.ToString();
+				numericTextBox2.Text = value.Height.ToString();
+			}
+		}
+
+		public int Zoom => _zoom[Pzoom];
+
+		public bool GridVisible
+		{
+			get { return toolStripButton11.Checked; }
+			set { toolStripButton11.Checked = value; }
+		}
+
+		public Color RequestedColor
+		{
+			get { return toolStripButton16.BackColor; }
+			set { toolStripButton16.BackColor = value; }
+		}
+
+		public int EntityId { get; private set; }
 
 		private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
 		{
@@ -160,7 +156,7 @@ namespace MapEditor
 			if (ey / 16 > 3)
 				ey = 3 * 16;
 			int w = Math.Abs(ex / 16 - _tmpx) + 1, h = Math.Abs(ey / 16 - _tmpy) + 1;
-			
+
 			var c = new byte[w * h];
 			int ox = _tmpx, oy = _tmpy;
 			if (ex / 16 < _tmpx)
@@ -169,14 +165,14 @@ namespace MapEditor
 				oy = ey / 16;
 			for (var x = ox; x < ox + w; x++)
 				for (var y = oy; y < oy + h; y++)
-					c[(y - oy) * w + (x - ox)] = (byte)(y * 16 + x);
+					c[(y - oy) * w + (x - ox)] = (byte) (y * 16 + x);
 			Chippack = new ChipPack(w, h, c);
 			_tmpx = _tmpy = -1;
 		}
 
 		private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (_tmpx == -1 || _tmpy == -1)
+			if ((_tmpx == -1) || (_tmpy == -1))
 				return;
 			int w = Math.Abs(e.X / 16 - _tmpx) + 1, h = Math.Abs(e.Y / 16 - _tmpy) + 1;
 			var c = new byte[w * h];
@@ -187,21 +183,17 @@ namespace MapEditor
 				oy = e.Y / 16;
 			for (var x = ox; x < ox + w; x++)
 				for (var y = oy; y < oy + h; y++)
-					c[(y - oy) * w + (x - ox)] = (byte)(y * 16 + x);
+					c[(y - oy) * w + (x - ox)] = (byte) (y * 16 + x);
 			Chippack = new ChipPack(w, h, c);
 		}
 
-
-		int _gradient = 255;
-
 		private void pictureBox1_Paint(object sender, PaintEventArgs e)
 		{
-			var dat = (int)(Math.Sin(_gradient / 180.0 * Math.PI) * 127 + 127);
+			var dat = (int) (Math.Sin(_gradient / 180.0 * Math.PI) * 127 + 127);
 			foreach (var chip in Chippack.Chips)
 				e.Graphics.DrawRectangle(new Pen(Color.FromArgb(dat, dat, dat), 1), chip % 16 * 16, chip / 16 * 16, 16, 16);
 			//Console.Write(dat + " ");
 		}
-		public ScreenFlag Sf = ScreenFlag.Fore;
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
@@ -219,13 +211,12 @@ namespace MapEditor
 
 		private void toolStripContainer1_ContentPanel_Load(object sender, EventArgs e)
 		{
-
 		}
 
 		private void toolStripButton3_Click(object sender, EventArgs e)
 		{
 			var filename = "Resources\\Graphics\\" + toolStripButton2.Text + ".png";
-			if (System.IO.File.Exists(filename))
+			if (File.Exists(filename))
 				pictureBox1.Image = new Bitmap(filename);
 			Request = RequestFlag.ChangeMpt;
 		}
@@ -256,32 +247,12 @@ namespace MapEditor
 
 		private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-
-		}
-
-		public Size MapSize
-		{
-			get
-			{
-				return new Size(int.Parse(numericTextBox1.Text), int.Parse(numericTextBox2.Text));
-			}
-			set
-			{
-				numericTextBox1.Text = value.Width.ToString();
-				numericTextBox2.Text = value.Height.ToString();
-			}
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
 			Request = RequestFlag.Resize;
 		}
-
-		int[] _zoom = { 10, 20, 50, 70, 100 };
-
-		public int Pzoom = 4;
-
-		public int Zoom => _zoom[Pzoom];
 
 		//拡大
 		private void button2_Click(object sender, EventArgs e)
@@ -299,33 +270,8 @@ namespace MapEditor
 				Pzoom = 0;
 		}
 
-		public bool GridVisible
-		{
-			get
-			{
-				return toolStripButton11.Checked;
-			}
-			set
-			{
-				toolStripButton11.Checked = value;
-			}
-		}
-
-		public Color RequestedColor
-		{
-			get
-			{
-				return toolStripButton16.BackColor;
-			}
-			set
-			{
-				toolStripButton16.BackColor = value;
-			}
-		}
-
 		private void toolStripButton11_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		private void 新規作成NToolStripButton_Click(object sender, EventArgs e)
@@ -357,10 +303,6 @@ namespace MapEditor
 		{
 			Tool = ToolFlag.SpDel;
 		}
-
-		private int _entityId;
-
-		public int EntityId => _entityId;
 
 		private void toolStripButton15_Click(object sender, EventArgs e)
 		{
@@ -434,20 +376,21 @@ namespace MapEditor
 
 		private void propertyGrid1_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		private void textBox1_TextChanged(object sender, EventArgs e)
 		{
 			listBox1.BeginUpdate();
 			listBox1.Items.Clear();
-			listBox1.Items.AddRange(Items.Where(str => textBox1.Text.Contains(str)).ToArray());
+			listBox1.Items.AddRange((from hage in Items
+				where hage.Contains(textBox1.Text)
+				select hage).ToArray());
 			listBox1.EndUpdate();
 		}
 
 		private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			_entityId = int.Parse(listBox1.SelectedItem.ToString().Substring(0, 4));
+			EntityId = int.Parse(listBox1.SelectedItem.ToString().Substring(0, 4));
 		}
 
 		private void toolStripButton16_Click(object sender, EventArgs e)
@@ -458,28 +401,49 @@ namespace MapEditor
 			RequestedColor = cd.Color;
 			Request = RequestFlag.ChangeColor;
 		}
-
 	}
 
 	public enum RequestFlag
 	{
-		None, Resize, ChangeMpt, CreateNew, OpenCitMap, OpenSpdata, SaveCitMap, SaveSpdata, ChangeColor, SwapL, SwapR, SwapT, SwapB, TestPlay, CheatPlay
+		None,
+		Resize,
+		ChangeMpt,
+		CreateNew,
+		OpenCitMap,
+		OpenSpdata,
+		SaveCitMap,
+		SaveSpdata,
+		ChangeColor,
+		SwapL,
+		SwapR,
+		SwapT,
+		SwapB,
+		TestPlay,
+		CheatPlay
 	}
 
 
 	public enum ToolFlag
 	{
-		Pen, Line, Select, Fill, SpPut, SpSel, SpDel, SpVisible
+		Pen,
+		Line,
+		Select,
+		Fill,
+		SpPut,
+		SpSel,
+		SpDel,
+		SpVisible
 	}
 
 	public enum ScreenFlag
 	{
-		Fore, Back
+		Fore,
+		Back
 	}
 
 	public class NumericTextBox : TextBox
 	{
-		readonly char[] _permitChars = {'0','1','2','3','4','5','6','7','8','9', '0', '-', '.', };
+		private readonly char[] _permitChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '.'};
 
 		protected override void WndProc(ref Message m)
 		{
@@ -491,7 +455,7 @@ namespace MapEditor
 				case wmChar:
 					if ((_permitChars != null) && (_permitChars.Length > 0))
 					{
-						var e = new KeyPressEventArgs((char)(m.WParam.ToInt32()));
+						var e = new KeyPressEventArgs((char) m.WParam.ToInt32());
 						OnChar(e);
 
 						if (e.Handled)
@@ -513,56 +477,32 @@ namespace MapEditor
 		protected virtual void OnChar(KeyPressEventArgs e)
 		{
 			if (char.IsControl(e.KeyChar))
-			{
 				return;
-			}
 
 			if (!HasPermitChars(e.KeyChar, _permitChars))
-			{
 				e.Handled = true;
-			}
 		}
 
 		protected virtual void OnPaste(EventArgs e)
 		{
-			var stString = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
+			var stString = Clipboard.GetDataObject()?.GetData(DataFormats.Text).ToString();
 
 			if (stString != null)
-			{
 				SelectedText = GetPermitedString(stString, _permitChars);
-			}
 		}
 
 		private static bool HasPermitChars(char chTarget, char[] chPermits)
 		{
 			foreach (var ch in chPermits)
-			{
 				if (chTarget == ch)
-				{
 					return true;
-				}
-			}
 
 			return false;
 		}
 
 		private static string GetPermitedString(string stTarget, char[] chPermits)
-		{
-			var stReturn = string.Empty;
-
-			foreach (var chTarget in stTarget)
-			{
-				if (HasPermitChars(chTarget, chPermits))
-				{
-					stReturn += chTarget;
-				}
-			}
-
-			return stReturn;
-		}
-
+			=>
+			stTarget.Where(chTarget => HasPermitChars(chTarget, chPermits))
+				.Aggregate(string.Empty, (current, chTarget) => current + chTarget);
 	}
-
-
-
 }

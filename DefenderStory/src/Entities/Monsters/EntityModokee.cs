@@ -8,12 +8,6 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("Modokee_Ground", 2)]
 	public class EntityModokee : EntityFlying
 	{
-
-		public override int[] ImageHandle => ResourceUtility.ModokeeGround;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
-
 		public EntityModokee(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -24,6 +18,11 @@ namespace TakeUpJewel.Entities
 			MainAi = new AiFlySine(this, 1, 0, 1, 4, 5);
 			CollisionAIs.Add(new AiKillDefender(this));
 		}
+
+		public override int[] ImageHandle => ResourceUtility.ModokeeGround;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
 
 		public override void SetKilledAnime()
 		{
@@ -41,5 +40,4 @@ namespace TakeUpJewel.Entities
 				SetGraphic(7);
 		}
 	}
-
 }

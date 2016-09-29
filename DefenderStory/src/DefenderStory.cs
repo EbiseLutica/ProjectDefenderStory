@@ -1,137 +1,141 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using DxLibDLL;
 using TakeUpJewel.Util;
+using static DxLibDLL.DX;
 
 namespace TakeUpJewel
 {
-	static class Program
+	internal static class Program
 	{
-		static Size _scrSize;
+		private static Size _scrSize;
+
 		[STAThread]
-        static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			bool inf11 = false, binf11 = false, isfullscreen = false;
-			DX.SetUseGraphAlphaChannel(1);
-			DX.ChangeWindowMode(1);
+			SetUseGraphAlphaChannel(1);
+			ChangeWindowMode(1);
 			_scrSize = new Size(640, 480);
-			
-			DX.SetWindowText("Defender Story");
-			
-			DX.SetAlwaysRunFlag(1);
 
-			DX.SetWindowVisibleFlag(0);
-			if (DX.DxLib_Init() == -1)
+			SetWindowText("Take Up Jewel");
+
+			SetAlwaysRunFlag(1);
+
+			SetWindowVisibleFlag(0);
+			if (DxLib_Init() == -1)
 			{
 				ShowError("DirectX の初期化に失敗しました。");
 				return;
 			}
 
-			if (DX.SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60) == -1)
+			if (SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60) == -1)
 			{
 				ShowError("サイズの変更に失敗しました。");
 				return;
 			}
 
-			DX.SetWindowVisibleFlag(1);
+			SetWindowVisibleFlag(1);
 
-			if (DX.SetDrawScreen(DX.DX_SCREEN_BACK) == -1)
+			if (SetDrawScreen(DX_SCREEN_BACK) == -1)
 			{
 				ShowError("裏画面の指定に失敗しました。");
 				return;
 			}
 
-			var logo = DX.LoadGraph("Resources\\Graphics\\citringo.png");
-			DX.ClearDrawScreen();
-			DX.DrawGraph(_scrSize.Width / 2 - 246 / 2 , _scrSize.Height / 2 - 64 / 2, logo, 1);
-			DX.ScreenFlip();
+			var logo = LoadGraph("Resources\\Graphics\\citringo.png");
+			ClearDrawScreen();
+			DrawGraph(_scrSize.Width / 2 - 246 / 2, _scrSize.Height / 2 - 64 / 2, logo, 1);
+			ScreenFlip();
 
 			//----モジュールの初期化
 			FontUtility.Init();
 			SoundUtility.Init();
 			ResourceUtility.Init();
-			
+
 			GameEngine.Init(320, 240);
 			//----
 			while (true)
 			{
-				inf11 = DX.CheckHitKey(DX.KEY_INPUT_F11) == 1;
-				DX.ProcessMessage();
+				inf11 = CheckHitKey(KEY_INPUT_F11) == TRUE;
+
+
+				ProcessMessage();
 				if (inf11 && !binf11)
 				{
 					if (isfullscreen)
 					{
 						isfullscreen = false;
 						_scrSize = new Size(640, 480);
-						DX.SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60);
-						DX.ChangeWindowMode(1);
+						SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60);
+						ChangeWindowMode(1);
 						GameEngine.Reload();
 					}
 					else
 					{
 						isfullscreen = true;
 						_scrSize = Screen.PrimaryScreen.Bounds.Size;
-						DX.ChangeWindowMode(0);
-						DX.SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60);
+						ChangeWindowMode(0);
+						SetGraphMode(_scrSize.Width, _scrSize.Height, 32, 60);
 						GameEngine.Reload();
 					}
-					DX.ScreenFlip();
+					ScreenFlip();
 				}
-				CopyToDxScreen(GameEngine.DoGameLoop());
-				if (DX.ScreenFlip() == -1)
+				int hScreen;
+				CopyToDxScreen(hScreen = GameEngine.DoGameLoop());
+
+				if (CheckHitKey(KEY_INPUT_F2) == TRUE)
+				{
+					if (!Directory.Exists("ScreenShot"))
+						Directory.CreateDirectory("ScreenShot");
+					SaveDrawScreenToPNG(0, 0, _scrSize.Width, _scrSize.Height, $@"ScreenShot\{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png");
+				}
+				if (ScreenFlip() == -1)
 				{
 					//StopSoundMem(nowHandle);
 					//DeleteSoundMem(nowHandle);
-					DX.DxLib_End();
+					DxLib_End();
 					return;
 				}
 
 				//Console.Write(output + "\t");
 				binf11 = inf11;
-				
 			}
-
-
-
 		}
 
-		
+
 		/// <summary>
-		/// エラーを表示します。
+		///     エラーを表示します。
 		/// </summary>
 		/// <param name="message">エラーメッセージ。</param>
 		/// <returns>ダイアログの結果。</returns>
 		public static DialogResult ShowError(string message)
 		{
-			DX.DxLib_End();
+			DxLib_End();
 			return MessageBox.Show(message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1);
 		}
 
 
-
 		/// <summary>
-		/// 画面バッファを拡大して DxLib のスクリーンにコピーします。
+		///     画面バッファを拡大して DxLib のスクリーンにコピーします。
 		/// </summary>
 		internal static void CopyToDxScreen(int handle)
 		{
-			DX.SetDrawScreen(DX.DX_SCREEN_BACK);
-			DX.ClearDrawScreen();
-			if ((float)_scrSize.Width / _scrSize.Height != 320f / 240)
+			SetDrawScreen(DX_SCREEN_BACK);
+			ClearDrawScreen();
+			if ((float) _scrSize.Width / _scrSize.Height != 320f / 240)
 			{
 				var a = _scrSize.Height / 240;
 				var width = 320 * a;
-				DX.DrawExtendGraph((_scrSize.Width - width) / 2, (_scrSize.Height - 240 * a) / 2, _scrSize.Width - (_scrSize.Width - width) / 2, _scrSize.Height - (_scrSize.Height - 240 * a) / 2, handle, 0);
+				DrawExtendGraph((_scrSize.Width - width) / 2, (_scrSize.Height - 240 * a) / 2,
+					_scrSize.Width - (_scrSize.Width - width) / 2, _scrSize.Height - (_scrSize.Height - 240 * a) / 2, handle, 0);
 			}
 			else
 			{
-				DX.DrawExtendGraph(0, 0, _scrSize.Width, _scrSize.Height, handle, 0);
+				DrawExtendGraph(0, 0, _scrSize.Width, _scrSize.Height, handle, 0);
 			}
 //			DX.SetDrawScreen(handle);
 		}
 	}
-
-
-
-
 }

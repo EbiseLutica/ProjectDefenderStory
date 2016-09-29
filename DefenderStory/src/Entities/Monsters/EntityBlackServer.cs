@@ -8,20 +8,15 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("EntityBlackServer", 85)]
 	public class EntityBlackServer : EntityLiving
 	{
+		/// <summary>
+		///     AIのモード。
+		/// </summary>
+		private int _nowstatus;
 
 		/// <summary>
-		/// AIのモード。
+		///     タイマー。
 		/// </summary>
-		int _nowstatus;
-		/// <summary>
-		/// タイマー。
-		/// </summary>
-		int _tick;
-
-		public override int[] ImageHandle => ResourceUtility.BlackServer;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
+		private int _tick;
 
 		public EntityBlackServer(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
@@ -31,8 +26,12 @@ namespace TakeUpJewel.Entities
 			Parent = par;
 			Size = new Size(16, 32);
 			CollisionAIs.Add(new AiKillDefender(this));
-
 		}
+
+		public override int[] ImageHandle => ResourceUtility.BlackServer;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
 
 		public override void SetKilledAnime()
 		{
@@ -70,8 +69,9 @@ namespace TakeUpJewel.Entities
 						else
 							_nowstatus++;
 						_tick = -1;
-						if (_nowstatus == 2 && !IsDying)
-							Parent.Add(new EntitySaba(Location, Mpts, Map, Parent)); ;//鯖を出現
+						if ((_nowstatus == 2) && !IsDying)
+							Parent.Add(new EntitySaba(Location, Mpts, Map, Parent));
+						; //鯖を出現
 					}
 					break;
 			}
@@ -83,25 +83,17 @@ namespace TakeUpJewel.Entities
 
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			return this;
 		}
-
 	}
 
 	[EntityRegistry("EntitySaba", -1)]
 	public class EntitySaba : EntityFlying
 	{
+		private int _mode = 6;
+		private int _tick;
 
-
-		public override int[] ImageHandle => ResourceUtility.BlackServer;
-
-		public override Sounds KilledSound => Sounds.Null;
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
-
-		int _mode = 6;
-		int _tick;
 		public EntitySaba(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -114,6 +106,15 @@ namespace TakeUpJewel.Entities
 			Velocity = new Vector(-2.3f, 0);
 		}
 
+
+		public override int[] ImageHandle => ResourceUtility.BlackServer;
+
+		public override Sounds KilledSound => Sounds.Null;
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
+
+		public override RectangleF Collision => new RectangleF(0, 16, 16, 8);
+
 		public override void SetKilledAnime()
 		{
 			AnimeSpeed = 0;
@@ -125,29 +126,24 @@ namespace TakeUpJewel.Entities
 			AnimeSpeed = 0;
 		}
 
-		public override RectangleF Collision => new RectangleF(0, 16, 16, 8);
-
 		public override void OnUpdate(Status ks)
 		{
 			//TODO: ここにこの Entity が行う処理を記述してください。
-			if (_mode < 9 && _tick > 8)
+			if ((_mode < 9) && (_tick > 8))
 				_mode++;
 			_tick++;
 			SetGraphic(_mode);
 
 			base.OnUpdate(ks);
 			var a = CollisionLeft();
-			if (!IsDying && a != ObjectHitFlag.NotHit && a != ObjectHitFlag.InWater)
+			if (!IsDying && (a != ObjectHitFlag.NotHit) && (a != ObjectHitFlag.InWater))
 				Kill();
 		}
 
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			return this;
 		}
-
 	}
-
-
 }

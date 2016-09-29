@@ -39,8 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\avenue.filing.dll</HintPath>
     </Reference>
-    <Reference Include="DxLibDotNet">
-      <HintPath>..\..\lib\DxLibDotNet.dll</HintPath>
+    <Reference Include="DxLibDotNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Google Drive\lib\DxLibDotNet.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.data">
       <HintPath>..\..\lib\nextmidi.data.dll</HintPath>
@@ -50,6 +51,9 @@
     </Reference>
     <Reference Include="nextmidi.filing.midi">
       <HintPath>..\..\lib\nextmidi.filing.midi.dll</HintPath>
+    </Reference>
+    <Reference Include="nextmidi.filing.midi.midifile">
+      <HintPath>..\..\..\Google Drive\lib\nextmidi.filing.midi.midifile.dll</HintPath>
     </Reference>
     <Reference Include="nextmidi.midiport.core">
       <HintPath>..\..\lib\nextmidi.midiport.core.dll</HintPath>
@@ -71,6 +75,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DynamicJson\DynamicJson.csproj">
+      <Project>{116b75d7-d429-4289-b7e6-ab8479d592e7}</Project>
+      <Name>DynamicJson</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibMssf\LibMssf.csproj">
       <Project>{12bd58f2-c658-4eca-a0ce-447a7d1af011}</Project>
       <Name>LibMssf</Name>

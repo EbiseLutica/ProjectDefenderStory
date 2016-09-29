@@ -11,14 +11,17 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("CameraMan", 87)]
 	public class EntityCameraMan : EntityLiving
 	{
+		private bool _isjumping;
+		private bool _isTension;
 
-		int _tick;
-		bool _isTension;
+		private int _panime;
 
-		public override int[] ImageHandle => ResourceUtility.CameraMan;
+		private int _tick;
 
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
+		/// <summary>
+		///     アニメ用タイマー。
+		/// </summary>
+		private int _timer;
 
 		public EntityCameraMan(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
@@ -31,9 +34,13 @@ namespace TakeUpJewel.Entities
 			Jump();
 		}
 
+		public override int[] ImageHandle => ResourceUtility.CameraMan;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
+
 		public override void SetKilledAnime()
 		{
-			
 		}
 
 		public override void SetCrushedAnime()
@@ -42,13 +49,6 @@ namespace TakeUpJewel.Entities
 			AnimeSpeed = 0;
 		}
 
-		/// <summary>
-		/// アニメ用タイマー。
-		/// </summary>
-		int _timer;
-
-		int _panime;
-		bool _isjumping;
 		public void Jump()
 		{
 			/*if (!IsJumping)
@@ -94,7 +94,7 @@ namespace TakeUpJewel.Entities
 						_isjumping = true;
 						Velocity.Y = -3.4f;
 					}
-                }
+				}
 			}
 			SetGraphic(_panime);
 		}
@@ -103,10 +103,10 @@ namespace TakeUpJewel.Entities
 		{
 			//TODO: ここにこの Entity が行う処理を記述してください。
 			if (!IsDying)
-			{
 				if (!_isTension)
 				{
-					if (Math.Abs(Location.X - Parent.MainEntity.Location.X) < 64 && Location.Y <= Parent.MainEntity.Location.Y && Parent.MainEntity.Location.Y <= Location.Y + Size.Height)
+					if ((Math.Abs(Location.X - Parent.MainEntity.Location.X) < 64) && (Location.Y <= Parent.MainEntity.Location.Y) &&
+						(Parent.MainEntity.Location.Y <= Location.Y + Size.Height))
 					{
 						_isTension = true;
 						_tick = 0;
@@ -120,12 +120,11 @@ namespace TakeUpJewel.Entities
 					_tick++;
 					if (_tick == 0)
 					{
-
 						//TODO: 効果音発生
-						
-						if (Math.Abs(Location.X - Parent.MainEntity.Location.X) >= 64 && Location.Y > Parent.MainEntity.Location.Y || Parent.MainEntity.Location.Y > Location.Y + Size.Height)
-						{
 
+						if (((Math.Abs(Location.X - Parent.MainEntity.Location.X) >= 64) && (Location.Y > Parent.MainEntity.Location.Y)) ||
+							(Parent.MainEntity.Location.Y > Location.Y + Size.Height))
+						{
 							_isTension = false;
 							_tick = 0;
 							goto nuke;
@@ -134,28 +133,24 @@ namespace TakeUpJewel.Entities
 						SoundUtility.PlaySound(Sounds.Shutter);
 					}
 
-					if (_tick > 30 && _tick < 60 && _tick % 4 == 0)
+					if ((_tick > 30) && (_tick < 60) && (_tick % 4 == 0))
 					{
 						Parent.Add(new EntityCameraRazer(Location, Mpts, Map, Parent));
 						SoundUtility.PlaySound(Sounds.Razer);
 					}
 
 					if (_tick == 60)
-					{
-						if (Math.Abs(Location.X - Parent.MainEntity.Location.X) >= 64 && Location.Y > Parent.MainEntity.Location.Y || Parent.MainEntity.Location.Y > Location.Y + Size.Height)
+						if (((Math.Abs(Location.X - Parent.MainEntity.Location.X) >= 64) && (Location.Y > Parent.MainEntity.Location.Y)) ||
+							(Parent.MainEntity.Location.Y > Location.Y + Size.Height))
 						{
-
 							_isTension = false;
 							_tick = 0;
 							goto nuke;
 						}
-					}
-					
+
 
 					SetGraphic(0);
-
 				}
-			}
 			nuke:
 			if (!_isTension)
 				Jump();
@@ -165,38 +160,26 @@ namespace TakeUpJewel.Entities
 		public override void OnDraw(PointF p, Status ks)
 		{
 			base.OnDraw(p, ks);
-			if (_tick > 0 && _tick < 8 && _isTension)
-			{
+			if ((_tick > 0) && (_tick < 8) && _isTension)
 				DX.DrawGraphF(p.X - 10, p.Y - 2, ImageHandle[4], 1);
-
-			}
 		}
 
 		public override void OnDebugDraw(PointF p, Status ks)
 		{
 			base.OnDebugDraw(p, ks);
-			FontUtility.DrawMiniString((int)p.X + 4, (int)p.Y - 12, $"{_panime} {_timer}", 0xffffff);
+			FontUtility.DrawMiniString((int) p.X + 4, (int) p.Y - 12, $"{_panime} {_timer}", 0xffffff);
 		}
 
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			return this;
 		}
-
 	}
 
 	[EntityRegistry("CameraRazer", -1)]
 	public class EntityCameraRazer : EntityFlying
 	{
-
-	
-
-		public override int[] ImageHandle => ResourceUtility.CameraMan;
-
-
-		public override EntityGroup MyGroup => EntityGroup.MonsterWeapon;
-
 		public EntityCameraRazer(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -209,19 +192,22 @@ namespace TakeUpJewel.Entities
 			Velocity.X = -4f;
 		}
 
+
+		public override int[] ImageHandle => ResourceUtility.CameraMan;
+
+
+		public override EntityGroup MyGroup => EntityGroup.MonsterWeapon;
+
 		public override void SetKilledAnime()
 		{
-
 		}
 
 		public override void SetCrushedAnime()
 		{
-
 		}
 
 		public override void CheckCollision()
 		{
-		
 		}
 
 		public override void Kill()
@@ -232,29 +218,25 @@ namespace TakeUpJewel.Entities
 		public override void OnUpdate(Status ks)
 		{
 			//TODO: ここにこの Entity が行う処理を記述してください。
-			if (Location.X < -Size.Width || Location.Y < -Size.Height || Location.X > ks.Map.Width * 16 || Location.Y > ks.Map.Height * 16)
+			if ((Location.X < -Size.Width) || (Location.Y < -Size.Height) || (Location.X > ks.Map.Width * 16) ||
+				(Location.Y > ks.Map.Height * 16))
 				Kill();
 			foreach (EntityPlayer ep in Parent.FindEntitiesByType<EntityPlayer>())
 			{
 				if (ep.IsDying)
 					continue;
-				if (new Rectangle((int)ep.Location.X, (int)ep.Location.Y, ep.Size.Width, ep.Size.Height)
+				if (new Rectangle((int) ep.Location.X, (int) ep.Location.Y, ep.Size.Width, ep.Size.Height)
 					.CheckCollision(new RectangleF(Location.X, Location.Y + 4, 16, 2)))
-				{
 					ep.Kill();
-				}
-
 			}
 			base.OnUpdate(ks);
 		}
-		
+
 
 		public override Entity SetEntityData(dynamic jsonobj)
 		{
-			base.SetEntityData((object)jsonobj);
+			base.SetEntityData((object) jsonobj);
 			return this;
 		}
-
 	}
-
 }

@@ -7,12 +7,6 @@ namespace TakeUpJewel.Entities
 {
 	public class EntityParticleBase : EntityLiving
 	{
-
-		public override int[] ImageHandle => ResourceUtility.Particle;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Particle;
-
 		public EntityParticleBase(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -22,24 +16,25 @@ namespace TakeUpJewel.Entities
 			Size = new Size(8, 8);
 		}
 
+		public override int[] ImageHandle => ResourceUtility.Particle;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Particle;
+
+		public override int DyingMax => 0;
+
 		public override void CheckCollision()
 		{
-			
 		}
-
 
 
 		public override void SetKilledAnime()
 		{
-
 		}
 
 		public override void SetCrushedAnime()
 		{
-
 		}
-
-		public override int DyingMax => 0;
 
 		public override void Kill()
 		{
@@ -48,11 +43,11 @@ namespace TakeUpJewel.Entities
 
 		public override void OnUpdate(Status ks)
 		{
-			if (Location.X < -Size.Width || Location.X > GameEngine.Map.Width * 16 || Location.Y < -Size.Height || Location.Y > GameEngine.Map.Height * 16)
+			if ((Location.X < -Size.Width) || (Location.X > GameEngine.Map.Width * 16) || (Location.Y < -Size.Height) ||
+				(Location.Y > GameEngine.Map.Height * 16))
 				Kill(true, false);
 			base.OnUpdate(ks);
 		}
-
 	}
 
 	[EntityRegistry("Star", -1)]
@@ -70,8 +65,8 @@ namespace TakeUpJewel.Entities
 		{
 			base.OnUpdate(ks);
 		}
-
 	}
+
 	[EntityRegistry("WaterSplash", -1)]
 	public class EntityWaterSplash : EntityParticleBase
 	{
@@ -88,8 +83,8 @@ namespace TakeUpJewel.Entities
 			Velocity.Y += 0.3f;
 			base.OnUpdate(ks);
 		}
-
 	}
+
 	[EntityRegistry("Bubble", -1)]
 	public class EntityBubble : EntityParticleBase
 	{
@@ -103,13 +98,13 @@ namespace TakeUpJewel.Entities
 		public override void OnUpdate(Status ks)
 		{
 			var judge = new PointF(Location.X + Size.Width / 2, Location.Y + Size.Height / 2);
-			if (Mpts[Map[(int)judge.X / 16, (int)judge.Y / 16, 0]].CheckHit((int)judge.X % 16, (int)judge.Y % 16) != ObjectHitFlag.InWater)
-			{
+			if (Mpts[Map[(int) judge.X / 16, (int) judge.Y / 16, 0]].CheckHit((int) judge.X % 16, (int) judge.Y % 16) !=
+				ObjectHitFlag.InWater)
 				Kill();
-			}
 			base.OnUpdate(ks);
 		}
 	}
+
 	[EntityRegistry("BrokenBlock", -1)]
 	public class EntityBrokenBlock : EntityParticleBase
 	{
@@ -129,5 +124,4 @@ namespace TakeUpJewel.Entities
 			base.OnUpdate(ks);
 		}
 	}
-
 }

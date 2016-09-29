@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TakeUpJewel.Map
 {
 	public static class MapUtility
 	{
-		public static void SaveMap(byte[, ,] array, string path)
+		public static void SaveMap(byte[,,] array, string path)
 		{
 			var w = array.GetLength(0);
 			var h = array.GetLength(1);
 
-			var bw = new System.IO.BinaryWriter(new System.IO.FileStream(path, System.IO.FileMode.Create));
+			var bw = new BinaryWriter(new FileStream(path, FileMode.Create));
 			bw.Write("CITCHIP".ToArray());
 			bw.Write(w);
 			bw.Write(h);
@@ -24,12 +22,11 @@ namespace TakeUpJewel.Map
 						bw.Write(array[x, y, z]);
 
 			bw.Close();
-
 		}
 
-		public static void LoadMap(out byte[, ,] array, string path)
+		public static void LoadMap(out byte[,,] array, string path)
 		{
-			var br = new System.IO.BinaryReader(new System.IO.FileStream(path, System.IO.FileMode.Open));
+			var br = new BinaryReader(new FileStream(path, FileMode.Open));
 
 			if (new string(br.ReadChars(7)) != "CITCHIP")
 			{
@@ -46,8 +43,6 @@ namespace TakeUpJewel.Map
 					for (var x = 0; x < w; x++)
 						array[x, y, z] = br.ReadByte();
 			br.Close();
-
 		}
 	}
-
 }

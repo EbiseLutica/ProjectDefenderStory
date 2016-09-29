@@ -8,19 +8,6 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("Bunyo", 1)]
 	public class EntityBunyo : EntityLiving
 	{
-
-		public override int[] ImageHandle => ResourceUtility.CommonMob;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
-
-		public override RectangleF Collision => new RectangleF(2, 2, 12, 14);
-
-		public override void Move()
-		{
-			base.Move();
-		}
-
 		public EntityBunyo(PointF pnt, Object[] obj, byte[,,] chps, EntityList par)
 		{
 			Mpts = obj;
@@ -30,6 +17,18 @@ namespace TakeUpJewel.Entities
 			MainAi = new AiWalk(this, 1, 0, 1, 4, 5);
 			CollisionAIs.Add(new AiKillDefender(this));
 			Size = new Size(16, 16);
+		}
+
+		public override int[] ImageHandle => ResourceUtility.CommonMob;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
+
+		public override RectangleF Collision => new RectangleF(2, 2, 12, 14);
+
+		public override void Move()
+		{
+			base.Move();
 		}
 
 		public override void OnUpdate(Status ks)

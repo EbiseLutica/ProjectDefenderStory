@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,12 +7,14 @@ using DxLibDLL;
 namespace TakeUpJewel.Entities
 {
 	/// <summary>
-	/// エンティティのコレクションを表します。
+	///     エンティティのコレクションを表します。
 	/// </summary>
 	public class EntityList : EntityCollection
 	{
+		public Entity MainEntity { get; private set; }
+
 		/// <summary>
-		/// タグを使って Entity を探します。
+		///     タグを使って Entity を探します。
 		/// </summary>
 		/// <param name="tag">タグ文字列。</param>
 		/// <returns>Entity が存在すればそれらのコレクション、なければ空のコレクションが返ります。</returns>
@@ -23,7 +24,7 @@ namespace TakeUpJewel.Entities
 		}
 
 		/// <summary>
-		/// 型を指定して Entity を探します。
+		///     型を指定して Entity を探します。
 		/// </summary>
 		/// <typeparam name="T">探す対象のデータ型。</typeparam>
 		/// <returns></returns>
@@ -45,63 +46,71 @@ namespace TakeUpJewel.Entities
 			{
 				living.MainAi?.OnInit();
 				foreach (var ai in living.CollisionAIs)
-				{
 					ai.OnInit();
-				}
 			}
+
 			if (isMain)
 				MainEntity = item;
 		}
 
-		public Entity MainEntity
+		public void Update(ref Status ks, ref byte[,,] chips)
 		{
-			get; private set;
-		}
-
-		public void Draw(ref Status ks, ref byte[,,] chips)
-		{
-			int w, h;
-			DX.GetWindowSize(out w, out h);
 			//foreach だと削除・追加時にしぬので、forでやる
 			for (var i = 0; i < Count; i++)
 			{
 				var item = this[i];
-				if (item.IsDead)    //死んだら消す
-				{
+				if (item.IsDead) //死んだら消す
 					Remove(item);
-					//continue;
-				}
 				if (i >= Count)
 					break;
 				item = this[i];
-				if (Math.Abs(MainEntity.Location.X - item.Location.X) > w / 2)
+				if (Math.Abs(MainEntity.Location.X - item.Location.X) > GameEngine.ScrSize.Width)
 					continue;
-				item.OnUpdate(ks);    //更新処理をする
-				if (item is EntityLiving)
+				if (!GameEngine.IsFreezing)
 				{
-					if (((EntityLiving)item).MainAi != null && ((EntityLiving)item).MainAi.Use)
-						((EntityLiving)item).MainAi.OnUpdate();
-					foreach (var ai in ((EntityLiving)item).CollisionAIs)
+					item.OnUpdate(ks); //更新処理をする
+					var living = item as EntityLiving;
+					if (living != null)
 					{
-						if (ai.Use)
-							ai.OnUpdate();
-					}	
+						if ((living.MainAi != null) && !living.MainAi.IsInitialized)
+							living.MainAi.OnInit();
+						if ((living.MainAi != null) && living.MainAi.Use)
+							living.MainAi.OnUpdate();
+
+						foreach (var ai in living.CollisionAIs)
+						{
+							if (!ai.IsInitialized)
+								ai.OnInit();
+							if (ai.Use)
+								ai.OnUpdate();
+						}
+					}
 				}
-				if (item is EntityVisible)  //描画可能な Entity は描画する
-				{
-					((EntityVisible)item).OnDraw(new PointF(ks.Camera.X + item.Location.X, ks.Camera.Y + item.Location.Y), ks);
-				}
+			}
+		}
+
+		public void Draw(ref Status ks)
+		{
+			int w, h;
+			DX.GetWindowSize(out w, out h);
+			//foreach だと削除・追加時にしぬので、forでやる
+			var itemsTemp = from item in Items
+				where item is EntityVisible
+				orderby item.ZIndex ascending
+				select item as EntityVisible;
+			foreach (var item in itemsTemp)
+			{
+				if (Math.Abs(MainEntity.Location.X - item.Location.X) > GameEngine.ScrSize.Width)
+					continue;
+				item?.OnDraw(
+					new PointF(ks.Camera.X + item.Location.X, ks.Camera.Y + item.Location.Y), ks);
 			}
 		}
 
 		public void DebugDraw(ref Status ks, ref byte[,,] chips)
 		{
 			foreach (EntityVisible item in FindEntitiesByType<EntityVisible>())
-			{
 				item.OnDebugDraw(new PointF(ks.Camera.X + item.Location.X, ks.Camera.Y + item.Location.Y), ks);
-			}
-
 		}
-
 	}
 }

@@ -8,7 +8,6 @@ using Object = TakeUpJewel.Data.Object;
 
 namespace TakeUpJewel.Entities
 {
-
 	public enum PlayerForm
 	{
 		Big,
@@ -18,39 +17,48 @@ namespace TakeUpJewel.Entities
 	}
 
 	[EntityRegistry("Player", 0)]
-    public class EntityPlayer : EntityLiving
+	public class EntityPlayer : EntityLiving
 	{
-
-		public int Life { get; set; } = 5;
+		private int _flowtimer;
+		private bool _lshifted;
+		private float _spdAddition;
+		private float _spddivition;
+		private float _spdlimit;
 
 		/// <summary>
-		/// 現在のパワーアップ状態を取得します。
+		///     アイテムによって無敵になったかどうか。
 		/// </summary>
-		public PlayerForm Form
-		{
-			get; set;
-		}
+		public bool IsItemMuteki;
 
 		/// <summary>
-		/// 無敵時間。0のときは無敵ではないが、0以上の時は無敵である。
+		///     無敵時間。0のときは無敵ではないが、0以上の時は無敵である。
 		/// </summary>
 		public int MutekiTime;
 
 		/// <summary>
-		/// パワーアップ時間。0より大きいと、Big : Mini 間のパワーアップアニメを再生する。
+		///     パワーアップ時間。0より大きいと、Big : Mini 間のパワーアップアニメを再生する。
 		/// </summary>
 		public int PowerupTime;
 
-		/// <summary>
-		/// アイテムによって無敵になったかどうか。
-		/// </summary>
-		public bool IsItemMuteki;
-		private float _spdAddition;
-		private float _spdlimit;
-		private float _spddivition;
-		private bool _lshifted;
+		public EntityPlayer(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
+		{
+			Location = pnt;
+			Mpts = obj;
+			Map = chips;
+			Parent = par;
+			CollisionAIs.Add(new AiKillMonster(this));
 
-		private int _flowtimer;
+			IsOnLand = true;
+			Form = PlayerForm.Big;
+			Size = new Size(12, 14);
+		}
+
+		public int Life { get; set; } = 5;
+
+		/// <summary>
+		///     現在のパワーアップ状態を取得します。
+		/// </summary>
+		public PlayerForm Form { get; set; }
 
 		public override int[] ImageHandle
 		{
@@ -59,23 +67,27 @@ namespace TakeUpJewel.Entities
 				switch (Form)
 				{
 					default:
-						return ResourceUtility.BigPlayer;
+						return GameEngine.CurrentGender == PlayerGender.Male ? ResourceUtility.BigPlayer : ResourceUtility.BigPlayerFemale;
 					case PlayerForm.Ice:
-						return ResourceUtility.IcePlayer;
+						return GameEngine.CurrentGender == PlayerGender.Male ? ResourceUtility.IcePlayer : ResourceUtility.IcePlayerFemale;
 					case PlayerForm.Magic:
-						return ResourceUtility.MagicPlayer;
+						return GameEngine.CurrentGender == PlayerGender.Male
+							? ResourceUtility.MagicPlayer
+							: ResourceUtility.MagicPlayerFemale;
 					case PlayerForm.Fire:
-						return ResourceUtility.FirePlayer;
+						return GameEngine.CurrentGender == PlayerGender.Male
+							? ResourceUtility.FirePlayer
+							: ResourceUtility.FirePlayerFemale;
 				}
 			}
 		}
-		
 
-		
 
 		public override RectangleF Collision => new RectangleF(new PointF(2, 2), Size);
 
-		public override EntityGroup MyGroup => EntityGroup.Defender;
+		public override EntityGroup MyGroup => EntityGroup.Friend;
+
+		public override Sounds KilledSound => Sounds.PlayerMiss;
 
 		public override void OnUpdate(Status ks)
 		{
@@ -108,11 +120,9 @@ namespace TakeUpJewel.Entities
 			if (MutekiTime > 0)
 			{
 				MutekiTime--;
-				if (MutekiTime == 90 && IsItemMuteki)
-				{
+				if ((MutekiTime == 90) && IsItemMuteki)
 					SoundUtility.PlaySound(Sounds.WarningMuteki);
-				}
-				if (MutekiTime == 0 && IsItemMuteki)
+				if ((MutekiTime == 0) && IsItemMuteki)
 				{
 					IsItemMuteki = false;
 					GameEngine.BgmStop();
@@ -142,10 +152,10 @@ namespace TakeUpJewel.Entities
 						SetAnime(22, 25, 8);
 					break;
 			}
-			if (Velocity.X < 0.1f && Velocity.X > -0.1f)
+			if ((Velocity.X < 0.1f) && (Velocity.X > -0.1f))
 				AnimeSpeed = 0;
 			else
-				AnimeSpeed = (int)(10 - _spdlimit + (_spdlimit - Math.Abs(Velocity.X)) * 10);
+				AnimeSpeed = (int) (10 - _spdlimit + (_spdlimit - Math.Abs(Velocity.X)) * 10);
 		}
 
 		public void InputControl(Status ks)
@@ -187,22 +197,20 @@ namespace TakeUpJewel.Entities
 			else
 			{
 				Velocity.X *= _spddivition;
-				if (Velocity.X < 0.1f && Velocity.X > -0.1f)
+				if ((Velocity.X < 0.1f) && (Velocity.X > -0.1f))
 					Velocity.X = 0;
 			}
 
 
-
 			if (ks.Inz1)
 			{
-
-				if (!IsOnLand && ks.Inleft && CollisionLeft() == ObjectHitFlag.Hit)
+				if (!IsOnLand && ks.Inleft && (CollisionLeft() == ObjectHitFlag.Hit))
 				{
 					Velocity.X = 3f;
 					Velocity.Y = -4f;
 					SoundUtility.PlaySound(Sounds.Destroy);
 				}
-				else if (!IsOnLand && ks.Inright && CollisionRight() == ObjectHitFlag.Hit)
+				else if (!IsOnLand && ks.Inright && (CollisionRight() == ObjectHitFlag.Hit))
 				{
 					Velocity.X = -3f;
 					Velocity.Y = -4f;
@@ -212,18 +220,15 @@ namespace TakeUpJewel.Entities
 				{
 					if (IsInWater)
 					{
-
 						SoundUtility.PlaySound(Sounds.Swim);
 						Velocity.Y = -2f;
 						IsJumping = false;
 						IsOnLand = true;
 					}
-					else if (IsOnLand || _flowtimer < 10)
+					else if (IsOnLand || (_flowtimer < 10))
 					{
 						if (!IsJumping)
-						{
 							SoundUtility.PlaySound(Sounds.BigJump);
-						}
 						Velocity.Y = -3.6f - Math.Abs(Velocity.X) / 6.5f;
 						Move();
 					}
@@ -239,9 +244,7 @@ namespace TakeUpJewel.Entities
 			//	Velocity.Y += 0.1f;
 
 			if (!ks.Inz && IsJumping)
-			{
 				Velocity.Y += 0.1f;
-			}
 
 			//FontUtility.DrawMiniString((int)Location.X + ks.camera.X, (int)Location.Y + ks.camera.Y - 10, Velocity.Y.ToString(), 0xffffff);
 			if (ks.Inlshift)
@@ -250,32 +253,38 @@ namespace TakeUpJewel.Entities
 				_spddivition = 0.9f;
 				_spdlimit = 2.7f;
 				if (!_lshifted)
-				{
 					switch (Form)
 					{
 						case PlayerForm.Fire:
 							SoundUtility.PlaySound(Sounds.ShootFire);
-							Parent.Add(new EntityFireWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""Speed"": " + (Direction == Direction.Right ? EntityFireWeapon.SpeedX : -EntityFireWeapon.SpeedX) + "}")));
+							Parent.Add(
+								new EntityFireWeapon(Location, Mpts, Map, Parent).SetEntityData(
+									DynamicJson.Parse(@"{""SpeedX"": " +
+													  (Direction == Direction.Right ? EntityFireWeapon.SpeedX : -EntityFireWeapon.SpeedX) + "}")));
+							break;
+						case PlayerForm.Ice:
+							SoundUtility.PlaySound(Sounds.ShootFire);
+							Parent.Add(
+								new EntityIceWeapon(Location, Mpts, Map, Parent).SetEntityData(
+									DynamicJson.Parse(@"{""SpeedX"": " +
+													  (Direction == Direction.Right ? EntityIceWeapon.SpeedX : -EntityIceWeapon.SpeedX) + "}")));
 							break;
 						case PlayerForm.Magic:
 							SoundUtility.PlaySound(Sounds.ShootFire);
-							Parent.Add(new EntityLeafWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""SpeedX"": " + (Direction == Direction.Right ? EntityFireWeapon.SpeedX : -EntityFireWeapon.SpeedX) + @", ""SpeedY"": -2 }")));
-							Parent.Add(new EntityLeafWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""SpeedX"": " + (Direction == Direction.Right ? EntityFireWeapon.SpeedX : -EntityFireWeapon.SpeedX) + @", ""SpeedY"": 0 }")));
-							Parent.Add(new EntityLeafWeapon(Location, Mpts, Map, Parent).SetEntityData(DynamicJson.Parse(@"{""SpeedX"": " + (Direction == Direction.Right ? EntityFireWeapon.SpeedX : -EntityFireWeapon.SpeedX) + @", ""SpeedY"": 2 }")));
+							Parent.Add(new EntityLeafWeapon(Location, Mpts, Map, Parent));
 							break;
 					}
-				}
 
 				foreach (EntityLiving entity in Parent.FindEntitiesByType<EntityLiving>())
 				{
 					var e = entity;
 					if (e.IsDying)
 						continue;
-					if (MutekiTime > 0 && IsItemMuteki && (e.MyGroup == EntityGroup.Monster || e.MyGroup == EntityGroup.MonsterWeapon) && new RectangleF(e.Location.X, e.Location.Y, e.Size.Width, e.Size.Height).CheckCollision(new RectangleF(Location.X, Location.Y, Size.Width, Size.Height)))
-					{
+					if ((MutekiTime > 0) && IsItemMuteki &&
+						((e.MyGroup == EntityGroup.Enemy) || (e.MyGroup == EntityGroup.MonsterWeapon)) &&
+						new RectangleF(e.Location.X, e.Location.Y, e.Size.Width, e.Size.Height).CheckCollision(new RectangleF(Location.X,
+							Location.Y, Size.Width, Size.Height)))
 						e.Kill();
-					}
-
 				}
 
 				foreach (EntityTurcosShell e in Parent.FindEntitiesByType<EntityTurcosShell>())
@@ -285,9 +294,7 @@ namespace TakeUpJewel.Entities
 					//if (e.mutekitime > 0)
 					//	continue;
 					if (new RectangleF(Location, Size).CheckCollision(new RectangleF(e.Location, e.Size)))
-					{
 						e.Owner = this;
-					}
 				}
 				_lshifted = true;
 			}
@@ -298,7 +305,6 @@ namespace TakeUpJewel.Entities
 				_spddivition = 0.9f;
 				_spdlimit = 1.4f;
 			}
-
 		}
 
 		public override void OnOutOfWater()
@@ -307,23 +313,8 @@ namespace TakeUpJewel.Entities
 			base.OnOutOfWater();
 		}
 
-		public override Sounds KilledSound => Sounds.PlayerMiss;
-
-		public EntityPlayer(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
-		{
-			Location = pnt;
-			Mpts = obj;
-			Map = chips;
-			Parent = par;
-			CollisionAIs.Add(new AiKillMonster(this));
-
-			IsOnLand = true;
-			Form = PlayerForm.Big;
-			Size = new Size(12, 14);
-		}
-
 		/// <summary>
-		/// この EntityPlayer を殺害します。
+		///     この EntityPlayer を殺害します。
 		/// </summary>
 		public override void Kill()
 		{
@@ -332,6 +323,8 @@ namespace TakeUpJewel.Entities
 			if (IsFall)
 			{
 				base.Kill();
+				Velocity = Vector.Zero;
+				Life = 0;
 				SoundUtility.PlaySound(Sounds.PlayerMiss);
 				return;
 			}
@@ -348,9 +341,7 @@ namespace TakeUpJewel.Entities
 			Life--;
 
 			if (Form != PlayerForm.Big)
-			{
 				Form = PlayerForm.Big;
-			}
 
 			if (Life < 1)
 			{
@@ -358,18 +349,19 @@ namespace TakeUpJewel.Entities
 				base.Kill();
 				//SoundUtility.PlaySound(Sounds.PlayerMiss);
 			}
-			Velocity = Vector.Zero;
+
+			Velocity *= 0;
 		}
 
 		public override void OnDraw(PointF p, Status ks)
 		{
-			if (MutekiTime > 0 && PowerupTime == 0)
+			if ((MutekiTime > 0) && (PowerupTime == 0))
 			{
 				if (MutekiTime % 8 < 4)
 					base.OnDraw(p, ks);
 			}
 			else
-				base.OnDraw(new PointF(p.X, p.Y + (GameEngine.Tick % 8 < 4 && PowerupTime > 0 ? 16 : 0)), ks);
+				base.OnDraw(new PointF(p.X, p.Y + ((GameEngine.Tick % 8 < 4) && (PowerupTime > 0) ? 16 : 0)), ks);
 		}
 
 		internal void PowerUp(PlayerForm f)
@@ -400,11 +392,9 @@ namespace TakeUpJewel.Entities
 		{
 			IsItemMuteki = true;
 			MutekiTime = 600;
-			
+
 			SoundUtility.PlaySound(Sounds.PowerUp);
 			GameEngine.BgmPlay("muteki.mid");
 		}
 	}
-
-
 }

@@ -8,12 +8,6 @@ namespace TakeUpJewel.Entities
 	[EntityRegistry("Solider", 6)]
 	public class EntitySolider : EntityLiving
 	{
-
-		public override int[] ImageHandle => ResourceUtility.Dwarf;
-
-
-		public override EntityGroup MyGroup => EntityGroup.Monster;
-
 		public EntitySolider(PointF pnt, Object[] obj, byte[,,] chips, EntityList par)
 		{
 			Location = pnt;
@@ -24,6 +18,11 @@ namespace TakeUpJewel.Entities
 			CollisionAIs.Add(new AiKillDefender(this));
 			SetAnime(0, 3, 8);
 		}
+
+		public override int[] ImageHandle => ResourceUtility.Dwarf;
+
+
+		public override EntityGroup MyGroup => EntityGroup.Enemy;
 
 		public override void SetKilledAnime()
 		{

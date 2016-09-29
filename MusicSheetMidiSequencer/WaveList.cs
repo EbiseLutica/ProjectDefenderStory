@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using MusicSheet.Mssf;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
+using MusicSheet.Mssf;
 
 namespace MusicSheetMidiSequencer
 {
 	public partial class WaveList : Form
 	{
-		Bitmap _bitmap = new Bitmap(512, 512);
+		private readonly Bitmap _bitmap = new Bitmap(512, 512);
+
 		public WaveList()
 		{
 			InitializeComponent();
@@ -24,10 +20,10 @@ namespace MusicSheetMidiSequencer
 				int a, d, r, pan;
 				byte s;
 				int x = i % 12 * 40, y = i / 12 * 44;
-				
+
 				g.DrawString(i.ToString(), new Font("MS UI Gothic", 10), Brushes.Black, x, y);
 				y += 20;
-				if (System.IO.File.Exists("Insts\\" + i + ".mssf"))
+				if (File.Exists("Insts\\" + i + ".mssf"))
 				{
 					MssfUtility.LoadFileDynamic("Insts\\" + i + ".mssf", out wave, out a, out d, out s, out r, out pan);
 					DrawWave(x, y, g, wave);
@@ -42,24 +38,17 @@ namespace MusicSheetMidiSequencer
 
 			g.Dispose();
 			pictureBox1.Image = _bitmap;
-
 		}
 
-		
 
 		private void pictureBox1_Click(object sender, EventArgs e)
 		{
-
 		}
 
 		public static void DrawWave(int x, int y, Graphics g, short[] wave)
 		{
-
 			for (var j = 0; j < 32; j++)
-			{
-				g.DrawLine(Pens.Black, x + j, y, x + j, y + (wave[j] / 4096));
-			}
+				g.DrawLine(Pens.Black, x + j, y, x + j, y + wave[j] / 4096);
 		}
-	
 	}
 }

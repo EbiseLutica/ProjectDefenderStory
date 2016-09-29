@@ -1,401 +1,47 @@
-[
+﻿[
 	{
 		"PosX": 16,
-		"PosY": 176,
+		"PosY": 1552,
+		"Tag": null,
+		"ZIndex": 0,
 		"EntityID": 0,
+		"EntityData": { "SpawnFromDoor": false, "TargetDoorTag": "" }
+	}, { "PosX": 288, "PosY": 1456, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 1 } },
+	{ "PosX": 640, "PosY": 1376, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1024, "PosY": 1136, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1040, "PosY": 1136, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1216, "PosY": 1104, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1232, "PosY": 1104, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 1488, "PosY": 1120, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 10 } },
+	{ "PosX": 1488, "PosY": 1184, "Tag": null, "ZIndex": 0, "EntityID": 22, "EntityData": { "EntityType": 0 } },
+	{
+		"PosX": 64,
+		"PosY": 1568,
+		"Tag": null,
+		"ZIndex": 0,
+		"EntityID": 89,
 		"EntityData": {
-			"SpawnFromDoor": false,
-			"TargetDoorTag": null
+			"Script":
+				"[enstop]\u000d\u000a[mesbox:up]\u000d\u000a[mes:この先　リファクタ山]\u000d\u000a[mes:落石に注意]\u000d\u000a[mesend]\u000d\u000a[enstart]",
+			"TextureFile": "spsign.png",
+			"Width": 16,
+			"Height": 16,
+			"StartIndex": 1,
+			"EndIndex": 0,
+			"Speed": 0,
+			"UseAnime": false
 		}
-	},
-	{
-		"PosX": 2024,
-		"PosY": 64,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2055,
-		"PosY": 64,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2088,
-		"PosY": 64,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1875,
-		"PosY": 114,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1896,
-		"PosY": 114,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1927,
-		"PosY": 113,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1705,
-		"PosY": 64,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1736,
-		"PosY": 64,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1769,
-		"PosY": 65,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1408,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1424,
-		"PosY": 55,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1448,
-		"PosY": 31,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1472,
-		"PosY": 57,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1488,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1185,
-		"PosY": 96,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1200,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1225,
-		"PosY": 54,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1248,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1264,
-		"PosY": 96,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 1024,
-		"PosY": 16,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 912,
-		"PosY": 176,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 0 }
-	},
-	{
-		"PosX": 464,
-		"PosY": 16,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 720,
-		"PosY": 176,
-		"EntityID": 87,
-		"EntityData": null
-	},
-	{
-		"PosX": 768,
-		"PosY": 176,
-		"EntityID": 87,
-		"EntityData": null
-	},
-	{
-		"PosX": 944,
-		"PosY": 96,
-		"EntityID": 10,
-		"EntityData": null
-	},
-	{
-		"PosX": 1120,
-		"PosY": 176,
-		"EntityID": 87,
-		"EntityData": null
-	},
-	{
-		"PosX": 1344,
-		"PosY": 32,
-		"EntityID": 88,
-		"EntityData": null
-	},
-	{
-		"PosX": 1552,
-		"PosY": 80,
-		"EntityID": 88,
-		"EntityData": null
-	},
-	{
-		"PosX": 1792,
-		"PosY": 16,
-		"EntityID": 86,
-		"EntityData": null
-	},
-	{
-		"PosX": 1968,
-		"PosY": 32,
-		"EntityID": 86,
-		"EntityData": null
-	},
-	{
-		"PosX": 2176,
-		"PosY": 32,
-		"EntityID": 86,
-		"EntityData": null
-	},
-	{
-		"PosX": 2112,
-		"PosY": 176,
-		"EntityID": 85,
-		"EntityData": null
-	},
-	{
-		"PosX": 2288,
-		"PosY": 176,
-		"EntityID": 85,
-		"EntityData": null
-	},
-	{
-		"PosX": 2368,
-		"PosY": 96,
-		"EntityID": 88,
-		"EntityData": null
-	},
-	{
-		"PosX": 2512,
-		"PosY": 32,
-		"EntityID": 88,
-		"EntityData": null
-	},
-	{
-		"PosX": 2608,
-		"PosY": 144,
-		"EntityID": 88,
-		"EntityData": null
-	},
-	{
-		"PosX": 2736,
-		"PosY": 64,
-		"EntityID": 88,
-		"EntityData": null
-	},
-	{
-		"PosX": 2896,
-		"PosY": 176,
-		"EntityID": 87,
-		"EntityData": null
-	},
-	{
-		"PosX": 2976,
-		"PosY": 32,
-		"EntityID": 86,
-		"EntityData": null
-	},
-	{
-		"PosX": 2416,
-		"PosY": 128,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2448,
-		"PosY": 96,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2512,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2560,
-		"PosY": 96,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2624,
-		"PosY": 112,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2672,
-		"PosY": 48,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2640,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2704,
-		"PosY": 96,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2736,
-		"PosY": 144,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2785,
-		"PosY": 144,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2912,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2880,
-		"PosY": 112,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2960,
-		"PosY": 80,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 2992,
-		"PosY": 128,
-		"EntityID": 28,
-		"EntityData": { "WorkingType": 0 }
-	},
-	{
-		"PosX": 3081,
-		"PosY": 176,
-		"EntityID": 18,
-		"EntityData": { "NextStage": 5 }
-	},
-	{
-		"PosX": 1648,
-		"PosY": 176,
-		"EntityID": 83,
-		"EntityData": null
-	},
-	{
-		"PosX": 1648,
-		"PosY": 160,
-		"EntityID": 83,
-		"EntityData": null
-	},
-	{
-		"PosX": 1664,
-		"PosY": 160,
-		"EntityID": 83,
-		"EntityData": null
-	},
-	{
-		"PosX": 1664,
-		"PosY": 176,
-		"EntityID": 83,
-		"EntityData": null
-	},
-	{
-		"PosX": 192,
-		"PosY": 64,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 176,
-		"PosY": 64,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 6 }
-	},
-	{
-		"PosX": 688,
-		"PosY": 80,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 736,
-		"PosY": 80,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 784,
-		"PosY": 80,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 1888,
-		"PosY": 32,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 10 }
-	},
-	{
-		"PosX": 1904,
-		"PosY": 32,
-		"EntityID": 22,
-		"EntityData": { "EntityType": 6 }
-	}
+	}, { "PosX": 656, "PosY": 1360, "Tag": null, "ZIndex": 0, "EntityID": 28, "EntityData": { "WorkingType": 0 } },
+	{ "PosX": 2192, "PosY": 1456, "Tag": "", "ZIndex": 0, "EntityID": 18, "EntityData": { "NextStage": 5 } },
+	{ "PosX": 848, "PosY": 1232, "Tag": null, "ZIndex": 0, "EntityID": 15, "EntityData": null },
+	{ "PosX": 800, "PosY": 1296, "Tag": null, "ZIndex": 0, "EntityID": 15, "EntityData": null },
+	{ "PosX": 688, "PosY": 1328, "Tag": null, "ZIndex": 0, "EntityID": 15, "EntityData": null },
+	{ "PosX": 775, "PosY": 1146, "Tag": null, "ZIndex": 0, "EntityID": 15, "EntityData": null },
+	{ "PosX": 1488, "PosY": 1088, "Tag": null, "ZIndex": 0, "EntityID": 14, "EntityData": null },
+	{ "PosX": 1584, "PosY": 1264, "Tag": null, "ZIndex": 0, "EntityID": 16, "EntityData": null },
+	{ "PosX": 1696, "PosY": 1280, "Tag": null, "ZIndex": 0, "EntityID": 16, "EntityData": null },
+	{ "PosX": 1559, "PosY": 1120, "Tag": null, "ZIndex": 0, "EntityID": 16, "EntityData": null },
+	{ "PosX": 1760, "PosY": 1312, "Tag": null, "ZIndex": 0, "EntityID": 4, "EntityData": null },
+	{ "PosX": 1840, "PosY": 1360, "Tag": null, "ZIndex": 0, "EntityID": 4, "EntityData": null },
+	{ "PosX": 2105, "PosY": 1323, "Tag": null, "ZIndex": 0, "EntityID": 16, "EntityData": null }
 ]
