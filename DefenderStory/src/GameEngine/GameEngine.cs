@@ -257,9 +257,14 @@ namespace TakeUpJewel
 		/// </summary>
 		public static bool IsInit { get; set; }
 
+#if DEBUG
+		public const string VersionSuffix = "Debug";
+#else
+		public const string VersionSuffix = "Release";
+#endif
 		public static uint BackColor { get; set; }
-		public static string EngineVersion { get; set; } = "0.3.0";
-		public static string GameVersion { get; set; } = "1.1.0-Release";
+		public static string EngineVersion { get; set; } = "0.3.1";
+		public static string GameVersion { get; set; } = $"1.1.2-{VersionSuffix}";
 		public static string Copyright { get; set; } = "(C)2016 ＣCitringo";
 		public static PlayerGender CurrentGender { get; set; }
 
@@ -1439,7 +1444,7 @@ namespace TakeUpJewel
 							DrawGraph(ScrSize.Width / 2 - 180 / 2, ScrSize.Height - 220, ResourceUtility.Logo[0], 1);
 
 							FontUtility.DrawString(ScrSize.Width / 2 - 40, ScrSize.Height / 2 + 16,
-								_guiCursor != 2 ? "君の名は。" : @"戻りますか？", Color.White);
+								_guiCursor != 2 ? "どちらであそぶ？" : "もどるの？", Color.White);
 							FontUtility.DrawString(ScrSize.Width / 2 - 40, ScrSize.Height / 2 + 16 + 20,
 								$@"{(_guiCursor == 0 ? ">" : " ")}アレン", _guiCursor == 0 ? Color.Cyan : Color.White);
 							FontUtility.DrawString(ScrSize.Width / 2 - 40, ScrSize.Height / 2 + 16 + 40,

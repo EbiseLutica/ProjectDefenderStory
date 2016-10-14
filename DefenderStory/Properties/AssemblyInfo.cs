@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Citringo")]
 [assembly: AssemblyProduct("Take Up Jewel")]
 [assembly: AssemblyCopyright("(C)2016 Citringo")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("Take Up Jewel")]
 [assembly: AssemblyCulture("")]
 
 // ComVisible を false に設定すると、その型はこのアセンブリ内で COM コンポーネントから 

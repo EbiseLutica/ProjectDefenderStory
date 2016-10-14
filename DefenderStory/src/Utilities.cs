@@ -512,6 +512,7 @@ namespace TakeUpJewel.Util
 				DicFont[c] = i++; //文字番号を char によって指定できるよう登録する
 			ChangeFont("MS Gothic");
 			SetFontSize(11);
+			NativeFont.Clear();
 			//DX.ChangeFontType(DX.DX_FONTTYPE_ANTIALIASING);
 			SetFontThickness(1);
 			_isInit = true;
